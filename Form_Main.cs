@@ -24,7 +24,7 @@ namespace QCTracker {
 
             mapDisplayPanel.Controls.Add(mapView);
             mapView.Dock = DockStyle.Fill;
-        }
+        } 
 
         private void ConfigMap() {
             mapView.MapProvider = GMapProviders.OpenStreetMap;
