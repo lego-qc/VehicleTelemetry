@@ -19,17 +19,26 @@ namespace QCTracker {
         public MapView() {
             InitializeComponent();
 
-            mapView.MapProvider = GMapProviders.OpenStreetMap;
-            mapView.Position = new PointLatLng(47.5, 19);
-            mapView.MinZoom = 0;
-            mapView.MaxZoom = 24;
-            mapView.Zoom = 8;
-            mapView.Manager.Mode = AccessMode.ServerOnly;
+            map.MapProvider = GMapProviders.OpenStreetMap;
+            map.Position = new PointLatLng(47.5, 19);
+            map.MinZoom = 0;
+            map.MaxZoom = 24;
+            map.Zoom = 8;
+            map.Manager.Mode = AccessMode.ServerOnly;
 
-            mapView.OnPositionChanged += this.mapControl_PositionChanged;
-            mapView.OnMapZoomChanged += this.mapControl_ZoomChanged;
+            map.OnPositionChanged += this.mapControl_PositionChanged;
+            map.OnMapZoomChanged += this.mapControl_ZoomChanged;
 
-            mapView.Paths = paths;
+            map.Paths = paths;
+
+            mapParamsLat.Text = map.Position.Lat.ToString();
+            mapParamsLong.Text = map.Position.Lng.ToString();
+
+            mapParamsLat.KeyDown += mapParamsLat_Enter;
+            mapParamsLong.KeyDown += mapParamsLong_Enter;
+
+            mapDisplayPanel.Controls.Add(map);
+            map.Dock = DockStyle.Fill;
 
             position = new GeoPoint(47.5, 19);
         }
@@ -55,22 +64,25 @@ namespace QCTracker {
             return paths[index];
         }
 
+        public void ShowOptions() {
+            mapParamsOptions_Click(null, null);
+        }
+
 
         ////////////////////////////////////////////////////////////////////////
         // Vars
 
-        protected Map mapView = new Map();
-        private GeoPoint currentPosition;
+        protected Map map = new Map();
         private List<Path> paths = new List<Path>();
         private GeoPoint position;
 
-        GeoPoint Position {
+        public GeoPoint Position {
             get {
                 return position;
             }
             set {
                 position = value;
-                mapView.Position = new PointLatLng(position.Lat, position.Lng);
+                map.Position = new PointLatLng(position.Lat, position.Lng);
             }
         }
 
@@ -84,29 +96,29 @@ namespace QCTracker {
         }
 
         private void mapControl_ZoomChanged() {
-            mapParamsLat.Text = mapView.Position.Lat.ToString();
-            mapParamsLong.Text = mapView.Position.Lng.ToString();
+            mapParamsLat.Text = map.Position.Lat.ToString();
+            mapParamsLong.Text = map.Position.Lng.ToString();
         }
 
         private void mapParamsOptions_Click(object sender, EventArgs e) {
             var optionsForm = new Form_MapOptions();
-            optionsForm.Provider = mapView.MapProvider;
-            optionsForm.CacheMode = mapView.Manager.Mode;
-            optionsForm.GMap = mapView;
+            optionsForm.Provider = map.MapProvider;
+            optionsForm.CacheMode = map.Manager.Mode;
+            optionsForm.GMap = map;
             DialogResult result = optionsForm.ShowDialog(this);
             if (result == DialogResult.OK) {
-                mapView.Manager.Mode = optionsForm.CacheMode;
-                mapView.MapProvider = optionsForm.Provider;
+                map.Manager.Mode = optionsForm.CacheMode;
+                map.MapProvider = optionsForm.Provider;
             }
             optionsForm.Dispose();
         }
 
         private void mapParamsZoomIn_Click(object sender, EventArgs e) {
-            mapView.Zoom++;
+            map.Zoom++;
         }
 
         private void mapParamZoomOut_Click(object sender, EventArgs e) {
-            mapView.Zoom--;
+            map.Zoom--;
         }
 
         private void mapParamsLat_Enter(object sender, KeyEventArgs e) {
@@ -123,26 +135,26 @@ namespace QCTracker {
         }
 
         private void mapParamsLat_TextChanged() {
-            var currentPos = mapView.Position;
+            var currentPos = map.Position;
             try {
                 currentPos.Lat = Double.Parse(mapParamsLat.Text);
-                mapView.Position = currentPos;
+                map.Position = currentPos;
             }
             catch (Exception ex) {
-                mapParamsLat.Text = mapView.Position.Lat.ToString();
+                mapParamsLat.Text = map.Position.Lat.ToString();
                 mapParamsLat.SelectionStart = 0;
                 mapParamsLat.SelectionLength = mapParamsLat.Text.Length;
             }
         }
 
         private void mapParamsLong_TextChanged() {
-            var currentPos = mapView.Position;
+            var currentPos = map.Position;
             try {
                 currentPos.Lng = Double.Parse(mapParamsLong.Text);
-                mapView.Position = currentPos;
+                map.Position = currentPos;
             }
             catch (Exception ex) {
-                mapParamsLong.Text = mapView.Position.Lng.ToString();
+                mapParamsLong.Text = map.Position.Lng.ToString();
                 mapParamsLong.SelectionStart = 0;
                 mapParamsLong.SelectionLength = mapParamsLong.Text.Length;
             }
