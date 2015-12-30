@@ -88,6 +88,7 @@
     <Compile Include="MapView.Designer.cs">
       <DependentUpon>MapView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Message.cs" />
     <Compile Include="NetworkInterface.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="Program.cs" />

@@ -29,14 +29,14 @@
             this.confirmOk = new System.Windows.Forms.Button();
             this.confirmSeparator = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.mapProviderSelector = new System.Windows.Forms.ComboBox();
-            this.mapProviderLable = new System.Windows.Forms.Label();
-            this.cacheModeLabel = new System.Windows.Forms.Label();
-            this.cacheModeSelector = new System.Windows.Forms.ComboBox();
-            this.emptyCache = new System.Windows.Forms.Button();
-            this.currentCacheLocation = new System.Windows.Forms.TextBox();
-            this.cacheLocationLabel = new System.Windows.Forms.Label();
             this.browseCacheLocation = new System.Windows.Forms.Button();
+            this.cacheLocationLabel = new System.Windows.Forms.Label();
+            this.currentCacheLocation = new System.Windows.Forms.TextBox();
+            this.emptyCache = new System.Windows.Forms.Button();
+            this.cacheModeSelector = new System.Windows.Forms.ComboBox();
+            this.cacheModeLabel = new System.Windows.Forms.Label();
+            this.mapProviderLable = new System.Windows.Forms.Label();
+            this.mapProviderSelector = new System.Windows.Forms.ComboBox();
             this.mainLayout.SuspendLayout();
             this.confirmPanel.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -121,43 +121,31 @@
             this.panel1.Size = new System.Drawing.Size(342, 188);
             this.panel1.TabIndex = 3;
             // 
-            // mapProviderSelector
+            // browseCacheLocation
             // 
-            this.mapProviderSelector.FormattingEnabled = true;
-            this.mapProviderSelector.Location = new System.Drawing.Point(88, 7);
-            this.mapProviderSelector.Name = "mapProviderSelector";
-            this.mapProviderSelector.Size = new System.Drawing.Size(192, 21);
-            this.mapProviderSelector.TabIndex = 0;
+            this.browseCacheLocation.Location = new System.Drawing.Point(251, 91);
+            this.browseCacheLocation.Name = "browseCacheLocation";
+            this.browseCacheLocation.Size = new System.Drawing.Size(29, 20);
+            this.browseCacheLocation.TabIndex = 7;
+            this.browseCacheLocation.Text = "...";
+            this.browseCacheLocation.UseVisualStyleBackColor = true;
             // 
-            // mapProviderLable
+            // cacheLocationLabel
             // 
-            this.mapProviderLable.AutoSize = true;
-            this.mapProviderLable.Location = new System.Drawing.Point(10, 10);
-            this.mapProviderLable.Name = "mapProviderLable";
-            this.mapProviderLable.Size = new System.Drawing.Size(72, 13);
-            this.mapProviderLable.TabIndex = 1;
-            this.mapProviderLable.Text = "Map provider:";
+            this.cacheLocationLabel.AutoSize = true;
+            this.cacheLocationLabel.Location = new System.Drawing.Point(10, 95);
+            this.cacheLocationLabel.Name = "cacheLocationLabel";
+            this.cacheLocationLabel.Size = new System.Drawing.Size(81, 13);
+            this.cacheLocationLabel.TabIndex = 6;
+            this.cacheLocationLabel.Text = "Cache location:";
             // 
-            // cacheModeLabel
+            // currentCacheLocation
             // 
-            this.cacheModeLabel.AutoSize = true;
-            this.cacheModeLabel.Location = new System.Drawing.Point(10, 38);
-            this.cacheModeLabel.Name = "cacheModeLabel";
-            this.cacheModeLabel.Size = new System.Drawing.Size(70, 13);
-            this.cacheModeLabel.TabIndex = 2;
-            this.cacheModeLabel.Text = "Cache mode:";
-            // 
-            // cacheModeSelector
-            // 
-            this.cacheModeSelector.FormattingEnabled = true;
-            this.cacheModeSelector.Items.AddRange(new object[] {
-            "Cache only",
-            "Network Only",
-            "Both (fastest)"});
-            this.cacheModeSelector.Location = new System.Drawing.Point(88, 35);
-            this.cacheModeSelector.Name = "cacheModeSelector";
-            this.cacheModeSelector.Size = new System.Drawing.Size(192, 21);
-            this.cacheModeSelector.TabIndex = 3;
+            this.currentCacheLocation.Location = new System.Drawing.Point(97, 91);
+            this.currentCacheLocation.Name = "currentCacheLocation";
+            this.currentCacheLocation.Size = new System.Drawing.Size(147, 20);
+            this.currentCacheLocation.TabIndex = 5;
+            this.currentCacheLocation.Text = "invalid";
             // 
             // emptyCache
             // 
@@ -169,31 +157,46 @@
             this.emptyCache.UseVisualStyleBackColor = true;
             this.emptyCache.Click += new System.EventHandler(this.emptyCache_Click);
             // 
-            // currentCacheLocation
+            // cacheModeSelector
             // 
-            this.currentCacheLocation.Location = new System.Drawing.Point(97, 91);
-            this.currentCacheLocation.Name = "currentCacheLocation";
-            this.currentCacheLocation.Size = new System.Drawing.Size(147, 20);
-            this.currentCacheLocation.TabIndex = 5;
-            this.currentCacheLocation.Text = "invalid";
+            this.cacheModeSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cacheModeSelector.FormattingEnabled = true;
+            this.cacheModeSelector.Items.AddRange(new object[] {
+            "Cache only",
+            "Network Only",
+            "Both (fastest)"});
+            this.cacheModeSelector.Location = new System.Drawing.Point(88, 35);
+            this.cacheModeSelector.Name = "cacheModeSelector";
+            this.cacheModeSelector.Size = new System.Drawing.Size(192, 21);
+            this.cacheModeSelector.TabIndex = 3;
             // 
-            // cacheLocationLabel
+            // cacheModeLabel
             // 
-            this.cacheLocationLabel.AutoSize = true;
-            this.cacheLocationLabel.Location = new System.Drawing.Point(10, 95);
-            this.cacheLocationLabel.Name = "cacheLocationLabel";
-            this.cacheLocationLabel.Size = new System.Drawing.Size(81, 13);
-            this.cacheLocationLabel.TabIndex = 6;
-            this.cacheLocationLabel.Text = "Cache location:";
+            this.cacheModeLabel.AutoSize = true;
+            this.cacheModeLabel.Location = new System.Drawing.Point(10, 38);
+            this.cacheModeLabel.Name = "cacheModeLabel";
+            this.cacheModeLabel.Size = new System.Drawing.Size(70, 13);
+            this.cacheModeLabel.TabIndex = 2;
+            this.cacheModeLabel.Text = "Cache mode:";
             // 
-            // browseCacheLocation
+            // mapProviderLable
             // 
-            this.browseCacheLocation.Location = new System.Drawing.Point(251, 91);
-            this.browseCacheLocation.Name = "browseCacheLocation";
-            this.browseCacheLocation.Size = new System.Drawing.Size(29, 20);
-            this.browseCacheLocation.TabIndex = 7;
-            this.browseCacheLocation.Text = "...";
-            this.browseCacheLocation.UseVisualStyleBackColor = true;
+            this.mapProviderLable.AutoSize = true;
+            this.mapProviderLable.Location = new System.Drawing.Point(10, 10);
+            this.mapProviderLable.Name = "mapProviderLable";
+            this.mapProviderLable.Size = new System.Drawing.Size(72, 13);
+            this.mapProviderLable.TabIndex = 1;
+            this.mapProviderLable.Text = "Map provider:";
+            // 
+            // mapProviderSelector
+            // 
+            this.mapProviderSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.mapProviderSelector.FormattingEnabled = true;
+            this.mapProviderSelector.Location = new System.Drawing.Point(88, 7);
+            this.mapProviderSelector.Name = "mapProviderSelector";
+            this.mapProviderSelector.Size = new System.Drawing.Size(192, 21);
+            this.mapProviderSelector.Sorted = true;
+            this.mapProviderSelector.TabIndex = 0;
             // 
             // Form_MapOptions
             // 
