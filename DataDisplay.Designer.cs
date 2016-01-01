@@ -24,6 +24,8 @@
         /// </summary>
         private void InitializeComponent() {
             this.mainTable = new System.Windows.Forms.TableLayoutPanel();
+            this.titleGroup = new System.Windows.Forms.GroupBox();
+            this.titleGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainTable
@@ -33,20 +35,32 @@
             this.mainTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.mainTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.mainTable.Dock = System.Windows.Forms.DockStyle.Top;
-            this.mainTable.Location = new System.Drawing.Point(0, 0);
+            this.mainTable.Location = new System.Drawing.Point(3, 16);
             this.mainTable.Name = "mainTable";
             this.mainTable.RowCount = 1;
             this.mainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.mainTable.Size = new System.Drawing.Size(254, 26);
+            this.mainTable.Size = new System.Drawing.Size(248, 26);
             this.mainTable.TabIndex = 0;
+            // 
+            // titleGroup
+            // 
+            this.titleGroup.Controls.Add(this.mainTable);
+            this.titleGroup.Dock = System.Windows.Forms.DockStyle.Top;
+            this.titleGroup.Location = new System.Drawing.Point(0, 0);
+            this.titleGroup.Name = "titleGroup";
+            this.titleGroup.Size = new System.Drawing.Size(254, 100);
+            this.titleGroup.TabIndex = 1;
+            this.titleGroup.TabStop = false;
+            this.titleGroup.Text = "groupBox1";
             // 
             // DataDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.mainTable);
+            this.Controls.Add(this.titleGroup);
             this.Name = "DataDisplay";
             this.Size = new System.Drawing.Size(254, 169);
+            this.titleGroup.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -54,5 +68,6 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel mainTable;
+        private System.Windows.Forms.GroupBox titleGroup;
     }
 }

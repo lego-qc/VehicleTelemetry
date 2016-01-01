@@ -24,6 +24,15 @@ namespace QCTracker {
 
             mapGroup.Controls.Add(mapView);
             mapView.Dock = DockStyle.Fill;
+
+            dataGroupTest.Count = 3;
+            dataGroupTest.Title = "Acceleration";
+            dataGroupTest.Labels[0] = "X =";
+            dataGroupTest.Labels[1] = "Y =";
+            dataGroupTest.Labels[2] = "Z =";
+            dataGroupTest.Values[0] = "1";
+            dataGroupTest.Values[1] = "2";
+            dataGroupTest.Values[2] = "3";
         } 
 
         private void ConfigMap() {

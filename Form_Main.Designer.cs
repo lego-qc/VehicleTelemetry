@@ -43,6 +43,7 @@
             this.menuNetwork = new System.Windows.Forms.ToolStripMenuItem();
             this.menuOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemMapOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataGroupTest = new QCTracker.DataDisplay();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitLayout)).BeginInit();
             this.mainSplitLayout.Panel1.SuspendLayout();
             this.mainSplitLayout.Panel2.SuspendLayout();
@@ -82,6 +83,7 @@
             // 
             // dataPanelGroup
             // 
+            this.dataPanelGroup.Controls.Add(this.dataGroupTest);
             this.dataPanelGroup.Controls.Add(this.debugPushWaypoint);
             this.dataPanelGroup.Controls.Add(this.dataPanelMainLayout);
             this.dataPanelGroup.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -282,6 +284,15 @@
             this.menuItemMapOptions.Text = "Map Options";
             this.menuItemMapOptions.Click += new System.EventHandler(this.menuItemMapOptions_Click);
             // 
+            // dataGroupTest
+            // 
+            this.dataGroupTest.Count = 0;
+            this.dataGroupTest.Location = new System.Drawing.Point(6, 147);
+            this.dataGroupTest.Name = "dataGroupTest";
+            this.dataGroupTest.Size = new System.Drawing.Size(188, 139);
+            this.dataGroupTest.TabIndex = 2;
+            this.dataGroupTest.Title = null;
+            // 
             // QCTrackerMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -327,6 +338,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuNetwork;
         private System.Windows.Forms.ToolStripMenuItem menuOptions;
         private System.Windows.Forms.ToolStripMenuItem menuItemMapOptions;
+        private DataDisplay dataGroupTest;
     }
 }
 

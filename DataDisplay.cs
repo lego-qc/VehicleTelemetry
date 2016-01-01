@@ -17,9 +17,13 @@ namespace QCTracker {
             title = null;
             labels = new StringTable();
             values = new StringTable();
+            titleLabel = new Label();
+            graphButton = new Button();
 
             labels.OnChanged += this.OnLabelChanged;
             values.OnChanged += this.OnValueChanged;
+            graphButton.Click += this.OnShowGraph;
+            isShowingGraph = false;
         }
 
 
@@ -27,8 +31,11 @@ namespace QCTracker {
         private string title;
         private StringTable labels;
         private StringTable values;
-        private Label titleLabel = new Label();
-        private Button graphButton = new Button();
+        private Label titleLabel;
+        private Button graphButton;
+        private const int ROW_SIZE = 20;
+        private const int MARGIN = 1;
+        private bool isShowingGraph;
 
         public int Count {
             get {
@@ -56,20 +63,42 @@ namespace QCTracker {
                 title = value;
                 if (title != null) {
                     titleLabel.Text = title;
+                    titleGroup.Text = title;
                 }
                 else {
                     titleLabel.Text = "";
+                    titleGroup.Text = "";
                 }
             }
         }
 
+        public StringTable Labels {
+            get {
+                return labels;
+            }
+        }
+        public StringTable Values {
+            get {
+                return values;
+            }
+        }
+
         private void OnLabelChanged(int index, string value) {
-            Label label = (Label)mainTable.GetControlFromPosition(0, index + 1);
+            Label label = (Label)mainTable.GetControlFromPosition(0, index);
             label.Text = (value != null ? value : "");
         }
         private void OnValueChanged(int index, string value) {
-            TextBox textBox = (TextBox)mainTable.GetControlFromPosition(0, index + 1);
+            TextBox textBox = (TextBox)mainTable.GetControlFromPosition(1, index);
             textBox.Text = (value != null ? value : "");
+        }
+
+        private void OnShowGraph(object sender, EventArgs e) {
+            int currentWidth = titleGroup.Size.Width;
+            int currentHeight = titleGroup.Size.Height;
+            int newWidth = currentWidth;
+            int newHeight = currentHeight + (isShowingGraph ? -50 : +50);
+            titleGroup.Size = new Size(newWidth, newHeight);
+            isShowingGraph = !isShowingGraph;
         }
 
         private void UpdateLayout() {
@@ -80,21 +109,22 @@ namespace QCTracker {
             }
 
             // initialize table layout
-            mainTable.RowCount = count + 1;
-            foreach (RowStyle style in mainTable.RowStyles) {
-                style.SizeType = SizeType.Absolute;
-                style.Height = 26;
+            mainTable.RowCount = count;
+            mainTable.RowStyles.Clear();
+            for (int i=0; i<mainTable.RowCount; i++) {
+                mainTable.RowStyles.Add(new RowStyle(SizeType.Absolute, ROW_SIZE));
             }
-            mainTable.MinimumSize = new Size(0, 26 * mainTable.RowCount);
-            mainTable.Size = new Size(mainTable.Size.Width, 26 * mainTable.RowCount);
+            mainTable.MinimumSize = new Size(0, ROW_SIZE * mainTable.RowCount);
+            mainTable.Size = new Size(mainTable.Size.Width, ROW_SIZE * mainTable.RowCount + MARGIN);
+            titleGroup.Size = new Size(mainTable.Size.Width, mainTable.Size.Height + 24);
 
-
-            for (int row = 1; row < count; row++) {
+            for (int row = 0; row < count; row++) {
                 // add label
                 Label label = new Label();
                 mainTable.Controls.Add(label, 0, row);
                 label.Dock = DockStyle.Fill;
                 label.TextAlign = ContentAlignment.MiddleLeft;
+                label.Margin = new Padding(MARGIN);
 
                 // add textbox
                 TextBox textBox = new TextBox();
@@ -102,15 +132,20 @@ namespace QCTracker {
                 textBox.Dock = DockStyle.Fill;
                 textBox.TextAlign = HorizontalAlignment.Left;
                 textBox.ReadOnly = true;
+                textBox.Margin = new Padding(MARGIN);
             }
 
             // add graph button
             mainTable.Controls.Add(graphButton, 2, mainTable.RowCount - 1);
             graphButton.Text = "G";
+            graphButton.Margin = new Padding(MARGIN);
 
             // add title
-            mainTable.Controls.Add(titleLabel, 0, 0);
-            mainTable.SetColumnSpan(titleLabel, 3);           
+            //mainTable.Controls.Add(titleLabel, 0, 0);
+            //mainTable.SetColumnSpan(titleLabel, 3);
+            //titleLabel.Margin = new Padding(MARGIN);
+
+            mainTable.Refresh();
         }
 
         public class StringTable {
