@@ -11,10 +11,13 @@ namespace QCTracker {
         /// </summary>
         [STAThread]
         static void Main() {
+            //MessageTester.Test();
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             var mainForm = new QCTrackerMainForm();
             Application.Run(mainForm);
+            
         }
     }
 }

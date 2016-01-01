@@ -127,7 +127,7 @@
             this.dataPanelMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.dataPanelMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 5F));
             this.dataPanelMainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.dataPanelMainLayout.Size = new System.Drawing.Size(194, 227);
+            this.dataPanelMainLayout.Size = new System.Drawing.Size(194, 125);
             this.dataPanelMainLayout.TabIndex = 0;
             // 
             // dataPanelLabelPos
