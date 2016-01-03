@@ -14,7 +14,7 @@ using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.ToolTips;
 
 
-namespace QCTracker {
+namespace VehicleTelemetry {
     public partial class Form_MapOptions : Form {
         class ProviderItem {
             public GMapProvider provider;

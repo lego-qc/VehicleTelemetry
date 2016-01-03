@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 
 
-namespace QCTracker {
+namespace VehicleTelemetry {
     public class Map : GMap.NET.WindowsForms.GMapControl {
         protected override void OnPaintOverlays(Graphics g) {
             base.OnPaintOverlays(g);

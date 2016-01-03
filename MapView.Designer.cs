@@ -1,4 +1,4 @@
-﻿namespace QCTracker {
+﻿namespace VehicleTelemetry {
     partial class MapView {
         /// <summary> 
         /// Required designer variable.

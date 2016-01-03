@@ -1,4 +1,4 @@
-﻿namespace QCTracker {
+﻿namespace VehicleTelemetry {
     partial class Form_MapOptions {
         /// <summary>
         /// Required designer variable.

@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace QCTracker {
-    public partial class DataDisplay : UserControl {
-        public DataDisplay() {
+namespace VehicleTelemetry {
+    public partial class DataSnippet : UserControl {
+        public DataSnippet() {
             InitializeComponent();
 
             count = 0;
@@ -24,6 +24,10 @@ namespace QCTracker {
             values.OnChanged += this.OnValueChanged;
             graphButton.Click += this.OnShowGraph;
             isShowingGraph = false;
+
+            Font oldFont = titleGroup.Font;
+            titleGroup.Font = new Font(titleGroup.Font, FontStyle.Bold);
+            mainTable.Font = oldFont;
         }
 
 
@@ -97,7 +101,7 @@ namespace QCTracker {
             int currentHeight = titleGroup.Size.Height;
             int newWidth = currentWidth;
             int newHeight = currentHeight + (isShowingGraph ? -50 : +50);
-            titleGroup.Size = new Size(newWidth, newHeight);
+            this.Size = new Size(newWidth, newHeight);
             isShowingGraph = !isShowingGraph;
         }
 
@@ -116,7 +120,7 @@ namespace QCTracker {
             }
             mainTable.MinimumSize = new Size(0, ROW_SIZE * mainTable.RowCount);
             mainTable.Size = new Size(mainTable.Size.Width, ROW_SIZE * mainTable.RowCount + MARGIN);
-            titleGroup.Size = new Size(mainTable.Size.Width, mainTable.Size.Height + 24);
+            this.Size = new Size(this.Size.Width, mainTable.Size.Height + 24);
 
             for (int row = 0; row < count; row++) {
                 // add label
@@ -139,11 +143,6 @@ namespace QCTracker {
             mainTable.Controls.Add(graphButton, 2, mainTable.RowCount - 1);
             graphButton.Text = "G";
             graphButton.Margin = new Padding(MARGIN);
-
-            // add title
-            //mainTable.Controls.Add(titleLabel, 0, 0);
-            //mainTable.SetColumnSpan(titleLabel, 3);
-            //titleLabel.Margin = new Padding(MARGIN);
 
             mainTable.Refresh();
         }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace QCTracker {
+namespace VehicleTelemetry {
     public class Path : List<GeoPoint> {
         private Pen color = Pens.Red;
 

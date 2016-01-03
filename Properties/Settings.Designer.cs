@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace QCTracker.Properties {
+namespace VehicleTelemetry.Properties {
 
 
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

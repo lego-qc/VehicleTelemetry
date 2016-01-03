@@ -87,11 +87,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataDisplay.cs">
+    <Compile Include="DataSnippet.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DataDisplay.Designer.cs">
-      <DependentUpon>DataDisplay.cs</DependentUpon>
+    <Compile Include="DataSnippet.Designer.cs">
+      <DependentUpon>DataSnippet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataPanel.Designer.cs">
+      <DependentUpon>DataPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Form_Main.cs">
       <SubType>Form</SubType>
@@ -120,8 +126,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Waypoint.cs" />
-    <EmbeddedResource Include="DataDisplay.resx">
-      <DependentUpon>DataDisplay.cs</DependentUpon>
+    <EmbeddedResource Include="DataSnippet.resx">
+      <DependentUpon>DataSnippet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataPanel.resx">
+      <DependentUpon>DataPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Main.resx">
       <DependentUpon>Form_Main.cs</DependentUpon>

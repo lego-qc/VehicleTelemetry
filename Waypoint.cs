@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QCTracker {
+namespace VehicleTelemetry {
     public class GeoPoint {
         private double lat, lng, alt;
 

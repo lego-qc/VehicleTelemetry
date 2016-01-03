@@ -1,5 +1,5 @@
-﻿namespace QCTracker {
-    partial class DataDisplay {
+﻿namespace VehicleTelemetry {
+    partial class DataSnippet {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -45,20 +45,20 @@
             // titleGroup
             // 
             this.titleGroup.Controls.Add(this.mainTable);
-            this.titleGroup.Dock = System.Windows.Forms.DockStyle.Top;
+            this.titleGroup.Dock = System.Windows.Forms.DockStyle.Fill;
             this.titleGroup.Location = new System.Drawing.Point(0, 0);
             this.titleGroup.Name = "titleGroup";
-            this.titleGroup.Size = new System.Drawing.Size(254, 100);
+            this.titleGroup.Size = new System.Drawing.Size(254, 169);
             this.titleGroup.TabIndex = 1;
             this.titleGroup.TabStop = false;
-            this.titleGroup.Text = "groupBox1";
+            this.titleGroup.Text = "Title";
             // 
-            // DataDisplay
+            // DataSnippet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.titleGroup);
-            this.Name = "DataDisplay";
+            this.Name = "DataSnippet";
             this.Size = new System.Drawing.Size(254, 169);
             this.titleGroup.ResumeLayout(false);
             this.ResumeLayout(false);
