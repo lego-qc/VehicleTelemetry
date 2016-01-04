@@ -9,7 +9,7 @@ using System.Threading;
 
 
 namespace VehicleTelemetry {
-    public class NetworkInterface {
+    public class MessageProviderTcp : IMessageProvider {
         protected class AsyncStateObject {
             public AsyncStateObject(ReadMessagePhase next, int numBytesToRead) {
                 this.next = next;
@@ -20,7 +20,7 @@ namespace VehicleTelemetry {
         }
 
 
-        public NetworkInterface(ushort port) {
+        public MessageProviderTcp(ushort port) {
             listener = TcpListener.Create(port);
             socket = null;
         }
@@ -34,7 +34,7 @@ namespace VehicleTelemetry {
                 // accept incoming connection
                 socket = listener.AcceptSocket();
 
-
+                StartMessaging();
             }
             catch (Exception ex) {
                 throw;
@@ -42,6 +42,7 @@ namespace VehicleTelemetry {
         }
 
         public void Close() {
+            StopMessaging();
             if (socket != null) {
                 socket.Close();
             }
@@ -55,6 +56,7 @@ namespace VehicleTelemetry {
         private byte[] checksumBuffer = new byte[4];
         private byte[] dataBuffer = null;
         private Form_VehicleTelemetryMain targetForm;
+        public event MessageHandler OnMessage;
 
         protected delegate void ReadMessagePhase();
 
@@ -142,17 +144,8 @@ namespace VehicleTelemetry {
                 // ...
             }
 
-            switch (msg.Type) {
-                case eMessageType.LAYOUT:
-                    ProcessMessage((LayoutMessage)msg);
-                    break;
-                case eMessageType.DATA:
-                    ProcessMessage((DataMessage)msg);
-                    break;
-                case eMessageType.PATH:
-                    ProcessMessage((PathMessage)msg);
-                    break;
-            }
+            // fire event
+            OnMessage(msg);
         }
 
         private void ReadCallback(IAsyncResult result) {
@@ -162,21 +155,11 @@ namespace VehicleTelemetry {
                 // handle read error
                 // ...
             }
-            else {
+            else if (isMessaging) {
                 state.next();
             }
         }
 
-        private void ProcessMessage(LayoutMessage msg) {
 
-        }
-
-        private void ProcessMessage(PathMessage msg) {
-
-        }
-
-        private void ProcessMessage(DataMessage msg) {
-
-        }
     }
 }
