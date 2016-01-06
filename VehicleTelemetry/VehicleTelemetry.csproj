@@ -102,17 +102,18 @@
     <Compile Include="DataPanel.Designer.cs">
       <DependentUpon>DataPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_Main.cs">
+    <Compile Include="MessageProviderFactory.cs" />
+    <Compile Include="TelemetryControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TelemetryControl.Designer.cs">
+      <DependentUpon>TelemetryControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MapOptions.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_Main.Designer.cs">
-      <DependentUpon>Form_Main.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Form_MapOptions.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form_MapOptions.Designer.cs">
-      <DependentUpon>Form_MapOptions.cs</DependentUpon>
+    <Compile Include="MapOptions.Designer.cs">
+      <DependentUpon>MapOptions.cs</DependentUpon>
     </Compile>
     <Compile Include="IMessageProvider.cs" />
     <Compile Include="Map.cs">
@@ -128,7 +129,6 @@
     <Compile Include="MessageProcessor.cs" />
     <Compile Include="MessageProviderTcp.cs" />
     <Compile Include="Path.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GeoPoint.cs" />
     <EmbeddedResource Include="DataSnippet.resx">
@@ -137,11 +137,11 @@
     <EmbeddedResource Include="DataPanel.resx">
       <DependentUpon>DataPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_Main.resx">
-      <DependentUpon>Form_Main.cs</DependentUpon>
+    <EmbeddedResource Include="TelemetryControl.resx">
+      <DependentUpon>TelemetryControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_MapOptions.resx">
-      <DependentUpon>Form_MapOptions.cs</DependentUpon>
+    <EmbeddedResource Include="MapOptions.resx">
+      <DependentUpon>MapOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MapView.resx">
       <DependentUpon>MapView.cs</DependentUpon>

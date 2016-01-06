@@ -15,10 +15,10 @@ using GMap.NET.WindowsForms.Markers;
 using GMap.NET.WindowsForms.ToolTips;
 
 namespace VehicleTelemetry {
-    public partial class Form_VehicleTelemetryMain : Form {
+    public partial class TelemetryControl : UserControl {
         ////////////////////////////////////////////////////////////////////////
         // Cunstruction
-        public Form_VehicleTelemetryMain() {
+        public TelemetryControl() {
             InitializeComponent();
             ConfigMap();
 
@@ -44,7 +44,7 @@ namespace VehicleTelemetry {
         ////////////////////////////////////////////////////////////////////////
         // Vars
         protected MapView mapView = new MapView();
-        private bool trackingEnabled;
+        private bool trackingEnabled = false;
         private GeoPoint currentPosition;
         private List<Path> paths = new List<Path>();
 
@@ -58,12 +58,12 @@ namespace VehicleTelemetry {
 
         ////////////////////////////////////////////////////////////////////////
         // Event handlers
-        private void menuItemMapOptions_Click(object sender, EventArgs e) {
-            mapView.ShowOptions();
-        }
+        //private void menuItemMapOptions_Click(object sender, EventArgs e) {
+        //    mapView.ShowOptions();
+        //}
 
-        private void menuItemExit_Click(object sender, EventArgs e) {
-            Close();
-        }
+        //private void menuItemExit_Click(object sender, EventArgs e) {
+        //    Close();
+        //}
     }
 }

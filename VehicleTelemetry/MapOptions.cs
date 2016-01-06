@@ -15,7 +15,7 @@ using GMap.NET.WindowsForms.ToolTips;
 
 
 namespace VehicleTelemetry {
-    public partial class Form_MapOptions : Form {
+    public partial class MapOptions : Form {
         class ProviderItem {
             public GMapProvider provider;
             public ProviderItem(GMapProvider provider) {
@@ -26,7 +26,7 @@ namespace VehicleTelemetry {
             }
         }
 
-        public Form_MapOptions() {
+        public MapOptions() {
             InitializeComponent();
 
             DialogResult = DialogResult.Cancel;

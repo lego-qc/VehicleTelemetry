@@ -19,7 +19,10 @@ namespace NetworkTestTcp {
 
         public void Connect(string address, int port) {
             try {
-                IPHostEntry entry = Dns.Resolve(address);
+                IPHostEntry entry = Dns.GetHostEntry(address);
+                if (entry.AddressList.Length == 0) {
+                    throw new ArgumentException("Host name could not be resolved.");
+                }
                 socket.Connect(new IPEndPoint(entry.AddressList[0], port));                                
             }
             catch (Exception ex) {

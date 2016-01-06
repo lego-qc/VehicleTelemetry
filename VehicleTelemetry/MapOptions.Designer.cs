@@ -1,5 +1,5 @@
 ﻿namespace VehicleTelemetry {
-    partial class Form_MapOptions {
+    partial class MapOptions {
         /// <summary>
         /// Required designer variable.
         /// </summary>

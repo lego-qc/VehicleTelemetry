@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace VehicleTelemetry {
     public delegate void MessageHandler(Message message);
 
-    interface IMessageProvider {
+    public interface IMessageProvider {
         event MessageHandler OnMessage;
     }
+
 }

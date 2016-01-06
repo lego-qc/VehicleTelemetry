@@ -14,7 +14,25 @@ namespace VehicleTelemetryApp {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var mainForm = new Form_VehicleTelemetryMain();
+            //var mainForm = new Form_VehicleTelemetryMain();
+            //var netServer = new MessageProviderTcp(5640);
+            //var msgProcessor = new MessageProcessor();
+
+            //msgProcessor.TargetForm = mainForm;
+            //msgProcessor.MessageProvider = netServer;
+
+            //netServer.Listen();
+
+
+            Application.Run(new AppMainForm());
+        }
+    }
+}
+
+
+
+/* Code for testing main form's data panel
+
 
             mainForm.DataSnippets.Count = 4;
 
@@ -63,10 +81,4 @@ namespace VehicleTelemetryApp {
             mainForm.DataSnippets[3].Values[1] = "44";
             mainForm.DataSnippets[3].Values[2] = "43";
             mainForm.DataSnippets[3].Values[3] = "41";
-
-
-
-            Application.Run(mainForm);
-        }
-    }
-}
+    */

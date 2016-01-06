@@ -101,7 +101,7 @@ namespace VehicleTelemetry {
         }
 
         private void mapParamsOptions_Click(object sender, EventArgs e) {
-            var optionsForm = new Form_MapOptions();
+            var optionsForm = new MapOptions();
             optionsForm.Provider = map.MapProvider;
             optionsForm.CacheMode = map.Manager.Mode;
             optionsForm.GMap = map;

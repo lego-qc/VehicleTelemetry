@@ -5,16 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace VehicleTelemetry {
-    class MessageProcessor {
-        public MessageProcessor(IMessageProvider provider = null, Form_VehicleTelemetryMain targetForm = null) {
+    public class MessageProcessor {
+        public MessageProcessor(IMessageProvider provider = null, TelemetryControl targetForm = null) {
+            idToIndexMapping = new Dictionary<int, int>();
+            targetFormCollection = new HashSet<TelemetryControl>();
             MessageProvider = provider;
             TargetForm = targetForm;
-            idToIndexMapping = new Dictionary<int, int>();
         }
 
         private IMessageProvider provider;
-        private Form_VehicleTelemetryMain targetForm;
-        private HashSet<Form_VehicleTelemetryMain> targetFormCollection;
+        private TelemetryControl targetForm;
+        private HashSet<TelemetryControl> targetFormCollection;
         private Dictionary<int, int> idToIndexMapping;
 
         public IMessageProvider MessageProvider {
@@ -32,13 +33,15 @@ namespace VehicleTelemetry {
             }
         }
 
-        public Form_VehicleTelemetryMain TargetForm {
+        public TelemetryControl TargetForm {
             get {
                 return targetForm;
             }
             set {
                 if (value == null) {
-                    targetFormCollection.Remove(targetForm);
+                    if (targetFormCollection.Contains(targetForm)) {
+                        targetFormCollection.Remove(targetForm);
+                    }
                     targetForm = value;
                     return;
                 }
@@ -88,7 +91,7 @@ namespace VehicleTelemetry {
                         targetForm.DataSnippets[i].Count = msg[i].Dimension;
                         targetForm.DataSnippets[i].Title = msg[i].Name;
                         for (int j = 0; j < msg[i].Dimension; j++) {
-                            targetForm.DataSnippets[i].Labels[i] = msg[i][j];
+                            targetForm.DataSnippets[i].Labels[j] = msg[i][j];
                         }
                     }
                 }));

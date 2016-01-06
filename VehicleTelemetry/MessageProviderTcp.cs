@@ -10,6 +10,10 @@ using System.Threading;
 
 namespace VehicleTelemetry {
     public class MessageProviderTcp : IMessageProvider {
+        static MessageProviderTcp() {
+            MessageProviderFactory.RegisterClass<MessageProviderTcp>("Tcp");
+        }
+
         protected class AsyncStateObject {
             public AsyncStateObject(ReadMessagePhase next, int numBytesToRead) {
                 this.next = next;
@@ -19,6 +23,10 @@ namespace VehicleTelemetry {
             public int numBytesToRead;
         }
 
+
+        public MessageProviderTcp() : this(5640) {
+            // empty on purpose
+        }
 
         public MessageProviderTcp(ushort port) {
             listener = TcpListener.Create(port);
@@ -32,12 +40,16 @@ namespace VehicleTelemetry {
 
             try {
                 // accept incoming connection
+                listener.Start();
                 socket = listener.AcceptSocket();
 
                 StartMessaging();
             }
             catch (Exception ex) {
                 throw;
+            }
+            finally {
+                listener.Stop();
             }
         }
 
@@ -55,7 +67,6 @@ namespace VehicleTelemetry {
         private byte[] sizeBuffer = new byte[2];
         private byte[] checksumBuffer = new byte[4];
         private byte[] dataBuffer = null;
-        private Form_VehicleTelemetryMain targetForm;
         public event MessageHandler OnMessage;
 
         protected delegate void ReadMessagePhase();
@@ -91,6 +102,7 @@ namespace VehicleTelemetry {
             catch (Exception ex) {
                 // handle socket error
                 // ...
+                StopMessaging();
             }
         }
 
@@ -105,6 +117,7 @@ namespace VehicleTelemetry {
             catch (Exception ex) {
                 // handle socket error
                 // ...
+                StopMessaging();
             }
         }
 
@@ -115,12 +128,13 @@ namespace VehicleTelemetry {
             catch (Exception ex) {
                 // handle socket error
                 // ...
+                StopMessaging();
             }
         }
 
         private void CommitMessage() {
             // decode values
-            uint checksum = ((uint)checksumBuffer[0] << 24) + ((uint)checksumBuffer[1] << 16) + ((uint)checksumBuffer[2] << 8) + (uint)sizeBuffer[3];
+            uint checksum = ((uint)checksumBuffer[0] << 24) + ((uint)checksumBuffer[1] << 16) + ((uint)checksumBuffer[2] << 8) + (uint)checksumBuffer[3];
 
             // verify checksum
             bool isChecksumOk;
@@ -135,6 +149,7 @@ namespace VehicleTelemetry {
             if (!isChecksumOk) {
                 // handle checksum error
                 // ...
+                StopMessaging();
             }
 
             // decode message
@@ -142,10 +157,16 @@ namespace VehicleTelemetry {
             if (msg == null) {
                 // handle deserialization error
                 // ...
+                StopMessaging();
             }
 
             // fire event
             OnMessage(msg);
+
+            // get next message
+            if (isMessaging) {
+                ReadMessageSize();
+            }
         }
 
         private void ReadCallback(IAsyncResult result) {
@@ -154,12 +175,11 @@ namespace VehicleTelemetry {
             if (read != state.numBytesToRead) {
                 // handle read error
                 // ...
+                StopMessaging();
             }
             else if (isMessaging) {
                 state.next();
             }
         }
-
-
     }
 }
