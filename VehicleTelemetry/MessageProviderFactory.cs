@@ -3,32 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace VehicleTelemetry {
     public class MessageProviderFactory {
         static MessageProviderFactory() {
+            // create internal members
             registry = new Dictionary<Guid, ProviderCreator>();
             enumeration = new List<ProviderDesc>();
             enumWrapper = new ProviderEnumeration(enumeration);
-        }
 
-        public static void RegisterClass<ProviderT>(string name) where ProviderT : IMessageProvider, new() {
-            if (registry == null) {
-                registry = new Dictionary<Guid, ProviderCreator>();
-                enumeration = new List<ProviderDesc>();
-                enumWrapper = new ProviderEnumeration(enumeration);
-            }
-            Type type = typeof(ProviderT);
-            Guid id = type.GUID;
-            if (!registry.ContainsKey(id)) {
-                registry.Add(id, new ProviderCreator(name, () => { return new ProviderT(); }));
-                enumeration.Add(new ProviderDesc(id, name));
+            // get all classes implementing IMessageProvider from all assemblies
+            var subclasses =
+                from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                from type in assembly.GetTypes()
+                where typeof(IMessageProvider).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract && type.GetConstructor(Type.EmptyTypes) != null
+                select type;
+
+            // register all above classes
+            foreach (Type type in subclasses) {
+                Guid guid = type.GUID;
+                string name = type.Namespace + "." + type.Name;
+                if (!registry.ContainsKey(guid)) {
+                    registry.Add(guid, new ProviderCreator(name, () => {
+                        return (IMessageProvider)Activator.CreateInstance(type);
+                    }));
+                    enumeration.Add(new ProviderDesc(guid, name));
+                }
+                else {
+                    // should NEVER happen
+                    throw new Exception("Subclass found twice, should never happen.");
+                }
             }
         }
 
 
         public static IMessageProvider Create(Guid id) {
-            return null;
+            try {
+                return registry[id].creator();
+            }
+            catch (Exception ex) {
+                return null;
+            }
         }
 
         public static ProviderEnumeration Enumerator {

@@ -72,10 +72,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GMap.NET.Core">
-      <HintPath>..\..\..\Library\GMap.NET\Release-NETv4.0\GMap.NET.Core.dll</HintPath>
+      <HintPath>..\Reference\GMap.NET.Core.dll</HintPath>
     </Reference>
     <Reference Include="GMap.NET.WindowsForms">
-      <HintPath>..\..\..\Library\GMap.NET\Release-NETv4.0\GMap.NET.WindowsForms.dll</HintPath>
+      <HintPath>..\Reference\GMap.NET.WindowsForms.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

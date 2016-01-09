@@ -31,7 +31,7 @@
             this.disconnectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferenciesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.telemetryControl1 = new VehicleTelemetry.TelemetryControl();
+            this.telemetryControl = new VehicleTelemetry.TelemetryControl();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,18 +101,18 @@
             // 
             // telemetryControl1
             // 
-            this.telemetryControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.telemetryControl1.Location = new System.Drawing.Point(0, 24);
-            this.telemetryControl1.Name = "telemetryControl1";
-            this.telemetryControl1.Size = new System.Drawing.Size(727, 499);
-            this.telemetryControl1.TabIndex = 1;
+            this.telemetryControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.telemetryControl.Location = new System.Drawing.Point(0, 24);
+            this.telemetryControl.Name = "telemetryControl1";
+            this.telemetryControl.Size = new System.Drawing.Size(727, 499);
+            this.telemetryControl.TabIndex = 1;
             // 
             // AppMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(727, 523);
-            this.Controls.Add(this.telemetryControl1);
+            this.Controls.Add(this.telemetryControl);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "AppMainForm";
@@ -132,7 +132,7 @@
         private System.Windows.Forms.ToolStripMenuItem connectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem disconnectToolStripMenuItem;
-        private VehicleTelemetry.TelemetryControl telemetryControl1;
+        private VehicleTelemetry.TelemetryControl telemetryControl;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem preferenciesToolStripMenuItem;
     }

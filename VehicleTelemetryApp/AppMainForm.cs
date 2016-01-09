@@ -13,6 +13,9 @@ namespace VehicleTelemetryApp {
     public partial class AppMainForm : Form {
         public AppMainForm() {
             InitializeComponent();
+
+            messageProvider = null;
+            messageProcessor = new MessageProcessor(messageProvider, telemetryControl);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -21,12 +24,18 @@ namespace VehicleTelemetryApp {
 
         private void setupToolStripMenuItem_Click(object sender, EventArgs e) {
             var connectionForm = new ConnectionForm();
-            connectionForm.ShowDialog();
+            connectionForm.Processor = messageProcessor;
+            connectionForm.Provider = messageProvider;
+            connectionForm.Show();
+            messageProvider = connectionForm.Provider;
         }
 
         private void preferenciesToolStripMenuItem_Click(object sender, EventArgs e) {
             var preferencesForm = new PreferencesForm();
             DialogResult result = preferencesForm.ShowDialog();
         }
+
+        private IMessageProvider messageProvider;
+        private MessageProcessor messageProcessor;
     }
 }

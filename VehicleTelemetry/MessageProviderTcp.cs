@@ -10,9 +10,6 @@ using System.Threading;
 
 namespace VehicleTelemetry {
     public class MessageProviderTcp : IMessageProvider {
-        static MessageProviderTcp() {
-            MessageProviderFactory.RegisterClass<MessageProviderTcp>("Tcp");
-        }
 
         protected class AsyncStateObject {
             public AsyncStateObject(ReadMessagePhase next, int numBytesToRead) {
@@ -31,15 +28,17 @@ namespace VehicleTelemetry {
         public MessageProviderTcp(ushort port) {
             listener = TcpListener.Create(port);
             socket = null;
+            isListening = false;
         }
 
         public void Listen() {
-            if (Connected) {
+            if (IsConnected || isListening) {
                 throw new InvalidOperationException("Already connected.");
             }
 
             try {
                 // accept incoming connection
+                isListening = true;
                 listener.Start();
                 socket = listener.AcceptSocket();
 
@@ -50,10 +49,58 @@ namespace VehicleTelemetry {
             }
             finally {
                 listener.Stop();
+                isListening = false;
             }
         }
 
-        public void Close() {
+        public void ListenAsync(ListenCallback callback) {
+            if (IsConnected || isListening) {
+                throw new InvalidOperationException("Already connected.");
+            }
+
+            try {
+                isListening = true;
+                listener.Start();
+                listener.BeginAcceptSocket(ListenAsyncCallback, callback);
+            }
+            catch (Exception ex) {
+                callback(false);
+                listener.Stop();
+            }
+
+
+        }
+
+        void ListenAsyncCallback(IAsyncResult result) {
+            bool isOk = false;
+            try {
+                socket = listener.EndAcceptSocket(result);
+                StartMessaging();
+                isOk = true;
+            }
+            catch (Exception ex) {
+                isOk = false;
+            }
+            finally {
+                ListenCallback callback = (ListenCallback)result.AsyncState;
+
+                listener.Stop();
+                isListening = false;
+                callback(isOk);
+            }
+        }
+
+        public void Cancel() {
+            try {
+                listener.Stop();
+            }
+            catch (SocketException ex) {
+                // swallow exception
+            }
+        }
+
+
+        public void Disconnect() {
             StopMessaging();
             if (socket != null) {
                 socket.Close();
@@ -68,6 +115,7 @@ namespace VehicleTelemetry {
         private byte[] checksumBuffer = new byte[4];
         private byte[] dataBuffer = null;
         public event MessageHandler OnMessage;
+        private bool isListening;
 
         protected delegate void ReadMessagePhase();
 
@@ -80,9 +128,14 @@ namespace VehicleTelemetry {
             }
         }
 
-        public bool Connected {
+        public bool IsConnected {
             get {
                 return socket != null && socket.Connected;
+            }
+        }
+        public bool IsListening {
+            get {
+                return isListening;
             }
         }
 
@@ -161,7 +214,9 @@ namespace VehicleTelemetry {
             }
 
             // fire event
-            OnMessage(msg);
+            if (OnMessage != null) {
+                OnMessage(msg);
+            }
 
             // get next message
             if (isMessaging) {
@@ -170,16 +225,28 @@ namespace VehicleTelemetry {
         }
 
         private void ReadCallback(IAsyncResult result) {
-            int read = socket.EndReceive(result);
-            AsyncStateObject state = (AsyncStateObject)result.AsyncState;
-            if (read != state.numBytesToRead) {
-                // handle read error
-                // ...
+            try {
+                int read = socket.EndReceive(result);
+                AsyncStateObject state = (AsyncStateObject)result.AsyncState;
+                if (read != state.numBytesToRead) {
+                    // handle read error
+                    // ...
+                    StopMessaging();
+                }
+                else if (isMessaging) {
+                    state.next();
+                }
+            }
+            catch (Exception e) {
                 StopMessaging();
             }
-            else if (isMessaging) {
-                state.next();
-            }
+        }
+
+        public void Dispose() {
+            Disconnect();
+            socket.Dispose();
+            StopMessaging();
+            socket = null;
         }
     }
 }
