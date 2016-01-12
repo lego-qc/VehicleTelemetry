@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Diagnostics;
 using VehicleTelemetry;
 
 
@@ -38,21 +39,22 @@ namespace NetworkTestTcp {
                     // send layout
                     LayoutMessage layoutMsg = new LayoutMessage();
                     layoutMsg.Count = 3;
-                    layoutMsg[0].Dimension = 3;
+                    layoutMsg[0].Dimension = 4;
                     layoutMsg[0].Name = "GPS";
                     layoutMsg[0].Id = 1;
-                    layoutMsg[0].AppendPathIndex = 0;
-                    layoutMsg[0].AppendToPath = false;
-                    layoutMsg[0].UpdateMap = false;
+                    layoutMsg[0].AppendPathId = 10;
+                    layoutMsg[0].AppendPathEnabled = true;
+                    layoutMsg[0].UpdateMap = true;
                     layoutMsg[0][0] = "Latitude";
                     layoutMsg[0][1] = "Longitude";
                     layoutMsg[0][2] = "Altitude";
+                    layoutMsg[0][3] = "Speed (kph)";
 
                     layoutMsg[1].Dimension = 3;
                     layoutMsg[1].Name = "Speed";
                     layoutMsg[1].Id = 2;
-                    layoutMsg[1].AppendPathIndex = 0;
-                    layoutMsg[1].AppendToPath = false;
+                    layoutMsg[1].AppendPathId = 0;
+                    layoutMsg[1].AppendPathEnabled = false;
                     layoutMsg[1].UpdateMap = false;
                     layoutMsg[1][0] = "Forward";
                     layoutMsg[1][1] = "Right";
@@ -61,8 +63,8 @@ namespace NetworkTestTcp {
                     layoutMsg[2].Dimension = 4;
                     layoutMsg[2].Name = "Motors";
                     layoutMsg[2].Id = 3;
-                    layoutMsg[2].AppendPathIndex = 0;
-                    layoutMsg[2].AppendToPath = false;
+                    layoutMsg[2].AppendPathId = 0;
+                    layoutMsg[2].AppendPathEnabled = false;
                     layoutMsg[2].UpdateMap = false;
                     layoutMsg[2][0] = "Motor #1";
                     layoutMsg[2][1] = "Motor #2";
@@ -72,18 +74,37 @@ namespace NetworkTestTcp {
                     Console.WriteLine("Sending layout...");
                     client.Send(layoutMsg);
 
+                    PathMessage pathMsg = new PathMessage();
+                    pathMsg.action = PathMessage.eAction.ADD_PATH;
+                    pathMsg.path = 10;
+
+                    client.Send(pathMsg);
+                    Console.WriteLine("Configuring paths...");
+
                     // keep sending some data periodically
                     long iteration = 1;
+                    GeoPoint currentPoint = new GeoPoint(47.5, 19, 130);
+                    GeoPoint lastPoint = currentPoint;
+                    double elapsedTotal = 0;
+                    double frameTime = 1;
+                    Stopwatch timer = new Stopwatch();
+                    timer.Start();
                     while (isRunning) {
                         Console.WriteLine("updating data... #" + iteration.ToString());
                         DataMessage dataMsg = new DataMessage();
 
                         // gps
+                        currentPoint = new GeoPoint(
+                            47.5 + 0.05 * Math.Sin(0.01 * elapsedTotal),
+                            19 + 0.1 * Math.Cos(0.01 * elapsedTotal),
+                            130);
                         dataMsg.Id = 1;
-                        dataMsg.Dimension = 3;
-                        dataMsg[0] = 47.5f;
-                        dataMsg[1] = 19.0f;
-                        dataMsg[2] = 130.0f;
+                        dataMsg.Dimension = 4;
+                        dataMsg[0] = (float)currentPoint.Lat;
+                        dataMsg[1] = (float)currentPoint.Lng;
+                        dataMsg[2] = (float)130;
+                        dataMsg[3] = (float)(GeoPoint.DistanceDirect(currentPoint, lastPoint) / frameTime * 3.6);
+                        lastPoint = currentPoint;
 
                         client.Send(dataMsg);
 
@@ -108,6 +129,11 @@ namespace NetworkTestTcp {
 
                         // wait a little
                         Thread.Sleep(200);
+
+                        double elapsedTotalNew = timer.Elapsed.TotalSeconds;
+                        frameTime = elapsedTotalNew - elapsedTotal;
+                        elapsedTotal = elapsedTotalNew;
+                        
                     }
 
                     // close connection

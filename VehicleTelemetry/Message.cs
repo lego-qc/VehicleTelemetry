@@ -67,8 +67,8 @@ namespace VehicleTelemetry {
             public ushort Id = 0;
             private ushort dimension = 0;
             public bool UpdateMap = false;
-            public bool AppendToPath = false;
-            public ushort AppendPathIndex = 0;
+            public bool AppendPathEnabled = false;
+            public ushort AppendPathId = 0;
             private string[] valueNames = null;
 
             public string Name {
@@ -183,10 +183,10 @@ namespace VehicleTelemetry {
                 raw.Add((byte)(channels[i].Dimension));
 
                 raw.Add((byte)(channels[i].UpdateMap ? 1 : 0));
-                raw.Add((byte)(channels[i].AppendToPath ? 1 : 0));
+                raw.Add((byte)(channels[i].AppendPathEnabled ? 1 : 0));
 
-                raw.Add((byte)(channels[i].AppendPathIndex >> 8));
-                raw.Add((byte)(channels[i].AppendPathIndex));
+                raw.Add((byte)(channels[i].AppendPathId >> 8));
+                raw.Add((byte)(channels[i].AppendPathId));
 
                 for (int j = 0; j < channels[i].Dimension; j++) {
                     uint len = (uint)channels[i][j].Length;
@@ -244,8 +244,8 @@ namespace VehicleTelemetry {
                 channels[i].Id = (byte)((data[currentIndex + 0] << 8) + data[currentIndex + 1]);
                 channels[i].Dimension = (byte)((data[currentIndex + 2] << 8) + data[currentIndex + 3]);
                 channels[i].UpdateMap = 0 < data[currentIndex + 4];
-                channels[i].AppendToPath = 0 < data[currentIndex + 5];
-                channels[i].AppendPathIndex = (byte)((data[currentIndex + 6] << 8) + data[currentIndex + 7]);
+                channels[i].AppendPathEnabled = 0 < data[currentIndex + 5];
+                channels[i].AppendPathId = (byte)((data[currentIndex + 6] << 8) + data[currentIndex + 7]);
                 currentIndex += 8;
 
                 // read value names
@@ -381,9 +381,12 @@ namespace VehicleTelemetry {
         }
 
         public enum eAction : byte {
-            CLEAR,
-            UPDATE,
-            ADD,
+            ADD_POINT,
+            UPDATE_POINT,
+            CLEAR_PATH,
+            ADD_PATH,
+            REMOVE_PATH,
+            CLEAR_MAP,
         }
 
         public eAction action;
@@ -473,9 +476,9 @@ namespace VehicleTelemetry {
 
             layoutMsg[0].Name = "GPS";
             layoutMsg[0].Id = 0;
-            layoutMsg[0].AppendPathIndex = 1;
+            layoutMsg[0].AppendPathId = 1;
             layoutMsg[0].UpdateMap = true;
-            layoutMsg[0].AppendToPath = false;
+            layoutMsg[0].AppendPathEnabled = false;
             layoutMsg[0].Dimension = 3;
             layoutMsg[0][0] = "Latitude";
             layoutMsg[0][1] = "Longitude";
@@ -483,9 +486,9 @@ namespace VehicleTelemetry {
 
             layoutMsg[1].Name = "Velocity";
             layoutMsg[1].Id = 1;
-            layoutMsg[1].AppendPathIndex = 16;
+            layoutMsg[1].AppendPathId = 16;
             layoutMsg[1].UpdateMap = true;
-            layoutMsg[1].AppendToPath = true;
+            layoutMsg[1].AppendPathEnabled = true;
             layoutMsg[1].Dimension = 3;
             layoutMsg[1][0] = "X";
             layoutMsg[1][1] = "Y";
@@ -493,9 +496,9 @@ namespace VehicleTelemetry {
 
             layoutMsg[2].Name = "Temperature";
             layoutMsg[2].Id = 2;
-            layoutMsg[2].AppendPathIndex = 0;
+            layoutMsg[2].AppendPathId = 0;
             layoutMsg[2].UpdateMap = false;
-            layoutMsg[2].AppendToPath = true;
+            layoutMsg[2].AppendPathEnabled = true;
             layoutMsg[2].Dimension = 1;
             layoutMsg[2][0] = "Value";
 
@@ -504,7 +507,7 @@ namespace VehicleTelemetry {
 
 
             PathMessage pathMsg = new PathMessage();
-            pathMsg.action = PathMessage.eAction.UPDATE;
+            pathMsg.action = PathMessage.eAction.UPDATE_POINT;
             pathMsg.index = 5;
             pathMsg.path = 9;
             pathMsg.point = new GeoPoint(47.5, 19, 120);

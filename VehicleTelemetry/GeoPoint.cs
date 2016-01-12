@@ -72,5 +72,28 @@ namespace VehicleTelemetry {
                 }
             }
         }
+
+
+        public static double DistanceDirect(GeoPoint p1, GeoPoint p2) {
+            double[] p1xyz = p1.ToXYZ();
+            double[] p2xyz = p2.ToXYZ();
+            double dx = p1xyz[0] - p2xyz[0];
+            double dy = p1xyz[1] - p2xyz[1];
+            double dz = p1xyz[2] - p2xyz[2];
+            return Math.Sqrt(dx * dx + dy * dy + dz * dz);
+        }
+
+        public static double DistanceArc(GeoPoint p1, GeoPoint p2) {
+            throw new NotImplementedException("not implemented");
+        }
+
+        private double[] ToXYZ() {
+            double r = 6378100.0 + Alt;
+            return new double[] {
+                r*Math.Cos(Lat / 180 * Math.PI)*Math.Cos(Lng / 180 * Math.PI),
+                r*Math.Cos(Lat / 180 * Math.PI)*Math.Sin(Lng / 180 * Math.PI),
+                r*Math.Sin(Lat / 180 * Math.PI)
+            };
+        }
     }
 }

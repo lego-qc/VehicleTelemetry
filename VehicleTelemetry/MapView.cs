@@ -47,22 +47,6 @@ namespace VehicleTelemetry {
         ////////////////////////////////////////////////////////////////////////
         // Methods
 
-        public int AddPath() {
-            paths.Add(new Path());
-            return paths.Count - 1;
-        }
-
-        public void RemovePath(int index) {
-            paths.RemoveAt(index);
-        }
-
-        public int GetNumPaths() {
-            return paths.Count;
-        }
-
-        public Path GetPath(int index) {
-            return paths[index];
-        }
 
         public void ShowOptions() {
             mapParamsOptions_Click(null, null);
@@ -83,6 +67,15 @@ namespace VehicleTelemetry {
             set {
                 position = value;
                 map.Position = new PointLatLng(position.Lat, position.Lng);
+            }
+        }
+
+        public List<Path> Paths {
+            get {
+                return map.Paths;
+            }
+            set {
+                map.Paths = value;
             }
         }
 

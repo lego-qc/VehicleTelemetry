@@ -24,6 +24,7 @@ namespace VehicleTelemetry {
 
             mapGroup.Controls.Add(mapView);
             mapView.Dock = DockStyle.Fill;
+            mapView.Paths = paths;
         } 
 
         private void ConfigMap() {
@@ -33,7 +34,7 @@ namespace VehicleTelemetry {
         ////////////////////////////////////////////////////////////////////////
         // Methods
 
-        void SetCurrentPosition(GeoPoint point) {
+        public void SetCurrentPosition(GeoPoint point) {
             currentPosition = point;
             if (trackingEnabled) {
                 mapView.Position = point;
@@ -44,7 +45,7 @@ namespace VehicleTelemetry {
         ////////////////////////////////////////////////////////////////////////
         // Vars
         protected MapView mapView = new MapView();
-        private bool trackingEnabled = false;
+        private bool trackingEnabled = true;
         private GeoPoint currentPosition;
         private List<Path> paths = new List<Path>();
 
@@ -53,6 +54,12 @@ namespace VehicleTelemetry {
         public DataPanel DataSnippets {
             get {
                 return dataPanel;
+            }
+        }
+
+        public List<Path> Paths {
+            get {
+                return paths;
             }
         }
 
