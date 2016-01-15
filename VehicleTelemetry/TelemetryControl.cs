@@ -13,21 +13,22 @@ using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using GMap.NET.WindowsForms.ToolTips;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace VehicleTelemetry {
-    public partial class TelemetryControl : UserControl {
+    public partial class TelemetryControl : Form {
         ////////////////////////////////////////////////////////////////////////
         // Cunstruction
         public TelemetryControl() {
             panels = new PanelCollection(this);
+            dataPanels = new List<DataPanel>();
+            mapPanels = new List<MapPanel>();
 
             InitializeComponent();
             ConfigMap();
 
-            mapGroup.Controls.Add(mapView);
-            mapView.Dock = DockStyle.Fill;
-            mapView.Paths = paths;
-        } 
+            dockPanel.DocumentStyle = DocumentStyle.DockingMdi;
+        }
 
         private void ConfigMap() {
             currentPosition = new GeoPoint(47.5, 19);
@@ -39,32 +40,65 @@ namespace VehicleTelemetry {
         public void SetCurrentPosition(GeoPoint point) {
             currentPosition = point;
             if (trackingEnabled) {
-                mapView.Position = point;
+                //mapView.Position = point;
+            }
+        }
+
+
+        public MapPanel[] GetMapPanels() {
+            return mapPanels.ToArray();
+        }        
+
+        public DataPanel[] GetDataPanels() {
+            return dataPanels.ToArray();
+        }
+
+
+        private void AddPanel(Panel panel, DockState dockState) {
+            panel.Show(dockPanel, (WeifenLuo.WinFormsUI.Docking.DockState)dockState);
+
+            // check special panel types
+            Type panelType = panel.GetType();
+            if (typeof(MapPanel).IsAssignableFrom(panelType)) {
+                mapPanels.Add(panel as MapPanel);
+            }
+            if (typeof(DataPanel).IsAssignableFrom(panelType)) {
+                dataPanels.Add(panel as DataPanel);
+            }
+        }
+
+        private void RemovePanel(Panel panel) {
+            panel.DockPanel = null;
+
+            // check special panel types
+            Type panelType = panel.GetType();
+            if (typeof(MapPanel).IsAssignableFrom(panelType)) {
+                mapPanels.Remove(panel as MapPanel);
+            }
+            if (typeof(DataPanel).IsAssignableFrom(panelType)) {
+                dataPanels.Remove(panel as DataPanel);
             }
         }
 
 
         ////////////////////////////////////////////////////////////////////////
         // Vars
-        protected GMapPanel mapView = new GMapPanel();
         private bool trackingEnabled = true;
         private GeoPoint currentPosition;
         private List<Path> paths = new List<Path>();
         private PanelCollection panels;
+        private List<MapPanel> mapPanels;
+        private List<DataPanel> dataPanels;
 
         ////////////////////////////////////////////////////////////////////////
         // Properties
-        public DataPanel DataSnippets {
-            get {
-                return dataPanel;
-            }
-        }
 
         public List<Path> Paths {
             get {
                 return paths;
             }
         }
+
 
         ////////////////////////////////////////////////////////////////////////
         // Event handlers

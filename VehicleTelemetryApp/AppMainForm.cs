@@ -10,12 +10,22 @@ using System.Windows.Forms;
 using VehicleTelemetry;
 
 namespace VehicleTelemetryApp {
-    public partial class AppMainForm : Form {
+    public partial class AppMainForm : TelemetryControl {
         public AppMainForm() {
             InitializeComponent();
 
             messageProvider = null;
-            messageProcessor = new MessageProcessor(messageProvider, telemetryControl);
+            messageProcessor = new MessageProcessor(messageProvider, this);
+
+            DataPanel dataPanel = new DataPanel();
+            MapPanel mapPanel1 = new GMapPanel();
+            MapPanel mapPanel2 = new GMapPanel();
+            dataPanel.Text = "Telemetry Data";
+            mapPanel1.Text = "Map 1";
+            mapPanel2.Text = "Map 2";
+            Panels.Add(dataPanel, DockState.DockRight);
+            Panels.Add(mapPanel1, DockState.Document);
+            Panels.Add(mapPanel2, DockState.Document);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {

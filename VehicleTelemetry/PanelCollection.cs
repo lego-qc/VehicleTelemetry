@@ -10,6 +10,7 @@ namespace VehicleTelemetry {
         public class PanelCollection {
             public PanelCollection(TelemetryControl owner) {
                 collection = new List<Panel>();
+                this.owner = owner;
             }
 
             public int Count {
@@ -41,9 +42,8 @@ namespace VehicleTelemetry {
                 }
             }
 
-
-            public void Add(Panel panel) {
-                if (panel != null) {
+            public void Add(Panel panel, DockState dockState = DockState.Float) {
+                if (panel == null) {
                     throw new ArgumentNullException("You cannot pass null for a panel.");
                 }
 
@@ -51,11 +51,7 @@ namespace VehicleTelemetry {
                 collection.Add(panel);
 
                 // set panel to parent
-
-            }
-
-            public void Add(Panel panel, DockStyle dockStyle) {
-
+                owner.AddPanel(panel, dockState);
             }
 
             public void AddRange(Panel[] panels) {
@@ -65,9 +61,12 @@ namespace VehicleTelemetry {
             }
 
             public void Clear() {
-                collection.Clear();
-
                 // remove all panel from parent
+                foreach (var panel in collection) {
+                    owner.RemovePanel(panel);
+                }
+
+                collection.Clear();
             }
 
             public bool Contains(Panel panel) {
@@ -104,6 +103,7 @@ namespace VehicleTelemetry {
                 bool isRemoved = collection.Remove(panel);
                 if (isRemoved) {
                     // remove from parent as well
+                    owner.RemovePanel(panel);
                 }
                 return isRemoved;
             }
@@ -113,6 +113,7 @@ namespace VehicleTelemetry {
                 collection.RemoveAt(index);
 
                 // remove from parent as well
+                owner.RemovePanel(panel);
             }
 
             public void RemoveByKey(string key) {
@@ -129,6 +130,25 @@ namespace VehicleTelemetry {
 
             private List<Panel> collection;
             private TelemetryControl owner;
+
+            
+        }
+
+
+        public enum DockState {
+            Float = WeifenLuo.WinFormsUI.Docking.DockState.Float,
+            Hidden = WeifenLuo.WinFormsUI.Docking.DockState.Hidden,
+            Unknown = WeifenLuo.WinFormsUI.Docking.DockState.Unknown,
+
+            DockBottom          = WeifenLuo.WinFormsUI.Docking.DockState.DockBottom,
+            DockBottomAutoHide  = WeifenLuo.WinFormsUI.Docking.DockState.DockBottomAutoHide,
+            DockLeft            = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft,
+            DockLeftAutoHide    = WeifenLuo.WinFormsUI.Docking.DockState.DockLeftAutoHide,
+            DockRight           = WeifenLuo.WinFormsUI.Docking.DockState.DockRight,
+            DockRightAutoHide   = WeifenLuo.WinFormsUI.Docking.DockState.DockRightAutoHide,
+            DockTop             = WeifenLuo.WinFormsUI.Docking.DockState.DockTop,
+            DockTopAutoHide     = WeifenLuo.WinFormsUI.Docking.DockState.DockTopAutoHide,
+            Document            = WeifenLuo.WinFormsUI.Docking.DockState.Document,
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VehicleTelemetry {
     public class MessageProcessor {
-        public MessageProcessor(IMessageProvider provider = null, TelemetryControl targetForm = null) {
+        public MessageProcessor(IMessageProvider provider = null, TelemetryControl targetForm = null, MapPanel[] maps = null, DataPanel[] datas = null) {
             idToIndexMapping = new Dictionary<int, int>();
             pathToIndexMapping = new Dictionary<int, int>();
             targetFormCollection = new HashSet<TelemetryControl>();
@@ -107,14 +107,14 @@ namespace VehicleTelemetry {
 
                 // set layout to form's data panel
                 targetForm.Invoke(new Action(() => {
-                    targetForm.DataSnippets.Count = msg.Count;
-                    for (int i = 0; i < msg.Count; i++) {
-                        targetForm.DataSnippets[i].Count = msg[i].Dimension;
-                        targetForm.DataSnippets[i].Title = msg[i].Name;
-                        for (int j = 0; j < msg[i].Dimension; j++) {
-                            targetForm.DataSnippets[i].Labels[j] = msg[i][j];
-                        }
-                    }
+                    //targetForm.DataSnippets.Count = msg.Count;
+                    //for (int i = 0; i < msg.Count; i++) {
+                    //    targetForm.DataSnippets[i].Count = msg[i].Dimension;
+                    //    targetForm.DataSnippets[i].Title = msg[i].Name;
+                    //    for (int j = 0; j < msg[i].Dimension; j++) {
+                    //        targetForm.DataSnippets[i].Labels[j] = msg[i][j];
+                    //    }
+                    //}
                 }));
             }
             catch (AggregateException ex) {
@@ -132,10 +132,10 @@ namespace VehicleTelemetry {
 
             // set values to the corresponding snippet
             targetForm.Invoke(new Action(() => {
-                int minDim = Math.Min(msg.Dimension, targetForm.DataSnippets[index].Count);
-                for (int i = 0; i < minDim; i++) {
-                    targetForm.DataSnippets[index].Values[i] = msg[i].ToString();
-                }
+                //int minDim = Math.Min(msg.Dimension, targetForm.DataSnippets[index].Count);
+                //for (int i = 0; i < minDim; i++) {
+                //    targetForm.DataSnippets[index].Values[i] = msg[i].ToString();
+                //}
             }));
 
             // check if need to be set on map

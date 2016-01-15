@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace VehicleTelemetry {
-    public partial class DataPanel : UserControl {
+    public partial class DataPanel : Panel {
         public DataPanel() {
             InitializeComponent();
         }

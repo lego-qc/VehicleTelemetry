@@ -4,10 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleTelemetryApp", "VehicleTelemetryApp\VehicleTelemetryApp.csproj", "{EA95EAB8-AE2F-44CF-99EA-A9E1ECFFD995}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A0F1DFB4-F8F5-4FDF-B1CD-A869AC60C5AD} = {A0F1DFB4-F8F5-4FDF-B1CD-A869AC60C5AD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VehicleTelemetry", "VehicleTelemetry\VehicleTelemetry.csproj", "{A0F1DFB4-F8F5-4FDF-B1CD-A869AC60C5AD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkTestTcp", "NetworkTestTcp\NetworkTestTcp.csproj", "{8B24BB53-5634-4F1D-B3CF-72C5A38A07A7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A0F1DFB4-F8F5-4FDF-B1CD-A869AC60C5AD} = {A0F1DFB4-F8F5-4FDF-B1CD-A869AC60C5AD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
