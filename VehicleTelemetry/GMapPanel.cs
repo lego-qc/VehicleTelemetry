@@ -15,8 +15,8 @@ using GMap.NET.WindowsForms.Markers;
 using GMap.NET.WindowsForms.ToolTips;
 
 namespace VehicleTelemetry {
-    public partial class MapView : UserControl {
-        public MapView() {
+    public partial class GMapPanel : MapPanel {
+        public GMapPanel() {
             InitializeComponent();
 
             map.MapProvider = GMapProviders.OpenStreetMap;

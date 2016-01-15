@@ -1,5 +1,5 @@
 ﻿namespace VehicleTelemetry {
-    partial class MapView {
+    partial class GMapPanel {
         /// <summary> 
         /// Required designer variable.
         /// </summary>

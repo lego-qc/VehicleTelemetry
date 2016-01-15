@@ -19,6 +19,8 @@ namespace VehicleTelemetry {
         ////////////////////////////////////////////////////////////////////////
         // Cunstruction
         public TelemetryControl() {
+            panels = new PanelCollection(this);
+
             InitializeComponent();
             ConfigMap();
 
@@ -44,10 +46,11 @@ namespace VehicleTelemetry {
 
         ////////////////////////////////////////////////////////////////////////
         // Vars
-        protected MapView mapView = new MapView();
+        protected GMapPanel mapView = new GMapPanel();
         private bool trackingEnabled = true;
         private GeoPoint currentPosition;
         private List<Path> paths = new List<Path>();
+        private PanelCollection panels;
 
         ////////////////////////////////////////////////////////////////////////
         // Properties
@@ -65,12 +68,14 @@ namespace VehicleTelemetry {
 
         ////////////////////////////////////////////////////////////////////////
         // Event handlers
-        //private void menuItemMapOptions_Click(object sender, EventArgs e) {
-        //    mapView.ShowOptions();
-        //}
 
-        //private void menuItemExit_Click(object sender, EventArgs e) {
-        //    Close();
-        //}
+
+
+        ////////////////////////////////////////////////////////////////////////
+        public PanelCollection Panels {
+            get {
+                return panels;
+            }
+        }
     }
 }
