@@ -9,6 +9,17 @@ using System.Drawing;
 
 namespace VehicleTelemetry {
     public class Map : GMap.NET.WindowsForms.GMapControl {
+        private List<Path> paths = new List<Path>();
+
+        public List<Path> Paths {
+            get {
+                return paths;
+            }
+            set {
+                paths = value;
+            }
+        }
+
         protected override void OnPaintOverlays(Graphics g) {
             base.OnPaintOverlays(g);
 
@@ -25,17 +36,6 @@ namespace VehicleTelemetry {
                         g.DrawLine(path.Color, gp1.X, gp1.Y, gp2.X, gp2.Y);
                     }
                 }
-            }
-        }
-
-        private List<Path> paths = new List<Path>();
-
-        public List<Path> Paths {
-            get {
-                return paths;
-            }
-            set {
-                paths = value;
             }
         }
     }

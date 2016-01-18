@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 
 namespace VehicleTelemetry {
     public class MessageProcessor_Data : MessageProcessor {
+        private IMessageProvider messageProvider;
+        private DataPanel target;
+        /// <summary>
+        /// Links message IDs to the index of snippets on the data panel.
+        /// </summary>
+        private Dictionary<int, int> idToIndexMapping;
+        private object lockObject = new object();
+
+
         public MessageProcessor_Data(IMessageProvider provider = null, DataPanel target = null) {
             MessageProvider = provider;
             Target = target;
@@ -36,15 +45,6 @@ namespace VehicleTelemetry {
                 target = value;
             }
         }
-
-        private IMessageProvider messageProvider;
-        private DataPanel target;
-        /// <summary>
-        /// Links message IDs to the index of snippets on the data panel.
-        /// </summary>
-        private Dictionary<int, int> idToIndexMapping;
-        private object lockObject = new object();
-
 
         private void OnMessage(Message msg) {
             if (target == null) {

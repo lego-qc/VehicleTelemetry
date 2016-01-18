@@ -7,6 +7,10 @@ using System.Reflection;
 
 namespace VehicleTelemetry {
     public class MessageProviderFactory {
+        private static Dictionary<Guid, ProviderCreator> registry;
+        private static List<ProviderDesc> enumeration;
+        private static ProviderEnumeration enumWrapper;
+
         static MessageProviderFactory() {
             // create internal members
             registry = new Dictionary<Guid, ProviderCreator>();
@@ -37,6 +41,7 @@ namespace VehicleTelemetry {
             }
         }
 
+        private delegate IMessageProvider CreatorDelegate();
 
         public static IMessageProvider Create(Guid id) {
             try {
@@ -62,18 +67,6 @@ namespace VehicleTelemetry {
             public readonly string name;
         }
 
-        private delegate IMessageProvider CreatorDelegate();
-
-        private class ProviderCreator {
-            ProviderCreator() { }
-            public ProviderCreator(string name, CreatorDelegate creator) {
-                this.name = name;
-                this.creator = creator;
-            } 
-            public string name;
-            public CreatorDelegate creator;
-        }
-
         public class ProviderEnumeration {
             public ProviderEnumeration(List<ProviderDesc> data) {
                 this.data = data;
@@ -93,8 +86,14 @@ namespace VehicleTelemetry {
             }
         }
 
-        private static Dictionary<Guid, ProviderCreator> registry;
-        private static List<ProviderDesc> enumeration;
-        private static ProviderEnumeration enumWrapper;
+        private class ProviderCreator {
+            ProviderCreator() { }
+            public ProviderCreator(string name, CreatorDelegate creator) {
+                this.name = name;
+                this.creator = creator;
+            }
+            public string name;
+            public CreatorDelegate creator;
+        }
     }
 }

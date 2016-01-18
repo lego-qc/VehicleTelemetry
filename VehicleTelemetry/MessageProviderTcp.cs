@@ -10,15 +10,15 @@ using System.Threading;
 
 namespace VehicleTelemetry {
     public class MessageProviderTcp : IMessageProvider {
-
-        protected class AsyncStateObject {
-            public AsyncStateObject(ReadMessagePhase next, int numBytesToRead) {
-                this.next = next;
-                this.numBytesToRead = numBytesToRead;
-            }
-            public ReadMessagePhase next;
-            public int numBytesToRead;
-        }
+        private Socket socket;
+        private TcpListener listener;
+        private object lockObject = new object();
+        private volatile bool isMessaging;
+        private byte[] sizeBuffer = new byte[2];
+        private byte[] checksumBuffer = new byte[4];
+        private byte[] dataBuffer = null;
+        public event MessageHandler OnMessage;
+        private bool isListening;
 
 
         public MessageProviderTcp() : this(5640) {
@@ -29,6 +29,37 @@ namespace VehicleTelemetry {
             listener = TcpListener.Create(port);
             socket = null;
             isListening = false;
+        }
+
+
+        public void Dispose() {
+            Disconnect();
+            socket.Dispose();
+            StopMessaging();
+            socket = null;
+        }
+
+        protected delegate void ReadMessagePhase();
+
+
+        public ushort ListenPort {
+            get {
+                return (ushort)((IPEndPoint)listener.LocalEndpoint).Port;
+            }
+            set {
+                ((IPEndPoint)listener.LocalEndpoint).Port = value;
+            }
+        }
+
+        public bool IsConnected {
+            get {
+                return socket != null && socket.Connected;
+            }
+        }
+        public bool IsListening {
+            get {
+                return isListening;
+            }
         }
 
         public void Listen() {
@@ -71,6 +102,8 @@ namespace VehicleTelemetry {
 
         }
 
+
+
         void ListenAsyncCallback(IAsyncResult result) {
             bool isOk = false;
             try {
@@ -104,38 +137,6 @@ namespace VehicleTelemetry {
             StopMessaging();
             if (socket != null) {
                 socket.Close();
-            }
-        }
-
-        private Socket socket;
-        private TcpListener listener;
-        private object lockObject = new object();
-        private volatile bool isMessaging;
-        private byte[] sizeBuffer = new byte[2];
-        private byte[] checksumBuffer = new byte[4];
-        private byte[] dataBuffer = null;
-        public event MessageHandler OnMessage;
-        private bool isListening;
-
-        protected delegate void ReadMessagePhase();
-
-        public ushort ListenPort {
-            get {
-                return (ushort)((IPEndPoint)listener.LocalEndpoint).Port;
-            }
-            set {
-                ((IPEndPoint)listener.LocalEndpoint).Port = value;
-            }
-        }
-
-        public bool IsConnected {
-            get {
-                return socket != null && socket.Connected;
-            }
-        }
-        public bool IsListening {
-            get {
-                return isListening;
             }
         }
 
@@ -242,11 +243,13 @@ namespace VehicleTelemetry {
             }
         }
 
-        public void Dispose() {
-            Disconnect();
-            socket.Dispose();
-            StopMessaging();
-            socket = null;
+        protected class AsyncStateObject {
+            public AsyncStateObject(ReadMessagePhase next, int numBytesToRead) {
+                this.next = next;
+                this.numBytesToRead = numBytesToRead;
+            }
+            public ReadMessagePhase next;
+            public int numBytesToRead;
         }
     }
 }

@@ -12,16 +12,11 @@ namespace VehicleTelemetry {
     }
 
     public abstract class Message {
-        protected eMessageType type;
-
-        public eMessageType Type {
-            get {
-                return type;
-            }
+        public virtual eMessageType Type {
+            get;
         }
 
         public abstract byte[] Serialize();
-        protected abstract bool DeserializeSelf(byte[] data);
 
         public static Message Deserialize(byte[] data) {
             eMessageType type = (eMessageType)data[0];
@@ -47,6 +42,8 @@ namespace VehicleTelemetry {
             return isOk ? message : null;
         }
 
+        protected abstract bool DeserializeSelf(byte[] data);
+
         protected uint FloatToUint(float value) {
             return BitConverter.ToUInt32(BitConverter.GetBytes(value), 0);
         }
@@ -58,69 +55,6 @@ namespace VehicleTelemetry {
 
 
     public class LayoutMessage : Message {
-        public LayoutMessage() {
-            type = eMessageType.LAYOUT;
-        }
-
-        public class Channel {
-            private string name = null;
-            public ushort Id = 0;
-            private ushort dimension = 0;
-            public bool UpdateMap = false;
-            public bool AppendPathEnabled = false;
-            public ushort AppendPathId = 0;
-            private string[] valueNames = null;
-
-            public string Name {
-                get {
-                    return name != null ? name : "";
-                }
-                set {
-                    name = value;
-                }
-            }
-
-            public ushort Dimension {
-                get {
-                    return dimension;
-                }
-                set {
-                    if (value > 0) {
-                        string[] tmp = new string[value];
-                        int common = Math.Min(valueNames != null ? valueNames.Length : 0, value);
-                        int i;
-                        for (i = 0; i < common; i++) {
-                            tmp[i] = valueNames[i];
-                        }
-                        for (; i < value; i++) {
-                            tmp[i] = "unnamed";
-                        }
-                        valueNames = tmp;
-                        dimension = value;
-                    }
-                    else {
-                        dimension = 0;
-                        valueNames = null;
-                    }
-
-                }
-            }
-
-            public string this[int index] {
-                get {
-                    return valueNames[index];
-                }
-                set {
-                    if (value != null) {
-                        valueNames[index] = value;
-                    }
-                    else {
-                        valueNames[index] = "unnamed";
-                    }
-                }
-            }
-
-        }
 
         private Channel[] channels = null;
         public int Count {
@@ -145,6 +79,13 @@ namespace VehicleTelemetry {
                 }
             }
         }
+
+        public override eMessageType Type {
+            get {
+                return eMessageType.LAYOUT;   
+            }
+        }
+
         public Channel this[int index] {
             get {
                 return channels[index];
@@ -158,7 +99,7 @@ namespace VehicleTelemetry {
 
         public override byte[] Serialize() {
             List<byte> raw = new List<byte>();
-            raw.Add((byte)eMessageType.LAYOUT);
+            raw.Add((byte)Type);
             raw.Add((byte)((uint)channels.Length >> 24));
             raw.Add((byte)((uint)channels.Length >> 16));
             raw.Add((byte)((uint)channels.Length >> 8));
@@ -204,7 +145,7 @@ namespace VehicleTelemetry {
             return raw.ToArray();
         }
         protected override bool DeserializeSelf(byte[] data) {
-            if (data.Length < 5 || (eMessageType)data[0] != eMessageType.LAYOUT) {
+            if (data.Length < 5 || (eMessageType)data[0] != Type) {
                 return false;
             }
             uint numChannels =
@@ -272,21 +213,73 @@ namespace VehicleTelemetry {
                     currentIndex += (int)len;
                 }
             }
-
-            type = eMessageType.LAYOUT;
             this.channels = channels;
             return true;
         }
 
+        public class Channel {
+            public bool UpdateMap = false;
+            public bool AppendPathEnabled = false;
+            public ushort AppendPathId = 0;
+            public ushort Id = 0;
+            private ushort dimension = 0;
+            private string name = null;
+            private string[] valueNames = null;
+
+            public string Name {
+                get {
+                    return name != null ? name : "";
+                }
+                set {
+                    name = value;
+                }
+            }
+
+            public ushort Dimension {
+                get {
+                    return dimension;
+                }
+                set {
+                    if (value > 0) {
+                        string[] tmp = new string[value];
+                        int common = Math.Min(valueNames != null ? valueNames.Length : 0, value);
+                        int i;
+                        for (i = 0; i < common; i++) {
+                            tmp[i] = valueNames[i];
+                        }
+                        for (; i < value; i++) {
+                            tmp[i] = "unnamed";
+                        }
+                        valueNames = tmp;
+                        dimension = value;
+                    }
+                    else {
+                        dimension = 0;
+                        valueNames = null;
+                    }
+
+                }
+            }
+
+            public string this[int index] {
+                get {
+                    return valueNames[index];
+                }
+                set {
+                    if (value != null) {
+                        valueNames[index] = value;
+                    }
+                    else {
+                        valueNames[index] = "unnamed";
+                    }
+                }
+            }
+        }
     }
 
 
 
     public class DataMessage : Message {
-        public DataMessage() {
-            type = eMessageType.DATA;
-        }
-
         private ushort id = 0;
         private ushort dimension = 0;
         private float[] values = null;
@@ -315,6 +308,12 @@ namespace VehicleTelemetry {
             }
         }
 
+        public override eMessageType Type {
+            get {
+                return eMessageType.DATA;   
+            }
+        }
+
         public float this[int i] {
             get {
                 return values[i];
@@ -328,7 +327,7 @@ namespace VehicleTelemetry {
             int size = 1 + 2 + 2 + dimension * 4;
             byte[] raw = new byte[size];
 
-            raw[0] = (byte)eMessageType.DATA;
+            raw[0] = (byte)Type;
             raw[1] = (byte)(id >> 8);
             raw[2] = (byte)(id);
             raw[3] = (byte)(dimension >> 8);
@@ -349,7 +348,7 @@ namespace VehicleTelemetry {
                 return false;
             }
             eMessageType type = (eMessageType)data[0];
-            if (type != eMessageType.DATA) {
+            if (type != Type) {
                 return false;
             }
             ushort id, dimension;
@@ -376,28 +375,21 @@ namespace VehicleTelemetry {
 
 
     public class PathMessage : Message {
-        public PathMessage() {
-            type = eMessageType.PATH;
-        }
-
-        public enum eAction : byte {
-            ADD_POINT,
-            UPDATE_POINT,
-            CLEAR_PATH,
-            ADD_PATH,
-            REMOVE_PATH,
-            CLEAR_MAP,
-        }
-
         public eAction action;
         public ushort path;
         public uint index;
         public GeoPoint point;
         private const int SIZE = 1 + 1 + 2 + 4 + 4 * 3;
 
+        public override eMessageType Type {
+            get {
+                return eMessageType.PATH;   
+            }
+        }
+
         public override byte[] Serialize() {
             byte[] raw = new byte[SIZE];
-            raw[0] = (byte)eMessageType.PATH;
+            raw[0] = (byte)Type;
             raw[1] = (byte)action;
             raw[2] = (byte)(path >> 8);
             raw[3] = (byte)path;
@@ -434,10 +426,9 @@ namespace VehicleTelemetry {
             return raw;
         }
         protected override bool DeserializeSelf(byte[] data) {
-            if (data.Length < SIZE || (eMessageType)data[0] != eMessageType.PATH) {
+            if (data.Length < SIZE || (eMessageType)data[0] != Type) {
                 return false;
             }
-            type = eMessageType.PATH;
             action = (eAction)data[1];
             path = (ushort)(((uint)data[2] << 8) + data[3]);
             index = ((uint)data[4] << 24)
@@ -464,6 +455,15 @@ namespace VehicleTelemetry {
             point = new GeoPoint(UintToFloat(lat), UintToFloat(lng), UintToFloat(alt));
 
             return true;
+        }
+
+        public enum eAction : byte {
+            ADD_POINT,
+            UPDATE_POINT,
+            CLEAR_PATH,
+            ADD_PATH,
+            REMOVE_PATH,
+            CLEAR_MAP,
         }
     }
 

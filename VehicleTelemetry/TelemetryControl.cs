@@ -17,8 +17,14 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace VehicleTelemetry {
     public partial class TelemetryControl : Form {
-        ////////////////////////////////////////////////////////////////////////
-        // Cunstruction
+        private bool trackingEnabled = true;
+        private GeoPoint currentPosition;
+        private List<Path> paths = new List<Path>();
+        private PanelCollection panels;
+        private List<MapPanel> mapPanels;
+        private List<DataPanel> dataPanels;
+
+
         public TelemetryControl() {
             panels = new PanelCollection(this);
             dataPanels = new List<DataPanel>();
@@ -30,12 +36,23 @@ namespace VehicleTelemetry {
             dockPanel.DocumentStyle = DocumentStyle.DockingMdi;
         }
 
-        private void ConfigMap() {
-            currentPosition = new GeoPoint(47.5, 19);
+        public List<Path> Paths {
+            get {
+                return paths;
+            }
+        }
+        public PanelCollection Panels {
+            get {
+                return panels;
+            }
         }
 
-        ////////////////////////////////////////////////////////////////////////
-        // Methods
+        protected MenuStrip MenuStrip {
+            get {
+                return menuStrip1;
+            }
+        }
+
 
         public void SetCurrentPosition(GeoPoint point) {
             currentPosition = point;
@@ -43,7 +60,6 @@ namespace VehicleTelemetry {
                 //mapView.Position = point;
             }
         }
-
 
         public MapPanel[] GetMapPanels() {
             return mapPanels.ToArray();
@@ -58,6 +74,10 @@ namespace VehicleTelemetry {
             foreach (MapPanel panel in mapPanels) {
                 panel.Refresh();
             }
+        }
+
+        private void ConfigMap() {
+            currentPosition = new GeoPoint(47.5, 19);
         }
 
         private void AddPanel(Panel panel, DockState dockState) {
@@ -100,42 +120,6 @@ namespace VehicleTelemetry {
         }
 
 
-        ////////////////////////////////////////////////////////////////////////
-        // Vars
-        private bool trackingEnabled = true;
-        private GeoPoint currentPosition;
-        private List<Path> paths = new List<Path>();
-        private PanelCollection panels;
-        private List<MapPanel> mapPanels;
-        private List<DataPanel> dataPanels;
-
-        ////////////////////////////////////////////////////////////////////////
-        // Properties
-
-        public List<Path> Paths {
-            get {
-                return paths;
-            }
-        }
-
-        protected MenuStrip MenuStrip {
-            get {
-                return menuStrip1;
-            }
-        }
-
-
-        ////////////////////////////////////////////////////////////////////////
-        // Event handlers
-
-
-
-        ////////////////////////////////////////////////////////////////////////
-        public PanelCollection Panels {
-            get {
-                return panels;
-            }
-        }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
             Close();
@@ -143,10 +127,44 @@ namespace VehicleTelemetry {
 
 
         class PanelToolStripItem : ToolStripMenuItem {
+            private Panel panel;
+            private WeifenLuo.WinFormsUI.Docking.DockState lastState;
+            private TelemetryControl owner;
+
             public PanelToolStripItem(TelemetryControl owner, Panel panel = null) {
                 this.owner = owner;
                 this.Click += OnClicked;
                 this.Panel = panel;
+            }
+
+            protected override void Dispose(bool v) {
+                if (v) {
+                    this.Click -= OnClicked;
+                    if (panel != null) {
+                        panel.VisibleChanged -= OnVisibilityChanged;
+                    }
+                }
+                base.Dispose(v);
+            }
+
+
+            public Panel Panel {
+                get {
+                    return panel;
+                }
+                set {
+                    if (panel != null) {
+                        panel.VisibleChanged -= OnVisibilityChanged;
+                        panel.FormClosing -= OnClosed;
+                    }
+                    panel = value;
+                    if (panel != null) {
+                        panel.VisibleChanged += OnVisibilityChanged;
+                        OnVisibilityChanged(null, null);
+                        base.Text = panel.Text;
+                        panel.FormClosing += OnClosed;
+                    }
+                }
             }
 
             void OnClicked(object sender, EventArgs e) {
@@ -174,41 +192,6 @@ namespace VehicleTelemetry {
 
             void OnClosed(object sender, EventArgs e) {
                 owner.RemovePanel(panel);
-            }
-
-
-            protected override void Dispose(bool v) {
-                if (v) {
-                    this.Click -= OnClicked;
-                    if (panel != null) {
-                        panel.VisibleChanged -= OnVisibilityChanged;
-                    }
-                }
-                base.Dispose(v);
-            }
-
-
-            private Panel panel;
-            private WeifenLuo.WinFormsUI.Docking.DockState lastState;
-            private TelemetryControl owner;
-
-            public Panel Panel {
-                get {
-                    return panel;
-                }
-                set {
-                    if (panel != null) {
-                        panel.VisibleChanged -= OnVisibilityChanged;
-                        panel.FormClosing -= OnClosed;
-                    }
-                    panel = value;
-                    if (panel != null) {
-                        panel.VisibleChanged += OnVisibilityChanged;
-                        OnVisibilityChanged(null, null);
-                        base.Text = panel.Text;
-                        panel.FormClosing += OnClosed;
-                    }
-                }
             }
         }
     }

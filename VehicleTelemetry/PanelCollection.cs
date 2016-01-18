@@ -8,6 +8,9 @@ using System.Windows.Forms;
 namespace VehicleTelemetry {
     public partial class TelemetryControl {
         public class PanelCollection {
+            private List<Panel> collection;
+            private TelemetryControl owner;
+
             public PanelCollection(TelemetryControl owner) {
                 collection = new List<Panel>();
                 this.owner = owner;
@@ -25,6 +28,12 @@ namespace VehicleTelemetry {
                 }
             }
 
+            public Control Owner {
+                get {
+                    return owner;
+                }
+            }
+
             public Panel this[string key] {
                 get {
                     foreach (var panel in collection) {
@@ -33,12 +42,6 @@ namespace VehicleTelemetry {
                         }
                     }
                     throw new ArgumentOutOfRangeException("Panel with the specified key not found.");
-                }
-            }
-
-            public Control Owner {
-                get {
-                    return owner;
                 }
             }
 
@@ -126,14 +129,8 @@ namespace VehicleTelemetry {
                 foreach (var panel in toRemove) {
                     Remove(panel);
                 }
-            }
-
-            private List<Panel> collection;
-            private TelemetryControl owner;
-
-            
+            }            
         }
-
 
         public enum DockState {
             Float = WeifenLuo.WinFormsUI.Docking.DockState.Float,

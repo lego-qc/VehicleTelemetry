@@ -16,6 +16,11 @@ using GMap.NET.WindowsForms.ToolTips;
 
 namespace VehicleTelemetry {
     public partial class GMapPanel : MapPanel {
+        protected Map map = new Map();
+        private List<Path> paths = new List<Path>();
+        private GeoPoint position;
+
+
         public GMapPanel() {
             InitializeComponent();
 
@@ -45,23 +50,9 @@ namespace VehicleTelemetry {
             position = new GeoPoint(47.5, 19);
         }
 
-
-        ////////////////////////////////////////////////////////////////////////
-        // Methods
-
-
-        public void ShowOptions() {
-            mapParamsOptions_Click(null, null);
-        }
-
-
-        ////////////////////////////////////////////////////////////////////////
-        // Vars
-
-        protected Map map = new Map();
-        private List<Path> paths = new List<Path>();
-        private GeoPoint position;
-
+        /// <summary>
+        /// Geographical position currently shown on the map.
+        /// </summary>
         public override GeoPoint Position {
             get {
                 return position;
@@ -72,6 +63,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// List of paths to draw on the map as lines.
+        /// </summary>
         public override List<Path> Paths {
             get {
                 return map.Paths;
@@ -82,19 +76,36 @@ namespace VehicleTelemetry {
         }
 
 
-        ////////////////////////////////////////////////////////////////////////
-        // Event handlers
+        /// <summary>
+        /// Shows the configuration panel for the map panel.
+        /// </summary>
+        public void ShowOptions() {
+            mapParamsOptions_Click(null, null);
+        }
 
+
+        /// <summary>
+        /// Handler for when the underlying GMap.Net form's position changes.
+        /// </summary>
+        /// <param name="position">Current position given by the GMap.Net form.</param>
         private void mapControl_PositionChanged(PointLatLng position) {
             mapParamsLat.Text = position.Lat.ToString();
             mapParamsLong.Text = position.Lng.ToString();
         }
 
+        /// <summary>
+        /// Handler for when the underlying GMap.Net form's zoom changes.
+        /// </summary>
         private void mapControl_ZoomChanged() {
             mapParamsLat.Text = map.Position.Lat.ToString();
             mapParamsLong.Text = map.Position.Lng.ToString();
         }
 
+        /// <summary>
+        /// Handler for the button to show config panel.
+        /// </summary>
+        /// <param name="sender">Unused.</param>
+        /// <param name="e">Unused.</param>
         private void mapParamsOptions_Click(object sender, EventArgs e) {
             var optionsForm = new MapOptions();
             optionsForm.Provider = map.MapProvider;
@@ -108,20 +119,33 @@ namespace VehicleTelemetry {
             optionsForm.Dispose();
         }
 
+        /// <summary>
+        /// Handler for the Zoom In button.
+        /// </summary>
         private void mapParamsZoomIn_Click(object sender, EventArgs e) {
             map.Zoom++;
         }
 
+        /// <summary>
+        /// Handler for the Zoom Out button.
+        /// </summary>
         private void mapParamZoomOut_Click(object sender, EventArgs e) {
             map.Zoom--;
         }
 
+        /// <summary>
+        /// Handler for the position edit boxes. Commits the typed text.
+        /// </summary>
         private void mapParamsLat_Enter(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.Return) {
                 e.SuppressKeyPress = true;
                 mapParamsLat_TextChanged();
             }
         }
+
+        /// <summary>
+        /// Handler for the position edit boxes. Commits the typed text.
+        /// </summary>
         private void mapParamsLong_Enter(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.Return) {
                 e.SuppressKeyPress = true;
@@ -129,6 +153,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Processes the position edit boxes' text.
+        /// </summary>
         private void mapParamsLat_TextChanged() {
             var currentPos = map.Position;
             try {
@@ -142,6 +169,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Processes the position edit boxes' text.
+        /// </summary>
         private void mapParamsLong_TextChanged() {
             var currentPos = map.Position;
             try {

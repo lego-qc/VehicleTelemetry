@@ -16,15 +16,10 @@ using GMap.NET.WindowsForms.ToolTips;
 
 namespace VehicleTelemetry {
     public partial class MapOptions : Form {
-        class ProviderItem {
-            public GMapProvider provider;
-            public ProviderItem(GMapProvider provider) {
-                this.provider = provider;
-            }
-            public override string ToString() {
-                return provider.Name;
-            }
-        }
+
+        private AccessMode cacheMode;
+        private GMapProvider provider;
+        private GMapControl gmap;
 
         public MapOptions() {
             InitializeComponent();
@@ -34,40 +29,6 @@ namespace VehicleTelemetry {
                 mapProviderSelector.Items.Add(new ProviderItem(provider));
             }
         }
-
-        private void ProcessResults() {
-            provider = ((ProviderItem)mapProviderSelector.SelectedItem).provider;
-            int cacheIndex = cacheModeSelector.SelectedIndex;
-            switch (cacheIndex) {
-                case 0:
-                    cacheMode = AccessMode.CacheOnly;
-                    break;
-                case 1:
-                    cacheMode = AccessMode.ServerOnly;
-                    break;
-                case 2:
-                    cacheMode = AccessMode.ServerAndCache;
-                    break;
-                default:
-                    cacheMode = AccessMode.CacheOnly;
-                    break;       
-            }
-        }
-
-        private void confirmOk_Click(object sender, EventArgs e) {
-            ProcessResults();
-            DialogResult = DialogResult.OK;
-        }
-
-        private void confirmCancel_Click(object sender, EventArgs e) {
-            ProcessResults();
-            DialogResult = DialogResult.Cancel;
-        }
-
-
-        private AccessMode cacheMode;
-        private GMapProvider provider;
-        private GMapControl gmap;
 
         public AccessMode CacheMode {
             get {
@@ -119,10 +80,50 @@ namespace VehicleTelemetry {
             }
         }
 
+
+        private void ProcessResults() {
+            provider = ((ProviderItem)mapProviderSelector.SelectedItem).provider;
+            int cacheIndex = cacheModeSelector.SelectedIndex;
+            switch (cacheIndex) {
+                case 0:
+                    cacheMode = AccessMode.CacheOnly;
+                    break;
+                case 1:
+                    cacheMode = AccessMode.ServerOnly;
+                    break;
+                case 2:
+                    cacheMode = AccessMode.ServerAndCache;
+                    break;
+                default:
+                    cacheMode = AccessMode.CacheOnly;
+                    break;
+            }
+        }
+
+        private void confirmOk_Click(object sender, EventArgs e) {
+            ProcessResults();
+            DialogResult = DialogResult.OK;
+        }
+
+        private void confirmCancel_Click(object sender, EventArgs e) {
+            ProcessResults();
+            DialogResult = DialogResult.Cancel;
+        }
+
         private void emptyCache_Click(object sender, EventArgs e) {
             DialogResult result = MessageBox.Show("This will delete all your tile cache data.\nAre you sure?", "Delete Cache", MessageBoxButtons.YesNo);
             if (gmap != null && result == DialogResult.Yes) {
                 gmap.Manager.PrimaryCache.DeleteOlderThan(DateTime.Now, null);
+            }
+        }
+
+        protected class ProviderItem {
+            public GMapProvider provider;
+            public ProviderItem(GMapProvider provider) {
+                this.provider = provider;
+            }
+            public override string ToString() {
+                return provider.Name;
             }
         }
     }
