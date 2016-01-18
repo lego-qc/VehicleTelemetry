@@ -9,12 +9,18 @@ using System.Net.Sockets;
 
 namespace NetworkTestTcp {
     class MessageClientTcp : IDisposable {
+        private Socket socket;
+
+
         public MessageClientTcp() {
             socket = new Socket(SocketType.Stream, ProtocolType.IP);
             socket.NoDelay = true;
         }
 
-        private Socket socket;
+        
+        public void Dispose() {
+            socket.Dispose();
+        }
 
 
         public void Connect(string address, int port) {
@@ -54,10 +60,6 @@ namespace NetworkTestTcp {
             socket.Send(size);
             socket.Send(data);
             socket.Send(checksum);
-        }
-
-        public void Dispose() {
-            socket.Dispose();
         }
     }
 }

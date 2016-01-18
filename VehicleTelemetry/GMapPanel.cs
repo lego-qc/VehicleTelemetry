@@ -40,6 +40,8 @@ namespace VehicleTelemetry {
             mapDisplayPanel.Controls.Add(map);
             map.Dock = DockStyle.Fill;
 
+            map.DisableFocusOnMouseEnter = true;
+
             position = new GeoPoint(47.5, 19);
         }
 
@@ -60,7 +62,7 @@ namespace VehicleTelemetry {
         private List<Path> paths = new List<Path>();
         private GeoPoint position;
 
-        public GeoPoint Position {
+        public override GeoPoint Position {
             get {
                 return position;
             }
@@ -70,7 +72,7 @@ namespace VehicleTelemetry {
             }
         }
 
-        public List<Path> Paths {
+        public override List<Path> Paths {
             get {
                 return map.Paths;
             }

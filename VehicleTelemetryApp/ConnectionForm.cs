@@ -61,7 +61,9 @@ namespace VehicleTelemetryApp {
             currentProvider = MessageProviderFactory.Create(item.desc.id);
 
             // assign new provider to the processor
-            currentProcessor.MessageProvider = currentProvider;
+            foreach (var p in currentProcessors) {
+                p.MessageProvider = currentProvider;
+            }
 
             UpdateControlState();
         }
@@ -79,7 +81,7 @@ namespace VehicleTelemetryApp {
 
 
         private IMessageProvider currentProvider;
-        private MessageProcessor currentProcessor;
+        private MessageProcessor[] currentProcessors;
 
         public IMessageProvider Provider {
             get {
@@ -87,7 +89,9 @@ namespace VehicleTelemetryApp {
             }
             set {
                 if (value == null) {
-                    currentProcessor.MessageProvider = null;
+                    foreach (var p in currentProcessors) {
+                        p.MessageProvider = null;
+                    }
                     currentProvider = null;
                     UpdateControlState();
                     return;
@@ -115,19 +119,21 @@ namespace VehicleTelemetryApp {
                 }
 
                 // apply changes to the processor
-                currentProcessor.MessageProvider = value;
+                foreach (var p in currentProcessors) {
+                    p.MessageProvider = value;
+                }
 
                 // set state of UI controls according to current state
                 UpdateControlState();
             }
         }
 
-        public MessageProcessor Processor {
+        public MessageProcessor[] Processors {
             get {
-                return currentProcessor;
+                return currentProcessors;
             }
             set {
-                currentProcessor = value;
+                currentProcessors = value;
             }
         }
 

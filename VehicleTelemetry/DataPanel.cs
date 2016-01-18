@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace VehicleTelemetry {
     public partial class DataPanel : Panel {
+        private int count;
+
         public DataPanel() {
             InitializeComponent();
         }
-
-        private int count;
 
         public int Count {
             get {

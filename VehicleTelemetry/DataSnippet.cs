@@ -10,6 +10,17 @@ using System.Windows.Forms;
 
 namespace VehicleTelemetry {
     public partial class DataSnippet : UserControl {
+        private int count;
+        private string title;
+        private StringTable labels;
+        private StringTable values;
+        private Label titleLabel;
+        private Button graphButton;
+        private const int ROW_SIZE = 20;
+        private const int MARGIN = 1;
+        private bool isShowingGraph;
+
+
         public DataSnippet() {
             InitializeComponent();
 
@@ -30,16 +41,6 @@ namespace VehicleTelemetry {
             mainTable.Font = oldFont;
         }
 
-
-        private int count;
-        private string title;
-        private StringTable labels;
-        private StringTable values;
-        private Label titleLabel;
-        private Button graphButton;
-        private const int ROW_SIZE = 20;
-        private const int MARGIN = 1;
-        private bool isShowingGraph;
 
         public int Count {
             get {
@@ -81,6 +82,7 @@ namespace VehicleTelemetry {
                 return labels;
             }
         }
+
         public StringTable Values {
             get {
                 return values;
@@ -91,6 +93,7 @@ namespace VehicleTelemetry {
             Label label = (Label)mainTable.GetControlFromPosition(0, index);
             label.Text = (value != null ? value : "");
         }
+
         private void OnValueChanged(int index, string value) {
             TextBox textBox = (TextBox)mainTable.GetControlFromPosition(1, index);
             textBox.Text = (value != null ? value : "");
@@ -115,7 +118,7 @@ namespace VehicleTelemetry {
             // initialize table layout
             mainTable.RowCount = count;
             mainTable.RowStyles.Clear();
-            for (int i=0; i<mainTable.RowCount; i++) {
+            for (int i = 0; i < mainTable.RowCount; i++) {
                 mainTable.RowStyles.Add(new RowStyle(SizeType.Absolute, ROW_SIZE));
             }
             mainTable.MinimumSize = new Size(0, ROW_SIZE * mainTable.RowCount);
@@ -146,6 +149,7 @@ namespace VehicleTelemetry {
 
             mainTable.Refresh();
         }
+
 
         public class StringTable {
             public delegate void OnChangedEvent(int index, string value);

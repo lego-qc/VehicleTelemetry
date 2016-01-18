@@ -49,7 +49,7 @@
             this.mapMainPanel.RowCount = 2;
             this.mapMainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mapMainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mapMainPanel.Size = new System.Drawing.Size(515, 316);
+            this.mapMainPanel.Size = new System.Drawing.Size(499, 277);
             this.mapMainPanel.TabIndex = 0;
             // 
             // mapParamsControlLayout
@@ -67,14 +67,14 @@
             this.mapParamsControlLayout.Controls.Add(this.mapParamsLong, 1, 1);
             this.mapParamsControlLayout.Controls.Add(this.mapParamsOptions, 3, 0);
             this.mapParamsControlLayout.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.mapParamsControlLayout.Location = new System.Drawing.Point(3, 261);
+            this.mapParamsControlLayout.Location = new System.Drawing.Point(3, 222);
             this.mapParamsControlLayout.MaximumSize = new System.Drawing.Size(0, 52);
             this.mapParamsControlLayout.MinimumSize = new System.Drawing.Size(0, 52);
             this.mapParamsControlLayout.Name = "mapParamsControlLayout";
             this.mapParamsControlLayout.RowCount = 2;
             this.mapParamsControlLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.mapParamsControlLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.mapParamsControlLayout.Size = new System.Drawing.Size(509, 52);
+            this.mapParamsControlLayout.Size = new System.Drawing.Size(493, 52);
             this.mapParamsControlLayout.TabIndex = 1;
             // 
             // mapParamZoomOut
@@ -144,12 +144,12 @@
             // mapParamsOptions
             // 
             this.mapParamsOptions.Dock = System.Windows.Forms.DockStyle.Right;
-            this.mapParamsOptions.Location = new System.Drawing.Point(431, 3);
+            this.mapParamsOptions.Location = new System.Drawing.Point(415, 3);
             this.mapParamsOptions.Name = "mapParamsOptions";
             this.mapParamsControlLayout.SetRowSpan(this.mapParamsOptions, 2);
             this.mapParamsOptions.Size = new System.Drawing.Size(75, 46);
             this.mapParamsOptions.TabIndex = 6;
-            this.mapParamsOptions.Text = "Map Options";
+            this.mapParamsOptions.Text = "Configure...";
             this.mapParamsOptions.UseVisualStyleBackColor = true;
             this.mapParamsOptions.Click += new System.EventHandler(this.mapParamsOptions_Click);
             // 
@@ -158,16 +158,17 @@
             this.mapDisplayPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mapDisplayPanel.Location = new System.Drawing.Point(3, 3);
             this.mapDisplayPanel.Name = "mapDisplayPanel";
-            this.mapDisplayPanel.Size = new System.Drawing.Size(509, 252);
+            this.mapDisplayPanel.Size = new System.Drawing.Size(493, 213);
             this.mapDisplayPanel.TabIndex = 1;
             // 
-            // MapView
+            // GMapPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(499, 277);
             this.Controls.Add(this.mapMainPanel);
-            this.Name = "MapView";
-            this.Size = new System.Drawing.Size(515, 316);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.Name = "GMapPanel";
             this.mapMainPanel.ResumeLayout(false);
             this.mapParamsControlLayout.ResumeLayout(false);
             this.mapParamsControlLayout.PerformLayout();

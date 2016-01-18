@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace VehicleTelemetry {
-    public class Panel : WeifenLuo.WinFormsUI.Docking.DockContent {
-
+    class MessageProcessor_Map : MessageProcessor {
     }
 }

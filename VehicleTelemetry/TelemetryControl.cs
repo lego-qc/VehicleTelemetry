@@ -26,14 +26,14 @@ namespace VehicleTelemetry {
 
             InitializeComponent();
             ConfigMap();
-
+            
             dockPanel.DocumentStyle = DocumentStyle.DockingMdi;
         }
 
         private void ConfigMap() {
             currentPosition = new GeoPoint(47.5, 19);
         }
-        
+
         ////////////////////////////////////////////////////////////////////////
         // Methods
 
@@ -47,15 +47,25 @@ namespace VehicleTelemetry {
 
         public MapPanel[] GetMapPanels() {
             return mapPanels.ToArray();
-        }        
+        }
 
         public DataPanel[] GetDataPanels() {
             return dataPanels.ToArray();
         }
 
 
+        public void PathsUpdated() {
+            foreach (MapPanel panel in mapPanels) {
+                panel.Refresh();
+            }
+        }
+
         private void AddPanel(Panel panel, DockState dockState) {
             panel.Show(dockPanel, (WeifenLuo.WinFormsUI.Docking.DockState)dockState);
+
+            // register on view menu
+            panelsToolStripMenuItem.DropDownItems.Add(new PanelToolStripItem(this, panel));
+            menuStrip1.PerformLayout();
 
             // check special panel types
             Type panelType = panel.GetType();
@@ -69,6 +79,15 @@ namespace VehicleTelemetry {
 
         private void RemovePanel(Panel panel) {
             panel.DockPanel = null;
+
+            // unregister on view menu
+            foreach (PanelToolStripItem item in panelsToolStripMenuItem.DropDownItems) {
+                if (item.Panel == panel) {
+                    panelsToolStripMenuItem.DropDownItems.Remove(item);
+                    item.Dispose();
+                    break;
+                }
+            }
 
             // check special panel types
             Type panelType = panel.GetType();
@@ -99,6 +118,12 @@ namespace VehicleTelemetry {
             }
         }
 
+        protected MenuStrip MenuStrip {
+            get {
+                return menuStrip1;
+            }
+        }
+
 
         ////////////////////////////////////////////////////////////////////////
         // Event handlers
@@ -109,6 +134,81 @@ namespace VehicleTelemetry {
         public PanelCollection Panels {
             get {
                 return panels;
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
+            Close();
+        }
+
+
+        class PanelToolStripItem : ToolStripMenuItem {
+            public PanelToolStripItem(TelemetryControl owner, Panel panel = null) {
+                this.owner = owner;
+                this.Click += OnClicked;
+                this.Panel = panel;
+            }
+
+            void OnClicked(object sender, EventArgs e) {
+                if (panel.Visible) {
+                    panel.Hide();
+                }
+                else {
+                    panel.Show();
+                }
+            }
+
+            void OnVisibilityChanged(object sender, EventArgs e) {
+                if (panel.Visible) {
+                    // change state of checkbox
+                    base.Checked = true;
+                }
+                else {
+                    // change state of checkbox
+                    base.Checked = false;
+
+                    // remember last dock state
+                    lastState = panel.DockState;
+                }
+            }
+
+            void OnClosed(object sender, EventArgs e) {
+                owner.RemovePanel(panel);
+            }
+
+
+            protected override void Dispose(bool v) {
+                if (v) {
+                    this.Click -= OnClicked;
+                    if (panel != null) {
+                        panel.VisibleChanged -= OnVisibilityChanged;
+                    }
+                }
+                base.Dispose(v);
+            }
+
+
+            private Panel panel;
+            private WeifenLuo.WinFormsUI.Docking.DockState lastState;
+            private TelemetryControl owner;
+
+            public Panel Panel {
+                get {
+                    return panel;
+                }
+                set {
+                    if (panel != null) {
+                        panel.VisibleChanged -= OnVisibilityChanged;
+                        panel.FormClosing -= OnClosed;
+                    }
+                    panel = value;
+                    if (panel != null) {
+                        panel.VisibleChanged += OnVisibilityChanged;
+                        OnVisibilityChanged(null, null);
+                        base.Text = panel.Text;
+                        panel.FormClosing += OnClosed;
+                    }
+                }
             }
         }
     }

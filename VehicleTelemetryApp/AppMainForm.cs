@@ -14,18 +14,37 @@ namespace VehicleTelemetryApp {
         public AppMainForm() {
             InitializeComponent();
 
-            messageProvider = null;
-            messageProcessor = new MessageProcessor(messageProvider, this);
+            // merge menu strips
+            foreach (ToolStripMenuItem menuItem in menuStrip1.Items) {
+                menuItem.MergeAction = MergeAction.Append;
+            }
+            toolsToolStripMenuItem.MergeAction = MergeAction.MatchOnly;
+            ToolStripManager.Merge(menuStrip1, base.MenuStrip);
+            menuStrip1.Visible = false;
 
+            // create panels
             DataPanel dataPanel = new DataPanel();
-            MapPanel mapPanel1 = new GMapPanel();
-            MapPanel mapPanel2 = new GMapPanel();
+            MapPanel mapPanel = new GMapPanel();
+            VideoPanel videoPanel = new DummyVideoPanel();
             dataPanel.Text = "Telemetry Data";
-            mapPanel1.Text = "Map 1";
-            mapPanel2.Text = "Map 2";
+            mapPanel.Text = "Map";
+            videoPanel.Text = "Dummy Video (not working)";
             Panels.Add(dataPanel, DockState.DockRight);
-            Panels.Add(mapPanel1, DockState.Document);
-            Panels.Add(mapPanel2, DockState.Document);
+            Panels.Add(mapPanel, DockState.Document);
+            Panels.Add(videoPanel, DockState.Document);
+
+            // Set up panels
+            mapPanel.Paths = Paths;
+
+            // create message processors
+            messageProcessorData = new MessageProcessor_Data();
+            messageProcessorPath = new MessageProcessor_Path();
+            messageProcessorData.Target = dataPanel;
+            messageProcessorPath.Target = this;
+        }
+
+        private void InitializeExtendedMenuStrip() {
+
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -34,18 +53,20 @@ namespace VehicleTelemetryApp {
 
         private void setupToolStripMenuItem_Click(object sender, EventArgs e) {
             var connectionForm = new ConnectionForm();
-            connectionForm.Processor = messageProcessor;
+            connectionForm.Processors =new MessageProcessor[] { messageProcessorPath, messageProcessorData };
             connectionForm.Provider = messageProvider;
             connectionForm.Show();
             messageProvider = connectionForm.Provider;
         }
 
-        private void preferenciesToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void appSettingsToolStripMenuItem_Click(object sender, EventArgs e) {
             var preferencesForm = new PreferencesForm();
             DialogResult result = preferencesForm.ShowDialog();
         }
 
         private IMessageProvider messageProvider;
-        private MessageProcessor messageProcessor;
+        private MessageProcessor_Path messageProcessorPath;
+        private MessageProcessor_Data messageProcessorData;
+
     }
 }

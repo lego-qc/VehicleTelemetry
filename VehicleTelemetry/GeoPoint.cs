@@ -74,6 +74,12 @@ namespace VehicleTelemetry {
         }
 
 
+        /// <summary>
+        /// Computes distance between two points along a straight 3D line.
+        /// </summary>
+        /// <param name="p1">The first point.</param>
+        /// <param name="p2">The seconds point.</param>
+        /// <returns>Distance between the two points.</returns>
         public static double DistanceDirect(GeoPoint p1, GeoPoint p2) {
             double[] p1xyz = p1.ToXYZ();
             double[] p2xyz = p2.ToXYZ();
@@ -83,10 +89,20 @@ namespace VehicleTelemetry {
             return Math.Sqrt(dx * dx + dy * dy + dz * dz);
         }
 
+        /// <summary>
+        /// Computes distance between two points along Earth's surface, considering constant climb rate.
+        /// </summary>
+        /// <param name="p1">The first point.</param>
+        /// <param name="p2">The second point.</param>
+        /// <returns>The distance between the two points.</returns>
         public static double DistanceArc(GeoPoint p1, GeoPoint p2) {
             throw new NotImplementedException("not implemented");
         }
 
+        /// <summary>
+        /// Translates geographics lat/long/alt coordinates to cartesian coordinates.
+        /// </summary>
+        /// <returns>A 3-element array containing x,y and z coordinates.</returns>
         private double[] ToXYZ() {
             double r = 6378100.0 + Alt;
             return new double[] {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace VehicleTelemetry {
-    public class Panel : WeifenLuo.WinFormsUI.Docking.DockContent {
+    public abstract class VideoPanel : Panel {
 
     }
 }

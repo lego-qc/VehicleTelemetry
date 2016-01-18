@@ -10,10 +10,12 @@ using VehicleTelemetry;
 
 namespace NetworkTestTcp {
     class Program {
+        private static bool isRunning;
+        private static Random gaussGen;
+
         static Program() {
             gaussGen = new Random();
         }
-
 
         static void Main(string[] args) {
             // display usage info
@@ -146,8 +148,7 @@ namespace NetworkTestTcp {
             }
         }
 
-        private static bool isRunning;
-        private static Random gaussGen;
+
 
         private static double RandomGauss(double mean, double standardDeviation) {
             double u1 = gaussGen.NextDouble(); //these are uniform(0,1) random doubles
