@@ -5,13 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace VehicleTelemetry {
+    /// <summary>
+    /// Processes messages that are important for a DataPanel.
+    /// </summary>
     public class MessageProcessor_Data : MessageProcessor {
+        /// <summary>
+        /// The message source.
+        /// </summary>
         private IMessageProvider messageProvider;
+        /// <summary>
+        /// Which panel to display messages on.
+        /// </summary>
         private DataPanel target;
         /// <summary>
         /// Links message IDs to the index of snippets on the data panel.
         /// </summary>
         private Dictionary<int, int> idToIndexMapping;
+        /// <summary>
+        /// Lock this to protect internal resources. Invokes and async providers create a threading mess, better be safe.
+        /// </summary>
         private object lockObject = new object();
 
 
@@ -22,6 +34,9 @@ namespace VehicleTelemetry {
             idToIndexMapping = new Dictionary<int, int>();
         }
 
+        /// <summary>
+        /// Assign a message source.
+        /// </summary>
         public override IMessageProvider MessageProvider {
             get {
                 return messageProvider;
@@ -37,6 +52,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Which panel to display stuff on.
+        /// </summary>
         public DataPanel Target {
             get {
                 return target;
@@ -46,6 +64,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Handle message events. Demuxes by message type, and forwards messages.
+        /// </summary>
         private void OnMessage(Message msg) {
             if (target == null) {
                 return;
@@ -62,6 +83,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Set layouts to data panel.
+        /// </summary>
         private void ProcessMessage(LayoutMessage msg) {
             lock (lockObject) {
                 target.Invoke(new Action(() => {
@@ -79,6 +103,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Set values to data panel.
+        /// </summary>
         private void ProcessMessage(DataMessage msg) {
             string error = null;
             try {

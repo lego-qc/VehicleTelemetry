@@ -15,8 +15,11 @@ using GMap.NET.WindowsForms.ToolTips;
 
 
 namespace VehicleTelemetry {
+    /// <summary>
+    /// Configuration panel for GMapPanels.
+    /// </summary>
+    /// <remarks><see cref="GMapPanel"/> for more.</remarks>
     public partial class MapOptions : Form {
-
         private AccessMode cacheMode;
         private GMapProvider provider;
         private GMapControl gmap;
@@ -79,7 +82,6 @@ namespace VehicleTelemetry {
                 gmap = value;
             }
         }
-
 
         private void ProcessResults() {
             provider = ((ProviderItem)mapProviderSelector.SelectedItem).provider;

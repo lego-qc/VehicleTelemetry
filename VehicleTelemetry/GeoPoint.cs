@@ -5,6 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace VehicleTelemetry {
+    /// <summary>
+    /// Represents a geographical coordinate.
+    /// </summary>
+    /// <remarks>
+    /// The coordinate system used if standard longitude/latitude/altitude.
+    /// Longitude and latitude are given in degrees, negative for western and southern hemispheres.
+    /// Base points are the equator and the Greenwich-line.
+    /// Altitude is given in meters above see level.
+    /// </remarks>
     public class GeoPoint {
         private double lat, lng, alt;
 
@@ -15,8 +24,12 @@ namespace VehicleTelemetry {
         }
 
         /// <summary>
-        /// Latitude of the point. Use negative value for southern hemisphere.
+        /// Latitude of the point (degrees). 
         /// </summary>
+        /// <remarks>
+        /// Use negative value for southern hemisphere.
+        /// Out of range values will be clamped to -90 or 90 degrees.
+        /// </remarks>
         public double Lat {
             get {
                 return lat;
@@ -31,9 +44,12 @@ namespace VehicleTelemetry {
         }
 
         /// <summary>
-        /// Longitude of the point. Use negative value for western hemisphere.
-        /// Out of range values will be mapped to -180:180 with no loss of information.
+        /// Longitude of the point (degrees). 
         /// </summary>
+        /// <remarks>
+        /// Use negative value for western hemisphere.
+        /// Out of range values will be mapped to -180:180 with no loss of information.
+        /// </remarks>
         public double Lng {
             get {
                 return lng;
@@ -58,9 +74,12 @@ namespace VehicleTelemetry {
         }
 
         /// <summary>
-        /// Altitude of the point in meters. Sea level equals zero.
-        /// Altitude cannot be less then -6 378 100m, the earth's radius.
+        /// Altitude of the point in meters.
         /// </summary>
+        /// <remarks>
+        /// Sea level equals zero.
+        /// Altitude cannot be less then -6 378 100m, the earth's radius.
+        /// </remarks>
         public double Alt {
             get {
                 return alt;
@@ -68,7 +87,7 @@ namespace VehicleTelemetry {
             set {
                 alt = value;
                 if (alt < -6378100.0) {
-                    alt = 6378100.0; // radius of earth
+                    alt = -6378100.0; // radius of earth
                 }
             }
         }

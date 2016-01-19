@@ -9,13 +9,30 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace VehicleTelemetry {
+    /// <summary>
+    /// DataPanels are used to show textual telemetry information.
+    /// </summary>
+    /// <remarks>
+    /// Information is grouped into snippets. Each snippet has its title
+    /// and multiple key-value pairs. Each pair represents the measured property
+    /// and the value of the measurement, e.g. "velocity" and "42 kph".
+    /// </remarks>
     public partial class DataPanel : Panel {
+        /// <summary>
+        /// Number of snippets.
+        /// </summary>
         private int count;
 
+        /// <summary>
+        /// Create an empty panel.
+        /// </summary>
         public DataPanel() {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// The number of snippets on the panel.
+        /// </summary>
         public int Count {
             get {
                 return count;
@@ -42,12 +59,19 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Access and possibly modify the i-th snippet.
+        /// </summary>
         public DataSnippet this[int index] {
             get {
                 return (DataSnippet)flowLayout.Controls[index];
             }
         }
 
+        /// <summary>
+        /// Recomputes the size of the snippet controls.
+        /// </summary>
+        /// <remarks>Call each time the panel is resized.</remarks>
         private void UpdateControlSize() {
             int parentWidth = flowLayout.ClientRectangle.Width;
             foreach (Control control in flowLayout.Controls) {
@@ -55,6 +79,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Handler for resize events of the internal flow layout.
+        /// </summary>
         private void flowLayout_Resize(object sender, EventArgs e) {
             UpdateControlSize();
         }

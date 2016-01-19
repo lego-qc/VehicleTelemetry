@@ -16,6 +16,9 @@ using GMap.NET.WindowsForms.ToolTips;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace VehicleTelemetry {
+    /// <summary>
+    /// This interface will probably change, and I'm fucking tired of commenting.
+    /// </summary>
     public partial class TelemetryControl : Form {
         private bool trackingEnabled = true;
         private GeoPoint currentPosition;

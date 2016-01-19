@@ -9,6 +9,9 @@ using System.Threading;
 
 
 namespace VehicleTelemetry {
+    /// <summary>
+    /// Establish connection to stream messages over TCP.
+    /// </summary>
     public class MessageProviderTcp : IMessageProvider {
         private Socket socket;
         private TcpListener listener;
@@ -21,10 +24,17 @@ namespace VehicleTelemetry {
         private bool isListening;
 
 
+        /// <summary>
+        /// Listens on default port.
+        /// </summary>
         public MessageProviderTcp() : this(5640) {
             // empty on purpose
         }
 
+        /// <summary>
+        /// Specify the listening port.
+        /// </summary>
+        /// <param name="port">Which port to use for incoming connections.</param>
         public MessageProviderTcp(ushort port) {
             listener = TcpListener.Create(port);
             socket = null;
@@ -39,9 +49,12 @@ namespace VehicleTelemetry {
             socket = null;
         }
 
+
         protected delegate void ReadMessagePhase();
 
-
+        /// <summary>
+        /// Which port to use for incoming connections.
+        /// </summary>
         public ushort ListenPort {
             get {
                 return (ushort)((IPEndPoint)listener.LocalEndpoint).Port;
@@ -51,17 +64,27 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Check if connection is alive.
+        /// </summary>
         public bool IsConnected {
             get {
                 return socket != null && socket.Connected;
             }
         }
+
+        /// <summary>
+        /// Check if listening is in progress.
+        /// </summary>
         public bool IsListening {
             get {
                 return isListening;
             }
         }
 
+        /// <summary>
+        /// Listen for incoming connections. DEPRECATED!
+        /// </summary>
         public void Listen() {
             if (IsConnected || isListening) {
                 throw new InvalidOperationException("Already connected.");
@@ -84,6 +107,10 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Listen for incoming connections asynchronously.
+        /// </summary>
+        /// <param name="callback">Called if a connection is established or on failure.</param>
         public void ListenAsync(ListenCallback callback) {
             if (IsConnected || isListening) {
                 throw new InvalidOperationException("Already connected.");
@@ -98,13 +125,35 @@ namespace VehicleTelemetry {
                 callback(false);
                 listener.Stop();
             }
+        }
 
-
+        /// <summary>
+        /// Stop listening to incoming connections.
+        /// </summary>
+        public void Cancel() {
+            try {
+                listener.Stop();
+            }
+            catch (SocketException ex) {
+                // swallow exception
+            }
         }
 
 
+        /// <summary>
+        /// Disconnect from remote peer.
+        /// </summary>
+        public void Disconnect() {
+            StopMessaging();
+            if (socket != null) {
+                socket.Close();
+            }
+        }
 
-        void ListenAsyncCallback(IAsyncResult result) {
+        /// <summary>
+        /// Handler for C#'s asnync socket.
+        /// </summary>
+        private void ListenAsyncCallback(IAsyncResult result) {
             bool isOk = false;
             try {
                 socket = listener.EndAcceptSocket(result);
@@ -120,23 +169,6 @@ namespace VehicleTelemetry {
                 listener.Stop();
                 isListening = false;
                 callback(isOk);
-            }
-        }
-
-        public void Cancel() {
-            try {
-                listener.Stop();
-            }
-            catch (SocketException ex) {
-                // swallow exception
-            }
-        }
-
-
-        public void Disconnect() {
-            StopMessaging();
-            if (socket != null) {
-                socket.Close();
             }
         }
 

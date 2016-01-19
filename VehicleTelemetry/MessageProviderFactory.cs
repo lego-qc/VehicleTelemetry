@@ -6,11 +6,27 @@ using System.Threading.Tasks;
 using System.Reflection;
 
 namespace VehicleTelemetry {
+    /// <summary>
+    /// Collects a list of all classes that implement IMessageProviders. Allows creation of instances of these classes.
+    /// </summary>
+    /// <remarks>Such a class must have a default constructor, and needs not to be abstract.</remarks>
     public class MessageProviderFactory {
+        /// <summary>
+        /// Associates type GUIDs with objects that can create that type.
+        /// </summary>
         private static Dictionary<Guid, ProviderCreator> registry;
+        /// <summary>
+        /// A list of all registered provider classes.
+        /// </summary>
         private static List<ProviderDesc> enumeration;
+        /// <summary>
+        /// A wrapper to publicly expose the above.
+        /// </summary>
         private static ProviderEnumeration enumWrapper;
 
+        /// <summary>
+        /// Collect the list of conforming classes, adds them to registry, and initializes creators.
+        /// </summary>
         static MessageProviderFactory() {
             // create internal members
             registry = new Dictionary<Guid, ProviderCreator>();
@@ -41,8 +57,15 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Store creators in this delegate.
+        /// </summary>
         private delegate IMessageProvider CreatorDelegate();
 
+
+        /// <summary>
+        /// Create an instance identified by its GUID. You may get the GUID from enumerating registered classes.
+        /// </summary>
         public static IMessageProvider Create(Guid id) {
             try {
                 return registry[id].creator();
@@ -52,12 +75,18 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Enumerate registered classes.
+        /// </summary>
         public static ProviderEnumeration Enumerator {
             get {
                 return enumWrapper;
             }
         }
 
+        /// <summary>
+        /// Describes a registered provider class.
+        /// </summary>
         public class ProviderDesc {
             public ProviderDesc(Guid id, string name) {
                 this.id = id;

@@ -8,9 +8,18 @@ using System.Drawing;
 
 
 namespace VehicleTelemetry {
+    /// <summary>
+    /// A thin wrapper around GMap.Net's control.
+    /// </summary>
+    /// <remarks>
+    /// Allow drawing of custom overlays.
+    /// </remarks>
     public class Map : GMap.NET.WindowsForms.GMapControl {
         private List<Path> paths = new List<Path>();
 
+        /// <summary>
+        /// List of paths that are to be drawn as lines on the map.
+        /// </summary>
         public List<Path> Paths {
             get {
                 return paths;
@@ -20,6 +29,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Draws the custom overlays to the map.
+        /// </summary>
         protected override void OnPaintOverlays(Graphics g) {
             base.OnPaintOverlays(g);
 

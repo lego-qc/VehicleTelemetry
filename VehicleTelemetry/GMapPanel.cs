@@ -15,11 +15,17 @@ using GMap.NET.WindowsForms.Markers;
 using GMap.NET.WindowsForms.ToolTips;
 
 namespace VehicleTelemetry {
+    /// <summary>
+    /// A two-dimensional map panel based on GMap.Net.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="Panel"/> for more about what a panel is.
+    /// <see cref="TelemetryControl"/> for more about how panels are used.
+    /// </remarks>
     public partial class GMapPanel : MapPanel {
-        protected Map map = new Map();
         private List<Path> paths = new List<Path>();
         private GeoPoint position;
-
+        protected Map map = new Map();
 
         public GMapPanel() {
             InitializeComponent();

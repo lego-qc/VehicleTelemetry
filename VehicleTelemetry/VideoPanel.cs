@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace VehicleTelemetry {
-    public abstract class VideoPanel : Panel {
+    /// <summary>
+    /// Display video on a panel.
+    /// </summary>
+    public class VideoPanel : Panel {
 
     }
 }

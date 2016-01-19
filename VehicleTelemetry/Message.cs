@@ -5,19 +5,46 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace VehicleTelemetry {
+    /// <summary>
+    /// Identifies the type of a message.
+    /// </summary>
     public enum eMessageType : byte {
         LAYOUT,
         DATA,
         PATH,
     }
 
+    /// <summary>
+    /// Abstract base class for representing messages.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// A message is a logical and physical object that is transmitted from the remote site.
+    /// A message can contain various telemetry information. Therefore, there are multiple types of messages.
+    /// This class serves as a base class for all those message types.
+    /// </para>
+    /// <para>
+    /// Messages also handle the work of serialization. Messages are seralized into custom bytestreams. The format
+    /// of the bytestream is consistent across all methods of transmission.
+    /// </para>
+    /// </remarks>
     public abstract class Message {
+        /// <summary>
+        /// Get type of the message.
+        /// </summary>
         public virtual eMessageType Type {
             get;
         }
 
+        /// <summary>
+        /// Convert message to bytestream.
+        /// </summary>
         public abstract byte[] Serialize();
 
+        /// <summary>
+        /// Construct message from bytestream.
+        /// </summary>
+        /// <returns>Returns null on failure.</returns>
         public static Message Deserialize(byte[] data) {
             eMessageType type = (eMessageType)data[0];
             Message message;
@@ -42,21 +69,43 @@ namespace VehicleTelemetry {
             return isOk ? message : null;
         }
 
+        /// <summary>
+        /// Deserialization algorithm. Implement this in subclasses.
+        /// </summary>
+        /// <returns>False on failure.</returns>
         protected abstract bool DeserializeSelf(byte[] data);
 
+        /// <summary>
+        /// Changes type, keeps bit pattern.
+        /// </summary>
         protected uint FloatToUint(float value) {
             return BitConverter.ToUInt32(BitConverter.GetBytes(value), 0);
         }
+        /// <summary>
+        /// Changes type, keeps bit pattern.
+        /// </summary>
         protected float UintToFloat(uint value) {
             return BitConverter.ToSingle(BitConverter.GetBytes(value), 0);
         }
     }
 
 
-
+    /// <summary>
+    /// This message type defines layout of telemetry information.
+    /// </summary>
+    /// <remarks>
+    /// A layout contains snippets. Each snippet defines a vector of telemetry parameters.
+    /// Each parameter consists of the name of the parameter, and the value of it. The value
+    /// is transmitted via DataMesssages.
+    /// The layout defined here is directly set on DataPanels.
+    /// <see cref="DataPanel"/>.
+    /// </remarks>
     public class LayoutMessage : Message {
+        private Snippet[] channels = null;
 
-        private Channel[] channels = null;
+        /// <summary>
+        /// The number of snippets.
+        /// </summary>
         public int Count {
             get {
                 return channels != null ? channels.Length : 0;
@@ -66,27 +115,33 @@ namespace VehicleTelemetry {
                     channels = null;
                 }
                 else {
-                    Channel[] tmp = new Channel[value];
+                    Snippet[] tmp = new Snippet[value];
                     int common = Math.Min(channels != null ? channels.Length : 0, value);
                     int i;
                     for (i = 0; i < common; i++) {
                         tmp[i] = channels[i];
                     }
                     for (; i < value; i++) {
-                        tmp[i] = new Channel();
+                        tmp[i] = new Snippet();
                     }
                     channels = tmp;
                 }
             }
         }
 
+        /// <summary>
+        /// Type of the message. Always returns LAYOUT.
+        /// </summary>
         public override eMessageType Type {
             get {
                 return eMessageType.LAYOUT;   
             }
         }
 
-        public Channel this[int index] {
+        /// <summary>
+        /// Access snippets.
+        /// </summary>
+        public Snippet this[int index] {
             get {
                 return channels[index];
             }
@@ -97,6 +152,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// <see cref="Message.Serialize"/>.
+        /// </summary>
         public override byte[] Serialize() {
             List<byte> raw = new List<byte>();
             raw.Add((byte)Type);
@@ -144,6 +202,10 @@ namespace VehicleTelemetry {
 
             return raw.ToArray();
         }
+
+        /// <summary>
+        /// <see cref="Message.Serialize"/>.
+        /// </summary>
         protected override bool DeserializeSelf(byte[] data) {
             if (data.Length < 5 || (eMessageType)data[0] != Type) {
                 return false;
@@ -154,10 +216,10 @@ namespace VehicleTelemetry {
                 + ((uint)data[3] << 8)
                 + ((uint)data[4]);
 
-            Channel[] channels = new Channel[numChannels];
+            Snippet[] channels = new Snippet[numChannels];
             int currentIndex = 5;
             for (int i = 0; i < numChannels; i++) {
-                channels[i] = new Channel();
+                channels[i] = new Snippet();
                 // read name length
                 if (data.Length < currentIndex + 4) {
                     return false;
@@ -217,15 +279,33 @@ namespace VehicleTelemetry {
             return true;
         }
 
-        public class Channel {
+        /// <summary>
+        /// Represents a vector of telemetry properties.
+        /// </summary>
+        public class Snippet {
+            /// <summary>
+            /// This snippet represents geographic coordinates. Set map position accordingly.
+            /// </summary>
             public bool UpdateMap = false;
+            /// <summary>
+            /// This snippet represents geographic coordinates. Append associated DataMessages to the specified path.
+            /// </summary>
             public bool AppendPathEnabled = false;
+            /// <summary>
+            /// Which path to append points to.
+            /// </summary>
             public ushort AppendPathId = 0;
+            /// <summary>
+            /// Each snippet has an ID that links it to DataMessages.
+            /// </summary>
             public ushort Id = 0;
             private ushort dimension = 0;
             private string name = null;
             private string[] valueNames = null;
 
+            /// <summary>
+            /// Name of the snippet.
+            /// </summary>
             public string Name {
                 get {
                     return name != null ? name : "";
@@ -235,6 +315,9 @@ namespace VehicleTelemetry {
                 }
             }
 
+            /// <summary>
+            /// The number of telemetry properties under this snippet.
+            /// </summary>
             public ushort Dimension {
                 get {
                     return dimension;
@@ -261,6 +344,9 @@ namespace VehicleTelemetry {
                 }
             }
 
+            /// <summary>
+            /// Access telemetry properties by index.
+            /// </summary>
             public string this[int index] {
                 get {
                     return valueNames[index];
@@ -279,11 +365,20 @@ namespace VehicleTelemetry {
 
 
 
+    /// <summary>
+    /// A DataMessage contains the numeric values associated with a snippet.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="LayoutMessage"/> for more on snippets and properties.
+    /// </remarks>
     public class DataMessage : Message {
         private ushort id = 0;
         private ushort dimension = 0;
         private float[] values = null;
 
+        /// <summary>
+        /// The ID that links this message to a snippet.
+        /// </summary>
         public ushort Id {
             get {
                 return id;
@@ -293,6 +388,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Dimension of the property value vector.
+        /// </summary>
         public ushort Dimension {
             get {
                 return dimension;
@@ -308,12 +406,18 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Type of the message. Always DATA.
+        /// </summary>
         public override eMessageType Type {
             get {
                 return eMessageType.DATA;   
             }
         }
 
+        /// <summary>
+        /// Access property values by index.
+        /// </summary>
         public float this[int i] {
             get {
                 return values[i];
@@ -323,6 +427,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// <see cref="Message.Serialize"/>.
+        /// </summary>
         public override byte[] Serialize() {
             int size = 1 + 2 + 2 + dimension * 4;
             byte[] raw = new byte[size];
@@ -343,6 +450,10 @@ namespace VehicleTelemetry {
 
             return raw;
         }
+
+        /// <summary>
+        /// <see cref="Message.DeserializeSelf"/>.
+        /// </summary>
         protected override bool DeserializeSelf(byte[] data) {
             if (data.Length < 5) {
                 return false;
@@ -373,20 +484,43 @@ namespace VehicleTelemetry {
         }
     }
 
-
+    /// <summary>
+    /// Messages for manipulating map paths.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="MapPanel.Paths"/> for more on paths.
+    /// </remarks>
     public class PathMessage : Message {
+        /// <summary>
+        /// Add/remove/modify paths/points.
+        /// </summary>
         public eAction action;
+        /// <summary>
+        /// Which path to perform action on.
+        /// </summary>
         public ushort path;
+        /// <summary>
+        /// Which point to modify.
+        /// </summary>
         public uint index;
+        /// <summary>
+        /// The point to add or new value for modifications.
+        /// </summary>
         public GeoPoint point;
         private const int SIZE = 1 + 1 + 2 + 4 + 4 * 3;
 
+        /// <summary>
+        /// Type of message. Always PATH.
+        /// </summary>
         public override eMessageType Type {
             get {
                 return eMessageType.PATH;   
             }
         }
 
+        /// <summary>
+        /// <see cref="Message.Serialize"/>
+        /// </summary>
         public override byte[] Serialize() {
             byte[] raw = new byte[SIZE];
             raw[0] = (byte)Type;
@@ -425,6 +559,10 @@ namespace VehicleTelemetry {
 
             return raw;
         }
+
+        /// <summary>
+        /// See <see cref="Message.DeserializeSelf"/>.
+        /// </summary>
         protected override bool DeserializeSelf(byte[] data) {
             if (data.Length < SIZE || (eMessageType)data[0] != Type) {
                 return false;
@@ -457,17 +595,41 @@ namespace VehicleTelemetry {
             return true;
         }
 
+        /// <summary>
+        /// The ways you can modify paths.
+        /// </summary>
         public enum eAction : byte {
+            /// <summary>
+            /// Append a new point to path. "Path" is the path's ID, "point" is the new point.
+            /// </summary>
             ADD_POINT,
+            /// <summary>
+            /// Replace a point. "Path" is the path's ID, "index" is which point to replace, "point" is the new value.
+            /// </summary>
             UPDATE_POINT,
+            /// <summary>
+            /// Removes all points from a path. "Path" is which path to clear.
+            /// </summary>
             CLEAR_PATH,
+            /// <summary>
+            /// Add a new path. "Path" specifies the ID, refer to it later when adding points.
+            /// </summary>
             ADD_PATH,
+            /// <summary>
+            /// Delete a path. "Path" specifies the ID of the path to delete.
+            /// </summary>
             REMOVE_PATH,
+            /// <summary>
+            /// Delete all paths.
+            /// </summary>
             CLEAR_MAP,
         }
     }
 
 
+    /// <summary>
+    /// Test serialization.
+    /// </summary>
     class MessageTester {
         public static bool Test() {
             LayoutMessage layoutMsg = new LayoutMessage();
@@ -525,9 +687,6 @@ namespace VehicleTelemetry {
 
             byte[] dataMsgBytes = dataMsg.Serialize();
             DataMessage dataMsgRestored = (DataMessage)Message.Deserialize(dataMsgBytes);
-
-
-
 
             return true;
         }

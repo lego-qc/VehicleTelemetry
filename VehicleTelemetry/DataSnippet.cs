@@ -9,7 +9,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace VehicleTelemetry {
+    /// <summary>
+    /// DataSnippet represents a snippet on a DataPanel.
+    /// </summary>
+    /// <remarks>
+    /// <see cref="DataPanel"/> for more on snippets.
+    /// </remarks>
     public partial class DataSnippet : UserControl {
+        /// <summary>
+        /// Number of record in the snippet.
+        /// </summary>
         private int count;
         private string title;
         private StringTable labels;
@@ -20,7 +29,9 @@ namespace VehicleTelemetry {
         private const int MARGIN = 1;
         private bool isShowingGraph;
 
-
+        /// <summary>
+        /// Create an empty snippet.
+        /// </summary>
         public DataSnippet() {
             InitializeComponent();
 
@@ -42,6 +53,9 @@ namespace VehicleTelemetry {
         }
 
 
+        /// <summary>
+        /// Number of key-value pairs in the snippet.
+        /// </summary>
         public int Count {
             get {
                 return count;
@@ -60,6 +74,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Title of the snippet.
+        /// </summary>
         public string Title {
             get {
                 return title;
@@ -77,28 +94,47 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Access the keys (called labels) of the snippet.
+        /// </summary>
         public StringTable Labels {
             get {
                 return labels;
             }
         }
 
+        /// <summary>
+        /// Access the values of the snippet.
+        /// </summary>
         public StringTable Values {
             get {
                 return values;
             }
         }
 
+        /// <summary>
+        /// Handler for label change.
+        /// </summary>
+        /// <param name="index">Which label changed.</param>
+        /// <param name="value">The new value of the label.</param>
         private void OnLabelChanged(int index, string value) {
             Label label = (Label)mainTable.GetControlFromPosition(0, index);
             label.Text = (value != null ? value : "");
         }
 
+        /// <summary>
+        /// Handler for value change.
+        /// </summary>
+        /// <param name="index">Which value changed.</param>
+        /// <param name="value">The new value.</param>
         private void OnValueChanged(int index, string value) {
             TextBox textBox = (TextBox)mainTable.GetControlFromPosition(1, index);
             textBox.Text = (value != null ? value : "");
         }
 
+        /// <summary>
+        /// Toggles the graph on/off.
+        /// </summary>
         private void OnShowGraph(object sender, EventArgs e) {
             int currentWidth = titleGroup.Size.Width;
             int currentHeight = titleGroup.Size.Height;
@@ -108,6 +144,9 @@ namespace VehicleTelemetry {
             isShowingGraph = !isShowingGraph;
         }
 
+        /// <summary>
+        /// Recreate internal controls, to be called after number of snippets changed.
+        /// </summary>
         private void UpdateLayout() {
             mainTable.Controls.Clear();
             if (count == 0) {
@@ -151,11 +190,24 @@ namespace VehicleTelemetry {
         }
 
 
+        /// <summary>
+        /// Helper class used to expose labels and values.
+        /// </summary>
         public class StringTable {
+
+            // Non of the members should be publicly exposed, except for the indexer.
             public delegate void OnChangedEvent(int index, string value);
             public event OnChangedEvent OnChanged;
-
+            /// <summary>
+            /// Do NOT ever mess with this. This member is only for the DataSnippet outer class.
+            /// Enough of a problem that it's exposed publicly. REMOVE THIS SOMEHOW!
+            /// </summary>
             public string[] strings = null;
+
+            /// <summary>
+            /// Accessor for the labels/values.
+            /// </summary>
+            /// <return>The index-th label/value.</return>
             public string this[int index] {
                 get {
                     return strings[index];
