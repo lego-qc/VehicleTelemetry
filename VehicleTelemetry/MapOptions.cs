@@ -33,6 +33,10 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Configure cache mode. Three modes are available:
+        /// network only, local cache only and hybrid.
+        /// </summary>
         public AccessMode CacheMode {
             get {
                 return cacheMode;
@@ -53,6 +57,11 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Set the currently used provider service. This may be null.
+        /// After closing the dialog, this property contains the
+        /// newly chosen provider.
+        /// </summary>
         public GMapProvider Provider {
             get {
                 return provider;
@@ -74,6 +83,10 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Set the GMap control itself. This refernce is not changed, but
+        /// the control is configured.
+        /// </summary>
         public GMapControl GMap {
             get {
                 return gmap;
@@ -83,6 +96,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Set properties according to stuff selected on the GUI.
+        /// </summary>
         private void ProcessResults() {
             provider = ((ProviderItem)mapProviderSelector.SelectedItem).provider;
             int cacheIndex = cacheModeSelector.SelectedIndex;
@@ -102,16 +118,25 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Runs when you click OK. Closes the dialog and reads changes from GUI.
+        /// </summary>
         private void confirmOk_Click(object sender, EventArgs e) {
             ProcessResults();
             DialogResult = DialogResult.OK;
         }
 
+        /// <summary>
+        /// Runs when you click cancel. Closes the dialog and reads changes from GUI, but returns cancel.
+        /// </summary>
         private void confirmCancel_Click(object sender, EventArgs e) {
             ProcessResults();
             DialogResult = DialogResult.Cancel;
         }
 
+        /// <summary>
+        /// Empties the cache of GMap.
+        /// </summary>
         private void emptyCache_Click(object sender, EventArgs e) {
             DialogResult result = MessageBox.Show("This will delete all your tile cache data.\nAre you sure?", "Delete Cache", MessageBoxButtons.YesNo);
             if (gmap != null && result == DialogResult.Yes) {
@@ -119,6 +144,9 @@ namespace VehicleTelemetry {
             }
         }
 
+        /// <summary>
+        /// Just a little shit that stores a GMapProvider and can be thrown into a combobox.
+        /// </summary>
         protected class ProviderItem {
             public GMapProvider provider;
             public ProviderItem(GMapProvider provider) {
