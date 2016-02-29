@@ -51,9 +51,6 @@ namespace VehicleTelemetryApp {
             // the newly selected item
             ProviderSelectorItem item = (ProviderSelectorItem)providerSelector.SelectedItem;
 
-            // display debug message for developer
-            //debugConfigLabel.Text = item.desc.id.ToString() + " - " + item.desc.name;
-
             // create an instance of the new provider
             if (currentProvider != null) {
                 currentProvider.Dispose();
@@ -62,6 +59,7 @@ namespace VehicleTelemetryApp {
             currentConfigurator = currentProvider.GetConfigurator();
             if (currentConfigurator != null) {
                 mainSplitter.Panel2.Controls.Add(currentConfigurator);
+                currentConfigurator.Dock = DockStyle.Fill;
             }            
 
             // assign new provider to the processor

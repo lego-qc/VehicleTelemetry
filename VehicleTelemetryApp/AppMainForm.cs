@@ -55,9 +55,9 @@ namespace VehicleTelemetryApp {
 
         private void setupToolStripMenuItem_Click(object sender, EventArgs e) {
             var connectionForm = new ConnectionForm();
-            connectionForm.Processors =new IMessageProcessor[] { messageProcessorPath, messageProcessorData };
+            connectionForm.Processors = new IMessageProcessor[] { messageProcessorPath, messageProcessorData, messageProcessorMap };
             connectionForm.Provider = messageProvider;
-            connectionForm.Show();
+            connectionForm.ShowDialog();
             messageProvider = connectionForm.Provider;
         }
 
@@ -70,5 +70,9 @@ namespace VehicleTelemetryApp {
         private MessageProcessor_Path messageProcessorPath;
         private MessageProcessor_Data messageProcessorData;
         private MessageProcessor_Map messageProcessorMap;
+
+        private void disconnectToolStripMenuItem_Click(object sender, EventArgs e) {
+            messageProvider.Disconnect();
+        }
     }
 }

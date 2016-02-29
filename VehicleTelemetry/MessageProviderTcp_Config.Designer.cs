@@ -23,21 +23,21 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.connectButton = new System.Windows.Forms.Button();
+            this.portButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.portTexBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // connectButton
+            // portButton
             // 
-            this.connectButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.connectButton.Location = new System.Drawing.Point(266, 1);
-            this.connectButton.Name = "connectButton";
-            this.connectButton.Size = new System.Drawing.Size(75, 23);
-            this.connectButton.TabIndex = 0;
-            this.connectButton.Text = "Connect";
-            this.connectButton.UseVisualStyleBackColor = true;
-            this.connectButton.Click += new System.EventHandler(this.connectButton_Click);
+            this.portButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.portButton.Location = new System.Drawing.Point(266, 1);
+            this.portButton.Name = "portButton";
+            this.portButton.Size = new System.Drawing.Size(75, 23);
+            this.portButton.TabIndex = 0;
+            this.portButton.Text = "Set port";
+            this.portButton.UseVisualStyleBackColor = true;
+            this.portButton.Click += new System.EventHandler(this.connectButton_Click);
             // 
             // label1
             // 
@@ -62,7 +62,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.portTexBox);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.connectButton);
+            this.Controls.Add(this.portButton);
             this.Name = "MessageProviderTcp_Config";
             this.Size = new System.Drawing.Size(344, 96);
             this.ResumeLayout(false);
@@ -72,7 +72,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button connectButton;
+        private System.Windows.Forms.Button portButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox portTexBox;
     }

@@ -94,9 +94,11 @@
             // 
             // stateIndicator
             // 
+            this.stateIndicator.Image = global::VehicleTelemetryApp.Properties.Resources.ConnectionForm_Disconnected;
             this.stateIndicator.Location = new System.Drawing.Point(454, 3);
             this.stateIndicator.Name = "stateIndicator";
             this.stateIndicator.Size = new System.Drawing.Size(34, 34);
+            this.stateIndicator.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.stateIndicator.TabIndex = 2;
             this.stateIndicator.TabStop = false;
             // 
