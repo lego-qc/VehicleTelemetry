@@ -39,8 +39,10 @@ namespace VehicleTelemetryApp {
             // create message processors
             messageProcessorData = new MessageProcessor_Data();
             messageProcessorPath = new MessageProcessor_Path();
+            messageProcessorMap = new MessageProcessor_Map();
             messageProcessorData.Target = dataPanel;
             messageProcessorPath.Target = this;
+            messageProcessorMap.Target = mapPanel;
         }
 
         private void InitializeExtendedMenuStrip() {
@@ -53,7 +55,7 @@ namespace VehicleTelemetryApp {
 
         private void setupToolStripMenuItem_Click(object sender, EventArgs e) {
             var connectionForm = new ConnectionForm();
-            connectionForm.Processors =new MessageProcessor[] { messageProcessorPath, messageProcessorData };
+            connectionForm.Processors =new IMessageProcessor[] { messageProcessorPath, messageProcessorData };
             connectionForm.Provider = messageProvider;
             connectionForm.Show();
             messageProvider = connectionForm.Provider;
@@ -67,6 +69,6 @@ namespace VehicleTelemetryApp {
         private IMessageProvider messageProvider;
         private MessageProcessor_Path messageProcessorPath;
         private MessageProcessor_Data messageProcessorData;
-
+        private MessageProcessor_Map messageProcessorMap;
     }
 }

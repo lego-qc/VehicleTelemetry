@@ -33,7 +33,7 @@ namespace VehicleTelemetry {
         bool IsListening { get; }
 
         /// <summary>
-        /// Listen for incoming connections.
+        /// Listen for incoming connections. Deprecated or not implemented, whatever. Don't use it.
         /// </summary>
         void Listen();
 
@@ -47,6 +47,11 @@ namespace VehicleTelemetry {
         /// Cancels listening.
         /// </summary>
         void Cancel();
+
+        /// <summary>
+        /// Create a control that allows to configure this provider.
+        /// </summary>
+        System.Windows.Forms.UserControl GetConfigurator();
 
         /// <summary>
         /// Closes connection.

@@ -151,6 +151,13 @@ namespace VehicleTelemetry {
         }
 
         /// <summary>
+        /// Create a control that allows to configure this provider.
+        /// </summary>
+        public System.Windows.Forms.UserControl GetConfigurator() {
+            return new MessageProviderTcp_Config(this);
+        }
+
+        /// <summary>
         /// Handler for C#'s asnync socket.
         /// </summary>
         private void ListenAsyncCallback(IAsyncResult result) {

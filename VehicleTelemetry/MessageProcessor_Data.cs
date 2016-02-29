@@ -8,7 +8,7 @@ namespace VehicleTelemetry {
     /// <summary>
     /// Processes messages that are important for a DataPanel.
     /// </summary>
-    public class MessageProcessor_Data : MessageProcessor {
+    public class MessageProcessor_Data : IMessageProcessor {
         /// <summary>
         /// The message source.
         /// </summary>
@@ -37,7 +37,7 @@ namespace VehicleTelemetry {
         /// <summary>
         /// Assign a message source.
         /// </summary>
-        public override IMessageProvider MessageProvider {
+        public IMessageProvider MessageProvider {
             get {
                 return messageProvider;
             }
@@ -60,7 +60,9 @@ namespace VehicleTelemetry {
                 return target;
             }
             set {
-                target = value;
+                lock (lockObject) {
+                    target = value;
+                }
             }
         }
 
@@ -88,18 +90,20 @@ namespace VehicleTelemetry {
         /// </summary>
         private void ProcessMessage(LayoutMessage msg) {
             lock (lockObject) {
-                target.Invoke(new Action(() => {
-                    target.Count = msg.Count;
-                    idToIndexMapping.Clear();
-                    for (int i = 0; i < msg.Count; i++) {
-                        target[i].Title = msg[i].Name;
-                        target[i].Count = msg[i].Dimension;
-                        for (int j = 0; j < msg[i].Dimension; j++) {
-                            target[i].Labels[j] = msg[i][j];
+                if (target != null) {
+                    target.Invoke(new Action(() => {
+                        target.Count = msg.Count;
+                        idToIndexMapping.Clear();
+                        for (int i = 0; i < msg.Count; i++) {
+                            target[i].Title = msg[i].Name;
+                            target[i].Count = msg[i].Dimension;
+                            for (int j = 0; j < msg[i].Dimension; j++) {
+                                target[i].Labels[j] = msg[i][j];
+                            }
+                            idToIndexMapping.Add(msg[i].Id, i);
                         }
-                        idToIndexMapping.Add(msg[i].Id, i);
-                    }
-                }));
+                    }));
+                }
             }
         }
 
@@ -110,13 +114,15 @@ namespace VehicleTelemetry {
             string error = null;
             try {
                 lock (lockObject) {
-                    int index = idToIndexMapping[msg.Id];
-                    target.Invoke(new Action(() => {
-                        int mindex = Math.Min(msg.Dimension, target[index].Count);
-                        for (int i=0; i< mindex; i++) {
-                            target[index].Values[i] = msg[i].ToString();
-                        }
-                    }));
+                    if (target != null) {
+                        int index = idToIndexMapping[msg.Id];
+                        target.Invoke(new Action(() => {
+                            int mindex = Math.Min(msg.Dimension, target[index].Count);
+                            for (int i = 0; i < mindex; i++) {
+                                target[index].Values[i] = msg[i].ToString();
+                            }
+                        }));
+                    }
                 }
             }
             catch (KeyNotFoundException e) {

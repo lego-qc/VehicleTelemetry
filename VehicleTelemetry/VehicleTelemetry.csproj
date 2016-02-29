@@ -123,6 +123,12 @@
     <Compile Include="MessageProcessor_Map.cs" />
     <Compile Include="MessageProcessor_Path.cs" />
     <Compile Include="MessageProviderFactory.cs" />
+    <Compile Include="MessageProviderTcp_Config.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MessageProviderTcp_Config.Designer.cs">
+      <DependentUpon>MessageProviderTcp_Config.cs</DependentUpon>
+    </Compile>
     <Compile Include="Panel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,7 +158,7 @@
       <DependentUpon>GMapPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Message.cs" />
-    <Compile Include="MessageProcessor.cs" />
+    <Compile Include="IMessageProcessor.cs" />
     <Compile Include="MessageProviderTcp.cs" />
     <Compile Include="Path.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -168,6 +174,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DummyVideoPanel.resx">
       <DependentUpon>DummyVideoPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MessageProviderTcp_Config.resx">
+      <DependentUpon>MessageProviderTcp_Config.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TelemetryControl.resx">
       <DependentUpon>TelemetryControl.cs</DependentUpon>

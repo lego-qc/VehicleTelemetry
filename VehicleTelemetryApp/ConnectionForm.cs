@@ -52,13 +52,17 @@ namespace VehicleTelemetryApp {
             ProviderSelectorItem item = (ProviderSelectorItem)providerSelector.SelectedItem;
 
             // display debug message for developer
-            debugConfigLabel.Text = item.desc.id.ToString() + " - " + item.desc.name;
+            //debugConfigLabel.Text = item.desc.id.ToString() + " - " + item.desc.name;
 
             // create an instance of the new provider
             if (currentProvider != null) {
                 currentProvider.Dispose();
             }
             currentProvider = MessageProviderFactory.Create(item.desc.id);
+            currentConfigurator = currentProvider.GetConfigurator();
+            if (currentConfigurator != null) {
+                mainSplitter.Panel2.Controls.Add(currentConfigurator);
+            }            
 
             // assign new provider to the processor
             foreach (var p in currentProcessors) {
@@ -81,7 +85,8 @@ namespace VehicleTelemetryApp {
 
 
         private IMessageProvider currentProvider;
-        private MessageProcessor[] currentProcessors;
+        private IMessageProcessor[] currentProcessors;
+        private UserControl currentConfigurator;
 
         public IMessageProvider Provider {
             get {
@@ -128,7 +133,7 @@ namespace VehicleTelemetryApp {
             }
         }
 
-        public MessageProcessor[] Processors {
+        public IMessageProcessor[] Processors {
             get {
                 return currentProcessors;
             }

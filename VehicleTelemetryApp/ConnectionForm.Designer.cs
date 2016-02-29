@@ -29,10 +29,8 @@
             this.providerSelectorLabel = new System.Windows.Forms.Label();
             this.stateIndicator = new System.Windows.Forms.PictureBox();
             this.actionButton = new System.Windows.Forms.Button();
-            this.debugConfigLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitter)).BeginInit();
             this.mainSplitter.Panel1.SuspendLayout();
-            this.mainSplitter.Panel2.SuspendLayout();
             this.mainSplitter.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stateIndicator)).BeginInit();
@@ -49,10 +47,6 @@
             // mainSplitter.Panel1
             // 
             this.mainSplitter.Panel1.Controls.Add(this.tableLayoutPanel1);
-            // 
-            // mainSplitter.Panel2
-            // 
-            this.mainSplitter.Panel2.Controls.Add(this.debugConfigLabel);
             this.mainSplitter.Size = new System.Drawing.Size(491, 289);
             this.mainSplitter.SplitterDistance = 40;
             this.mainSplitter.TabIndex = 0;
@@ -117,15 +111,6 @@
             this.actionButton.UseVisualStyleBackColor = true;
             this.actionButton.Click += new System.EventHandler(this.actionButton_Click);
             // 
-            // debugConfigLabel
-            // 
-            this.debugConfigLabel.AutoSize = true;
-            this.debugConfigLabel.Location = new System.Drawing.Point(13, 4);
-            this.debugConfigLabel.Name = "debugConfigLabel";
-            this.debugConfigLabel.Size = new System.Drawing.Size(93, 13);
-            this.debugConfigLabel.TabIndex = 0;
-            this.debugConfigLabel.Text = "debugConfigLabel";
-            // 
             // ConnectionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -135,8 +120,6 @@
             this.Name = "ConnectionForm";
             this.Text = "Connection Settings";
             this.mainSplitter.Panel1.ResumeLayout(false);
-            this.mainSplitter.Panel2.ResumeLayout(false);
-            this.mainSplitter.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitter)).EndInit();
             this.mainSplitter.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -154,6 +137,5 @@
         private System.Windows.Forms.Label providerSelectorLabel;
         private System.Windows.Forms.PictureBox stateIndicator;
         private System.Windows.Forms.Button actionButton;
-        private System.Windows.Forms.Label debugConfigLabel;
     }
 }

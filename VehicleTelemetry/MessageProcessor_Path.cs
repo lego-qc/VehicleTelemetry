@@ -8,7 +8,7 @@ namespace VehicleTelemetry {
     /// <summary>
     /// Modifies paths according to messages it receives.
     /// </summary>
-    public class MessageProcessor_Path : MessageProcessor {
+    public class MessageProcessor_Path : IMessageProcessor {
         private IMessageProvider messageProvider;
         private TelemetryControl target;
         /// <summary>
@@ -37,7 +37,7 @@ namespace VehicleTelemetry {
         /// <summary>
         /// Assign the source of messages.
         /// </summary>
-        public override IMessageProvider MessageProvider {
+        public IMessageProvider MessageProvider {
             get {
                 return messageProvider;
             }
@@ -60,7 +60,9 @@ namespace VehicleTelemetry {
                 return target;
             }
             set {
-                target = value;
+                lock (lockObject) {
+                    target = value;
+                }
             }
         }
 
@@ -92,7 +94,6 @@ namespace VehicleTelemetry {
         private void ProcessMessage(LayoutMessage msg) {
             lock (lockObject) {
                 appendIdToPathMapping.Clear();
-
                 for (int i = 0; i < msg.Count; i++) {
                     if (msg[i].AppendPathEnabled && !appendIdToPathMapping.ContainsKey(msg[i].Id)) {
                         appendIdToPathMapping.Add(msg[i].Id, msg[i].AppendPathId);
@@ -145,60 +146,69 @@ namespace VehicleTelemetry {
                 switch (msg.action) {
                     case PathMessage.eAction.ADD_POINT:
                         lock (lockObject) {
-                            index = pathToIndexMapping[msg.path];
+                            if (target != null) {
+                                index = pathToIndexMapping[msg.path];
+                                target.Invoke(new Action(() => { target.Paths[index].Add(msg.point); target.PathsUpdated(); }));
+                            }
                         }
-                        target.Invoke(new Action(() => { target.Paths[index].Add(msg.point); target.PathsUpdated(); }));
                         break;
                     case PathMessage.eAction.UPDATE_POINT:
                         lock (lockObject) {
-                            index = pathToIndexMapping[msg.path];
+                            if (target != null) {
+                                index = pathToIndexMapping[msg.path];
+                                target.Invoke(new Action(() => target.Paths[index][(int)msg.index] = msg.point));
+                            }
                         }
-                        target.Invoke(new Action(() => target.Paths[index][(int)msg.index] = msg.point));
                         break;
                     case PathMessage.eAction.CLEAR_PATH:
                         lock (lockObject) {
-                            index = pathToIndexMapping[msg.path];
+                            if (target != null) {
+                                index = pathToIndexMapping[msg.path];
+                                target.Invoke(new Action(() => target.Paths[index].Clear()));
+                            }
                         }
-                        target.Invoke(new Action(() => target.Paths[index].Clear()));
                         break;
                     case PathMessage.eAction.ADD_PATH:
                         bool containsPath;
                         lock (lockObject) {
                             containsPath = pathToIndexMapping.ContainsKey(msg.path);
-                        }
-                        if (!containsPath) {
-                            target.Invoke(new Action(() => {
-                                target.Paths.Add(new Path());
-                                index = target.Paths.Count - 1;
-                                lock (lockObject) {
+                            if (target == null) {
+                                // do nothing
+                            }
+                            else if (!containsPath) {
+                                target.Invoke(new Action(() => {
+                                    target.Paths.Add(new Path());
+                                    index = target.Paths.Count - 1;
                                     pathToIndexMapping.Add(msg.path, index);
-                                }
-                            }));
-                        }
-                        else {
-                            throw new InvalidOperationException("Path already exists, cannot add it.");
+                                }));
+                            }
+                            else {
+                                throw new InvalidOperationException("Path already exists, cannot add it.");
+                            }
                         }
                         break;
                     case PathMessage.eAction.REMOVE_PATH:
                         lock (lockObject) {
-                            index = pathToIndexMapping[msg.path];
-                        }
-                        target.Invoke(new Action(() => {
-                            target.Paths.RemoveAt(index);
-                            lock (lockObject) {
-                                pathToIndexMapping.Remove(msg.path);
-                                foreach (var key in pathToIndexMapping.Keys.ToArray()) {
-                                    if (pathToIndexMapping[key] > index) {
-                                        pathToIndexMapping[key]--;
+                            if (target != null) {
+                                index = pathToIndexMapping[msg.path];
+                                target.Invoke(new Action(() => {
+                                    target.Paths.RemoveAt(index);
+                                    pathToIndexMapping.Remove(msg.path);
+                                    foreach (var key in pathToIndexMapping.Keys.ToArray()) {
+                                        if (pathToIndexMapping[key] > index) {
+                                            pathToIndexMapping[key]--;
+                                        }
                                     }
-                                }
+                                }));
                             }
-                        }));
+                        }
                         break;
                     case PathMessage.eAction.CLEAR_MAP:
-                        target.Invoke(new Action(() => target.Paths.Clear()));
                         lock (lockObject) {
-                            pathToIndexMapping.Clear();
+                            if (target != null) {
+                                target.Invoke(new Action(() => target.Paths.Clear()));
+                                pathToIndexMapping.Clear();
+                            }
                         }
                         break;
                     default:
