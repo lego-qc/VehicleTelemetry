@@ -20,16 +20,13 @@ namespace VehicleTelemetry {
         private byte[] sizeBuffer = new byte[2];
         private byte[] checksumBuffer = new byte[4];
         private byte[] dataBuffer = null;
-        public event MessageHandler OnMessage;
         private bool isListening;
 
 
         /// <summary>
         /// Listens on default port.
         /// </summary>
-        public MessageProviderTcp() : this(5640) {
-            // empty on purpose
-        }
+        public MessageProviderTcp() : this(5640) { }
 
         /// <summary>
         /// Specify the listening port.
@@ -42,11 +39,11 @@ namespace VehicleTelemetry {
         }
 
 
+        /// <summary>
+        /// Free internal resources. Cannot be reused afterwards.
+        /// </summary>
         public void Dispose() {
             Disconnect();
-            socket.Dispose();
-            StopMessaging();
-            socket = null;
         }
 
 
@@ -86,31 +83,20 @@ namespace VehicleTelemetry {
         /// Listen for incoming connections. DEPRECATED!
         /// </summary>
         public void Listen() {
-            if (IsConnected || isListening) {
-                throw new InvalidOperationException("Already connected.");
-            }
-
-            try {
-                // accept incoming connection
-                isListening = true;
-                listener.Start();
-                socket = listener.AcceptSocket();
-
-                StartMessaging();
-            }
-            catch (Exception ex) {
-                throw;
-            }
-            finally {
-                listener.Stop();
-                isListening = false;
-            }
+            throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Fired when a new message is received.
+        /// </summary>
+        public event MessageHandler OnMessage;
 
         /// <summary>
         /// Listen for incoming connections asynchronously.
         /// </summary>
         /// <param name="callback">Called if a connection is established or on failure.</param>
+        /// <exception cref="InvalidOperationException">Already connected or listening.</exception>
+        /// <exception cref="SocketException">There was an error with the underlying TCP socket.</exception>
         public void ListenAsync(ListenCallback callback) {
             if (IsConnected || isListening) {
                 throw new InvalidOperationException("Already connected.");
@@ -124,6 +110,7 @@ namespace VehicleTelemetry {
             catch (Exception ex) {
                 callback(false);
                 listener.Stop();
+                throw;
             }
         }
 
@@ -144,9 +131,10 @@ namespace VehicleTelemetry {
         /// Disconnect from remote peer.
         /// </summary>
         public void Disconnect() {
-            StopMessaging();
+            isMessaging = false;
             if (socket != null) {
-                socket.Close();
+                socket.Dispose();
+                socket = null;
             }
         }
 
@@ -163,9 +151,14 @@ namespace VehicleTelemetry {
         private void ListenAsyncCallback(IAsyncResult result) {
             bool isOk = false;
             try {
-                socket = listener.EndAcceptSocket(result);
-                StartMessaging();
+                lock (lockObject) {
+                    socket = listener.EndAcceptSocket(result);
+                }
                 isOk = true;
+
+                // start messaging
+                isMessaging = true;
+                ReadMessageSize();
             }
             catch (Exception ex) {
                 isOk = false;
@@ -179,23 +172,15 @@ namespace VehicleTelemetry {
             }
         }
 
-        private void StartMessaging() {
-            isMessaging = true;
-            ReadMessageSize();
-        }
-
-        private void StopMessaging() {
-            isMessaging = false;
-        }
 
         private void ReadMessageSize() {
             try {
-                socket.BeginReceive(sizeBuffer, 0, 2, SocketFlags.None, ReadCallback, new AsyncStateObject(ReadMessage, 2));
+                lock (lockObject) {
+                    socket.BeginReceive(sizeBuffer, 0, 2, SocketFlags.None, ReadCallback, new AsyncStateObject(ReadMessage, 2));
+                }
             }
             catch (Exception ex) {
-                // handle socket error
-                // ...
-                StopMessaging();
+                isMessaging = false;
             }
         }
 
@@ -205,23 +190,23 @@ namespace VehicleTelemetry {
             dataBuffer = new byte[size];
 
             try {
-                socket.BeginReceive(dataBuffer, 0, size, SocketFlags.None, ReadCallback, new AsyncStateObject(ReadCheckSum, size));
+                lock (lockObject) {
+                    socket.BeginReceive(dataBuffer, 0, size, SocketFlags.None, ReadCallback, new AsyncStateObject(ReadCheckSum, size));
+                }
             }
             catch (Exception ex) {
-                // handle socket error
-                // ...
-                StopMessaging();
+                isMessaging = false;
             }
         }
 
         private void ReadCheckSum() {
             try {
-                socket.BeginReceive(checksumBuffer, 0, 4, SocketFlags.None, ReadCallback, new AsyncStateObject(CommitMessage, 4));
+                lock (lockObject) {
+                    socket.BeginReceive(checksumBuffer, 0, 4, SocketFlags.None, ReadCallback, new AsyncStateObject(CommitMessage, 4));
+                }
             }
             catch (Exception ex) {
-                // handle socket error
-                // ...
-                StopMessaging();
+                isMessaging = false;
             }
         }
 
@@ -240,17 +225,15 @@ namespace VehicleTelemetry {
             }
 
             if (!isChecksumOk) {
-                // handle checksum error
-                // ...
-                StopMessaging();
+                // kill connection
+                isMessaging = false;
             }
 
             // decode message
             Message msg = Message.Deserialize(dataBuffer);
             if (msg == null) {
-                // handle deserialization error
-                // ...
-                StopMessaging();
+                // invalid message, kill connection
+                isMessaging = false;
             }
 
             // fire event
@@ -266,19 +249,20 @@ namespace VehicleTelemetry {
 
         private void ReadCallback(IAsyncResult result) {
             try {
-                int read = socket.EndReceive(result);
+                int read = 0;
+                lock (lockObject) {
+                    read = socket.EndReceive(result);
+                }
                 AsyncStateObject state = (AsyncStateObject)result.AsyncState;
                 if (read != state.numBytesToRead) {
-                    // handle read error
-                    // ...
-                    StopMessaging();
+                    isMessaging = false;
                 }
                 else if (isMessaging) {
                     state.next();
                 }
             }
             catch (Exception e) {
-                StopMessaging();
+                isMessaging = false;
             }
         }
 

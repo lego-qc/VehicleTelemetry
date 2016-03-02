@@ -26,12 +26,15 @@ namespace VehicleTelemetryApp {
             DataPanel dataPanel = new DataPanel();
             MapPanel mapPanel = new GMapPanel();
             VideoPanel videoPanel = new DummyVideoPanel();
+            QuickTools quickTools = new QuickTools();
             dataPanel.Text = "Telemetry Data";
             mapPanel.Text = "Map";
             videoPanel.Text = "Dummy Video (not working)";
+            quickTools.Text = "Quick Tools";
             Panels.Add(dataPanel, DockState.DockRight);
             Panels.Add(mapPanel, DockState.Document);
             Panels.Add(videoPanel, DockState.Document);
+            Panels.Add(quickTools, DockState.DockLeft);
 
             // Set up panels
             mapPanel.Paths = Paths;
@@ -72,7 +75,9 @@ namespace VehicleTelemetryApp {
         private MessageProcessor_Map messageProcessorMap;
 
         private void disconnectToolStripMenuItem_Click(object sender, EventArgs e) {
-            messageProvider.Disconnect();
+            if (messageProvider != null) {
+                messageProvider.Disconnect();
+            }
         }
     }
 }

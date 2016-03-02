@@ -11,13 +11,22 @@ using VehicleTelemetry;
 
 namespace VehicleTelemetryApp {
     public partial class ConnectionForm : Form {
+        private int minSizeWithName = 400;
+
+
         public ConnectionForm() {
             InitializeComponent();
 
             // enumerate all providers and add them to selection
+            int maxNameLen = 0;
             for (int i = 0; i < MessageProviderFactory.Enumerator.Count; i++) {
                 providerSelector.Items.Add(new ProviderSelectorItem(MessageProviderFactory.Enumerator[i]));
+                maxNameLen = Math.Max(maxNameLen, MessageProviderFactory.Enumerator[i].name.Length);
             }
+
+            // adjust window size according to the length of provider names
+            minSizeWithName = (int)(providerSelector.Font.SizeInPoints * maxNameLen + 200);
+            this.MinimumSize = new Size(minSizeWithName, this.MinimumSize.Height);
 
             UpdateControlState();
         }
@@ -56,11 +65,19 @@ namespace VehicleTelemetryApp {
                 currentProvider.Dispose();
             }
             currentProvider = MessageProviderFactory.Create(item.desc.id);
+
+            // create a configurator for the new provider
+            mainSplitter.Panel2.Controls.Clear();
             currentConfigurator = currentProvider.GetConfigurator();
             if (currentConfigurator != null) {
                 mainSplitter.Panel2.Controls.Add(currentConfigurator);
                 currentConfigurator.Dock = DockStyle.Fill;
-            }            
+                this.MinimumSize = new Size(Math.Max(minSizeWithName, currentConfigurator.MinimumSize.Width), 72 + currentConfigurator.MinimumSize.Height);
+                this.Size = new Size(Width, this.MinimumSize.Height);
+            }
+            else {
+                this.MinimumSize = new Size(minSizeWithName, 72);
+            }
 
             // assign new provider to the processor
             foreach (var p in currentProcessors) {
@@ -146,6 +163,8 @@ namespace VehicleTelemetryApp {
                 // allow select only
                 actionButton.Enabled = false;
                 providerSelector.Enabled = true;
+
+                stateIndicator.Image = Properties.Resources.ConnectionForm_Disconnected;
             }
             else if (currentProvider.IsConnected) {
                 // allow disconnect only
@@ -153,16 +172,22 @@ namespace VehicleTelemetryApp {
                 providerSelector.Enabled = false;
 
                 actionButton.Text = "Disconnect";
+
+                stateIndicator.Image = Properties.Resources.ConnectionForm_Connected;
             }
             else if (currentProvider.IsListening) {
                 actionButton.Text = "Cancel";
                 actionButton.Enabled = true;
                 providerSelector.Enabled = false;
+
+                stateIndicator.Image = Properties.Resources.ConnectionForm_Waiting;
             }
             else {
                 actionButton.Text = "Listen";
                 actionButton.Enabled = true;
                 providerSelector.Enabled = true;
+
+                stateIndicator.Image = Properties.Resources.ConnectionForm_Disconnected;
             }
         }
 

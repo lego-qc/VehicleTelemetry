@@ -47,8 +47,8 @@
             // mainSplitter.Panel1
             // 
             this.mainSplitter.Panel1.Controls.Add(this.tableLayoutPanel1);
-            this.mainSplitter.Size = new System.Drawing.Size(491, 289);
-            this.mainSplitter.SplitterDistance = 40;
+            this.mainSplitter.Size = new System.Drawing.Size(409, 241);
+            this.mainSplitter.SplitterDistance = 33;
             this.mainSplitter.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -67,7 +67,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(491, 40);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(409, 33);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // providerSelector
@@ -75,9 +75,9 @@
             this.providerSelector.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.providerSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.providerSelector.FormattingEnabled = true;
-            this.providerSelector.Location = new System.Drawing.Point(117, 9);
+            this.providerSelector.Location = new System.Drawing.Point(117, 6);
             this.providerSelector.Name = "providerSelector";
-            this.providerSelector.Size = new System.Drawing.Size(250, 21);
+            this.providerSelector.Size = new System.Drawing.Size(168, 21);
             this.providerSelector.TabIndex = 1;
             this.providerSelector.SelectedIndexChanged += new System.EventHandler(this.providerSelector_SelectedIndexChanged);
             // 
@@ -85,7 +85,7 @@
             // 
             this.providerSelectorLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.providerSelectorLabel.AutoSize = true;
-            this.providerSelectorLabel.Location = new System.Drawing.Point(3, 13);
+            this.providerSelectorLabel.Location = new System.Drawing.Point(3, 10);
             this.providerSelectorLabel.Name = "providerSelectorLabel";
             this.providerSelectorLabel.Size = new System.Drawing.Size(108, 13);
             this.providerSelectorLabel.TabIndex = 0;
@@ -95,9 +95,9 @@
             // stateIndicator
             // 
             this.stateIndicator.Image = global::VehicleTelemetryApp.Properties.Resources.ConnectionForm_Disconnected;
-            this.stateIndicator.Location = new System.Drawing.Point(454, 3);
+            this.stateIndicator.Location = new System.Drawing.Point(372, 3);
             this.stateIndicator.Name = "stateIndicator";
-            this.stateIndicator.Size = new System.Drawing.Size(34, 34);
+            this.stateIndicator.Size = new System.Drawing.Size(34, 27);
             this.stateIndicator.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.stateIndicator.TabIndex = 2;
             this.stateIndicator.TabStop = false;
@@ -105,7 +105,7 @@
             // actionButton
             // 
             this.actionButton.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.actionButton.Location = new System.Drawing.Point(373, 8);
+            this.actionButton.Location = new System.Drawing.Point(291, 5);
             this.actionButton.Name = "actionButton";
             this.actionButton.Size = new System.Drawing.Size(75, 23);
             this.actionButton.TabIndex = 3;
@@ -117,8 +117,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(491, 289);
+            this.ClientSize = new System.Drawing.Size(409, 241);
             this.Controls.Add(this.mainSplitter);
+            this.MinimumSize = new System.Drawing.Size(400, 70);
             this.Name = "ConnectionForm";
             this.Text = "Connection Settings";
             this.mainSplitter.Panel1.ResumeLayout(false);

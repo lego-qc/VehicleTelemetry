@@ -73,6 +73,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuickTools.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QuickTools.Designer.cs">
+      <DependentUpon>QuickTools.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AppMainForm.resx">
       <DependentUpon>AppMainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -92,6 +98,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="QuickTools.resx">
+      <DependentUpon>QuickTools.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -107,6 +116,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ConnectionForm_Disconnected.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\ConnectionForm_Connected.bmp" />
+    <Content Include="Resources\ConnectionForm_Waiting.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

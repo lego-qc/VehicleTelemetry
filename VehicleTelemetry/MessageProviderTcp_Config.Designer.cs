@@ -25,13 +25,12 @@
         private void InitializeComponent() {
             this.portButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.portTexBox = new System.Windows.Forms.TextBox();
+            this.portTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // portButton
             // 
-            this.portButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.portButton.Location = new System.Drawing.Point(266, 1);
+            this.portButton.Location = new System.Drawing.Point(148, 1);
             this.portButton.Name = "portButton";
             this.portButton.Size = new System.Drawing.Size(75, 23);
             this.portButton.TabIndex = 0;
@@ -50,21 +49,22 @@
             // 
             // portTexBox
             // 
-            this.portTexBox.Location = new System.Drawing.Point(38, 3);
-            this.portTexBox.Name = "portTexBox";
-            this.portTexBox.Size = new System.Drawing.Size(100, 20);
-            this.portTexBox.TabIndex = 2;
-            this.portTexBox.Text = "5630";
+            this.portTextBox.Location = new System.Drawing.Point(38, 3);
+            this.portTextBox.Name = "portTexBox";
+            this.portTextBox.Size = new System.Drawing.Size(100, 20);
+            this.portTextBox.TabIndex = 2;
+            this.portTextBox.Text = "5630";
             // 
             // MessageProviderTcp_Config
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.portTexBox);
+            this.Controls.Add(this.portTextBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.portButton);
+            this.MinimumSize = new System.Drawing.Size(226, 26);
             this.Name = "MessageProviderTcp_Config";
-            this.Size = new System.Drawing.Size(344, 96);
+            this.Size = new System.Drawing.Size(226, 26);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -74,6 +74,6 @@
 
         private System.Windows.Forms.Button portButton;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox portTexBox;
+        private System.Windows.Forms.TextBox portTextBox;
     }
 }

@@ -123,6 +123,13 @@
     <Compile Include="MessageProcessor_Map.cs" />
     <Compile Include="MessageProcessor_Path.cs" />
     <Compile Include="MessageProviderFactory.cs" />
+    <Compile Include="MessageProviderSerial.cs" />
+    <Compile Include="MessageProviderSerial_Config.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MessageProviderSerial_Config.Designer.cs">
+      <DependentUpon>MessageProviderSerial_Config.cs</DependentUpon>
+    </Compile>
     <Compile Include="MessageProviderTcp_Config.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -174,6 +181,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DummyVideoPanel.resx">
       <DependentUpon>DummyVideoPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MessageProviderSerial_Config.resx">
+      <DependentUpon>MessageProviderSerial_Config.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MessageProviderTcp_Config.resx">
       <DependentUpon>MessageProviderTcp_Config.cs</DependentUpon>
