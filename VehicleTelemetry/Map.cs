@@ -14,7 +14,7 @@ namespace VehicleTelemetry {
     /// <remarks>
     /// Allow drawing of custom overlays.
     /// </remarks>
-    public class Map : GMap.NET.WindowsForms.GMapControl {
+    public class GMapExtended : GMap.NET.WindowsForms.GMapControl {
         private List<Path> paths = new List<Path>();
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace VehicleTelemetry {
                         p.Lat = path[i + 1].Lat;
                         p.Lng = path[i + 1].Lng;
                         GPoint gp2 = FromLatLngToLocal(p);
-                        g.DrawLine(path.Color, gp1.X, gp1.Y, gp2.X, gp2.Y);
+                        g.DrawLine(new Pen(path.Color, 3), gp1.X, gp1.Y, gp2.X, gp2.Y);
                     }
                 }
             }

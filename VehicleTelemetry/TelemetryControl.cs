@@ -20,7 +20,6 @@ namespace VehicleTelemetry {
     /// This interface will probably change, and I'm fucking tired of commenting.
     /// </summary>
     public partial class TelemetryControl : Form {
-        private bool trackingEnabled = true;
         private GeoPoint currentPosition;
         private List<Path> paths = new List<Path>();
         private PanelCollection panels;
@@ -34,16 +33,41 @@ namespace VehicleTelemetry {
             mapPanels = new List<MapPanel>();
 
             InitializeComponent();
-            ConfigMap();
-            
+
+            currentPosition = new GeoPoint(47.5, 19);                        
             dockPanel.DocumentStyle = DocumentStyle.DockingMdi;
         }
 
+
+
+        public virtual void AddPath(Path path) {
+            paths.Add(path);
+        }
+
+        public virtual void RemovePath(Path path) {
+            paths.Remove(path);
+        }
+
+        public int GetNumPaths() {
+            return paths.Count;
+        }
+
+        public Path GetPathByName(string name) {
+            foreach (var path in paths) {
+                if (string.Compare(path.Name, name) == 0) {
+                    return path;
+                }
+            }
+            return null;
+        }
+
+        // DEPRECATED
         public List<Path> Paths {
             get {
                 return paths;
             }
         }
+
         public PanelCollection Panels {
             get {
                 return panels;
@@ -56,14 +80,6 @@ namespace VehicleTelemetry {
             }
         }
 
-
-        public void SetCurrentPosition(GeoPoint point) {
-            currentPosition = point;
-            if (trackingEnabled) {
-                //mapView.Position = point;
-            }
-        }
-
         public MapPanel[] GetMapPanels() {
             return mapPanels.ToArray();
         }
@@ -73,14 +89,10 @@ namespace VehicleTelemetry {
         }
 
 
-        public void PathsUpdated() {
+        public void NotifyPathUpdate() {
             foreach (MapPanel panel in mapPanels) {
                 panel.Refresh();
             }
-        }
-
-        private void ConfigMap() {
-            currentPosition = new GeoPoint(47.5, 19);
         }
 
         private void AddPanel(Panel panel, DockState dockState) {
@@ -126,76 +138,6 @@ namespace VehicleTelemetry {
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
             Close();
-        }
-
-
-        class PanelToolStripItem : ToolStripMenuItem {
-            private Panel panel;
-            private WeifenLuo.WinFormsUI.Docking.DockState lastState;
-            private TelemetryControl owner;
-
-            public PanelToolStripItem(TelemetryControl owner, Panel panel = null) {
-                this.owner = owner;
-                this.Click += OnClicked;
-                this.Panel = panel;
-            }
-
-            protected override void Dispose(bool v) {
-                if (v) {
-                    this.Click -= OnClicked;
-                    if (panel != null) {
-                        panel.VisibleChanged -= OnVisibilityChanged;
-                    }
-                }
-                base.Dispose(v);
-            }
-
-
-            public Panel Panel {
-                get {
-                    return panel;
-                }
-                set {
-                    if (panel != null) {
-                        panel.VisibleChanged -= OnVisibilityChanged;
-                        panel.FormClosing -= OnClosed;
-                    }
-                    panel = value;
-                    if (panel != null) {
-                        panel.VisibleChanged += OnVisibilityChanged;
-                        OnVisibilityChanged(null, null);
-                        base.Text = panel.Text;
-                        panel.FormClosing += OnClosed;
-                    }
-                }
-            }
-
-            void OnClicked(object sender, EventArgs e) {
-                if (panel.Visible) {
-                    panel.Hide();
-                }
-                else {
-                    panel.Show();
-                }
-            }
-
-            void OnVisibilityChanged(object sender, EventArgs e) {
-                if (panel.Visible) {
-                    // change state of checkbox
-                    base.Checked = true;
-                }
-                else {
-                    // change state of checkbox
-                    base.Checked = false;
-
-                    // remember last dock state
-                    lastState = panel.DockState;
-                }
-            }
-
-            void OnClosed(object sender, EventArgs e) {
-                owner.RemovePanel(panel);
-            }
         }
     }
 }

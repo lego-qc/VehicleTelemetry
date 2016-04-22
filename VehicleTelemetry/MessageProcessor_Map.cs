@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace VehicleTelemetry {
+    /// <summary>
+    /// Manages a map according to messages.
+    /// </summary>
     public class MessageProcessor_Map : IMessageProcessor {
         private IMessageProvider messageProvider;
         private MapPanel target;
@@ -20,6 +23,9 @@ namespace VehicleTelemetry {
         }
 
 
+        /// <summary>
+        /// Set message provider from which it receives the messages.
+        /// </summary>
         public IMessageProvider MessageProvider {
             get {
                 return messageProvider;
@@ -36,6 +42,9 @@ namespace VehicleTelemetry {
         }
 
 
+        /// <summary>
+        /// Set map object which is to be controlled.
+        /// </summary>
         public MapPanel Target {
             get {
                 return target;
@@ -95,6 +104,7 @@ namespace VehicleTelemetry {
                         else {
                             target.Position = new GeoPoint(msg[0], msg[1], msg[2]);
                         }
+                        target.Refresh();
                     }));
                 }
             }

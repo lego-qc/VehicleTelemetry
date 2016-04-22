@@ -26,5 +26,7 @@ namespace VehicleTelemetry {
         public abstract List<Path> Paths {
             get; set;
         }
+
+
     }
 }

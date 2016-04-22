@@ -25,7 +25,7 @@ namespace VehicleTelemetry {
     public partial class GMapPanel : MapPanel {
         private List<Path> paths = new List<Path>();
         private GeoPoint position;
-        protected Map map = new Map();
+        protected GMapExtended map = new GMapExtended();
 
         public GMapPanel() {
             InitializeComponent();

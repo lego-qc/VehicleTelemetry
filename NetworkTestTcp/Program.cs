@@ -46,7 +46,7 @@ namespace NetworkTestTcp {
                     layoutMsg[0].Id = 1;
                     layoutMsg[0].AppendPathId = 10;
                     layoutMsg[0].AppendPathEnabled = true;
-                    layoutMsg[0].UpdateMap = false;
+                    layoutMsg[0].UpdateMap = true;
                     layoutMsg[0][0] = "Latitude";
                     layoutMsg[0][1] = "Longitude";
                     layoutMsg[0][2] = "Altitude";

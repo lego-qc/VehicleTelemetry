@@ -10,17 +10,30 @@ namespace VehicleTelemetry {
     /// A list of coordinates that represent a path.
     /// </summary>
     public class Path : List<GeoPoint> {
-        private Pen color = Pens.Red;
+        private Color color = Color.FromArgb(255, 0, 0, 0);
+        private string name = "";
 
         /// <summary>
         /// Color of the path on the map.
         /// </summary>
-        public Pen Color {
+        public Color Color {
             get {
                 return color;
             }
             set {
                 color = value;
+            }
+        }
+
+        /// <summary>
+        /// Get or set the name of the path.
+        /// </summary>
+        public string Name {
+            get {
+                return name;
+            }
+            set {
+                name = value;
             }
         }
     }

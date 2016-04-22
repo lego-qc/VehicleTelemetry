@@ -12,9 +12,9 @@ namespace VehicleTelemetry {
         private IMessageProvider messageProvider;
         private TelemetryControl target;
         /// <summary>
-        /// Maps path IDs to indices in target's path list.
+        /// Maps path IDs to Path objects.
         /// </summary>
-        private Dictionary<int, int> pathToIndexMapping;
+        private Dictionary<int, Path> pathIdMapping;
         /// <summary>
         /// Maps data messages with specific ID to paths IDs. Data messages whose ID matches a record in this list
         /// are interpreted as geographic coordinates, and appended to the specified path.
@@ -30,7 +30,7 @@ namespace VehicleTelemetry {
             MessageProvider = provider;
             Target = target;
 
-            pathToIndexMapping = new Dictionary<int, int>();
+            pathIdMapping = new Dictionary<int, Path>();
             appendIdToPathMapping = new Dictionary<int, int>();
         }
 
@@ -108,17 +108,18 @@ namespace VehicleTelemetry {
         private void ProcessMessage(DataMessage msg) {
             string error = null;
             try {
-                int index, path;
+                int pathId;
+                Path path;
                 lock (lockObject) {
-                    path = appendIdToPathMapping[msg.Id];
-                    index = pathToIndexMapping[path];
+                    pathId = appendIdToPathMapping[msg.Id];
+                    path = pathIdMapping[pathId];
                 }
 
                 if (msg.Dimension >= 3) {
-                    target.Invoke(new Action(() => { target.Paths[index].Add(new GeoPoint(msg[0], msg[1], msg[2])); target.PathsUpdated(); }));
+                    target.Invoke(new Action(() => { path.Add(new GeoPoint(msg[0], msg[1], msg[2])); target.NotifyPathUpdate(); }));
                 }
                 else if (msg.Dimension == 2) {
-                    target.Invoke(new Action(() => { target.Paths[index].Add(new GeoPoint(msg[0], msg[1], 0.0)); target.PathsUpdated(); }));
+                    target.Invoke(new Action(() => { path.Add(new GeoPoint(msg[0], msg[1], 0.0)); target.NotifyPathUpdate(); }));
                 }
                 else {
                     throw new ArgumentException("Message must be at least two-dimensional.");
@@ -142,44 +143,44 @@ namespace VehicleTelemetry {
         private void ProcessMessage(PathMessage msg) {
             string error = null;
             try {
-                int index;
+                Path path;
                 switch (msg.action) {
                     case PathMessage.eAction.ADD_POINT:
                         lock (lockObject) {
                             if (target != null) {
-                                index = pathToIndexMapping[msg.path];
-                                target.Invoke(new Action(() => { target.Paths[index].Add(msg.point); target.PathsUpdated(); }));
+                                path = pathIdMapping[msg.path];
+                                target.Invoke(new Action(() => { path.Add(msg.point); target.NotifyPathUpdate(); }));
                             }
                         }
                         break;
                     case PathMessage.eAction.UPDATE_POINT:
                         lock (lockObject) {
                             if (target != null) {
-                                index = pathToIndexMapping[msg.path];
-                                target.Invoke(new Action(() => target.Paths[index][(int)msg.index] = msg.point));
+                                path = pathIdMapping[msg.path];
+                                target.Invoke(new Action(() => path[(int)msg.index] = msg.point));
                             }
                         }
                         break;
                     case PathMessage.eAction.CLEAR_PATH:
                         lock (lockObject) {
                             if (target != null) {
-                                index = pathToIndexMapping[msg.path];
-                                target.Invoke(new Action(() => target.Paths[index].Clear()));
+                                path = pathIdMapping[msg.path];
+                                target.Invoke(new Action(() => path.Clear()));
                             }
                         }
                         break;
                     case PathMessage.eAction.ADD_PATH:
                         bool containsPath;
                         lock (lockObject) {
-                            containsPath = pathToIndexMapping.ContainsKey(msg.path);
+                            containsPath = pathIdMapping.ContainsKey(msg.path);
                             if (target == null) {
                                 // do nothing
                             }
                             else if (!containsPath) {
                                 target.Invoke(new Action(() => {
-                                    target.Paths.Add(new Path());
-                                    index = target.Paths.Count - 1;
-                                    pathToIndexMapping.Add(msg.path, index);
+                                    path = new Path();
+                                    target.Paths.Add(path);
+                                    pathIdMapping.Add(msg.path, path);
                                 }));
                             }
                             else {
@@ -190,15 +191,10 @@ namespace VehicleTelemetry {
                     case PathMessage.eAction.REMOVE_PATH:
                         lock (lockObject) {
                             if (target != null) {
-                                index = pathToIndexMapping[msg.path];
+                                path = pathIdMapping[msg.path];
                                 target.Invoke(new Action(() => {
-                                    target.Paths.RemoveAt(index);
-                                    pathToIndexMapping.Remove(msg.path);
-                                    foreach (var key in pathToIndexMapping.Keys.ToArray()) {
-                                        if (pathToIndexMapping[key] > index) {
-                                            pathToIndexMapping[key]--;
-                                        }
-                                    }
+                                    target.Paths.Remove(path);
+                                    pathIdMapping.Remove(msg.path);
                                 }));
                             }
                         }
@@ -207,7 +203,7 @@ namespace VehicleTelemetry {
                         lock (lockObject) {
                             if (target != null) {
                                 target.Invoke(new Action(() => target.Paths.Clear()));
-                                pathToIndexMapping.Clear();
+                                pathIdMapping.Clear();
                             }
                         }
                         break;

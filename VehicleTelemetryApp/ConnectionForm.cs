@@ -192,7 +192,14 @@ namespace VehicleTelemetryApp {
         }
 
         private void ListenAsyncCallback(bool result) {
-            Invoke(new Action(() => { UpdateControlState(); }));
+            // this crashes the app if attempting to connect while form is closed
+            // would adding a try/catch be ugly?
+            try {
+                Invoke(new Action(() => { UpdateControlState(); }));
+            }
+            catch (Exception ex) {
+                // don't care
+            }
         }
     }
 }
