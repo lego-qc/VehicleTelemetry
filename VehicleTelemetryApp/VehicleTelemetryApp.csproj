@@ -65,6 +65,12 @@
     <Compile Include="ConnectionForm.Designer.cs">
       <DependentUpon>ConnectionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MapTools.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapTools.Designer.cs">
+      <DependentUpon>MapTools.cs</DependentUpon>
+    </Compile>
     <Compile Include="PreferencesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,11 +85,23 @@
     <Compile Include="QuickTools.Designer.cs">
       <DependentUpon>QuickTools.cs</DependentUpon>
     </Compile>
+    <Compile Include="MapToolsItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapToolsItem.Designer.cs">
+      <DependentUpon>MapToolsItem.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AppMainForm.resx">
       <DependentUpon>AppMainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConnectionForm.resx">
       <DependentUpon>ConnectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MapTools.resx">
+      <DependentUpon>MapTools.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MapToolsItem.resx">
+      <DependentUpon>MapToolsItem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PreferencesForm.resx">
       <DependentUpon>PreferencesForm.cs</DependentUpon>

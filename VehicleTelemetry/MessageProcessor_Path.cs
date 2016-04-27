@@ -116,10 +116,10 @@ namespace VehicleTelemetry {
                 }
 
                 if (msg.Dimension >= 3) {
-                    target.Invoke(new Action(() => { path.Add(new GeoPoint(msg[0], msg[1], msg[2])); target.NotifyPathUpdate(); }));
+                    target.Invoke(new Action(() => { path.Add(new GeoPoint(msg[0], msg[1], msg[2])); target.Refresh(); }));
                 }
                 else if (msg.Dimension == 2) {
-                    target.Invoke(new Action(() => { path.Add(new GeoPoint(msg[0], msg[1], 0.0)); target.NotifyPathUpdate(); }));
+                    target.Invoke(new Action(() => { path.Add(new GeoPoint(msg[0], msg[1], 0.0)); target.Refresh(); }));
                 }
                 else {
                     throw new ArgumentException("Message must be at least two-dimensional.");
@@ -149,7 +149,7 @@ namespace VehicleTelemetry {
                         lock (lockObject) {
                             if (target != null) {
                                 path = pathIdMapping[msg.path];
-                                target.Invoke(new Action(() => { path.Add(msg.point); target.NotifyPathUpdate(); }));
+                                target.Invoke(new Action(() => { path.Add(msg.point); target.Refresh(); }));
                             }
                         }
                         break;

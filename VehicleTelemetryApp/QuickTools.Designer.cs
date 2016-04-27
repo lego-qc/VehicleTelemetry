@@ -23,35 +23,50 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.mapsBox = new System.Windows.Forms.GroupBox();
+            this.mapTools = new VehicleTelemetryApp.MapTools();
+            this.pathsBox = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.mapsBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // mapsBox
             // 
-            this.groupBox1.Location = new System.Drawing.Point(3, 112);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(72, 135);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Maps";
+            this.mapsBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.mapsBox.AutoSize = true;
+            this.mapsBox.Controls.Add(this.mapTools);
+            this.mapsBox.Location = new System.Drawing.Point(3, 112);
+            this.mapsBox.Name = "mapsBox";
+            this.mapsBox.Size = new System.Drawing.Size(243, 127);
+            this.mapsBox.TabIndex = 0;
+            this.mapsBox.TabStop = false;
+            this.mapsBox.Text = "Maps";
             // 
-            // groupBox2
+            // mapTools
             // 
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox2.Location = new System.Drawing.Point(3, 3);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(72, 103);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Paths";
+            this.mapTools.AutoSize = true;
+            this.mapTools.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapTools.Location = new System.Drawing.Point(3, 16);
+            this.mapTools.Name = "mapTools";
+            this.mapTools.Size = new System.Drawing.Size(237, 108);
+            this.mapTools.TabIndex = 0;
+            // 
+            // pathsBox
+            // 
+            this.pathsBox.Location = new System.Drawing.Point(3, 3);
+            this.pathsBox.Name = "pathsBox";
+            this.pathsBox.Size = new System.Drawing.Size(243, 103);
+            this.pathsBox.TabIndex = 1;
+            this.pathsBox.TabStop = false;
+            this.pathsBox.Text = "Paths";
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.Controls.Add(this.groupBox2);
-            this.flowLayoutPanel1.Controls.Add(this.groupBox1);
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.Controls.Add(this.pathsBox);
+            this.flowLayoutPanel1.Controls.Add(this.mapsBox);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -67,15 +82,20 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.Name = "QuickTools";
+            this.mapsBox.ResumeLayout(false);
+            this.mapsBox.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox mapsBox;
+        private System.Windows.Forms.GroupBox pathsBox;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private MapTools mapTools;
     }
 }

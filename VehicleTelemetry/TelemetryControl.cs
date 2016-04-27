@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Collections.ObjectModel;
 
 using GMap.NET;
 using GMap.NET.MapProviders;
@@ -21,10 +22,10 @@ namespace VehicleTelemetry {
     /// </summary>
     public partial class TelemetryControl : Form {
         private GeoPoint currentPosition;
-        private List<Path> paths = new List<Path>();
         private PanelCollection panels;
         private List<MapPanel> mapPanels;
         private List<DataPanel> dataPanels;
+        private ObservableCollection<Path> paths;
 
 
         public TelemetryControl() {
@@ -32,37 +33,18 @@ namespace VehicleTelemetry {
             dataPanels = new List<DataPanel>();
             mapPanels = new List<MapPanel>();
 
+            paths = new ObservableCollection<Path>();
+
             InitializeComponent();
 
             currentPosition = new GeoPoint(47.5, 19);                        
             dockPanel.DocumentStyle = DocumentStyle.DockingMdi;
+
+            paths.CollectionChanged += OnPathsChanged;
         }
 
 
-
-        public virtual void AddPath(Path path) {
-            paths.Add(path);
-        }
-
-        public virtual void RemovePath(Path path) {
-            paths.Remove(path);
-        }
-
-        public int GetNumPaths() {
-            return paths.Count;
-        }
-
-        public Path GetPathByName(string name) {
-            foreach (var path in paths) {
-                if (string.Compare(path.Name, name) == 0) {
-                    return path;
-                }
-            }
-            return null;
-        }
-
-        // DEPRECATED
-        public List<Path> Paths {
+        public ObservableCollection<Path> Paths {
             get {
                 return paths;
             }
@@ -89,9 +71,20 @@ namespace VehicleTelemetry {
         }
 
 
-        public void NotifyPathUpdate() {
-            foreach (MapPanel panel in mapPanels) {
-                panel.Refresh();
+        private void OnPathsChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs args) {
+            switch (args.Action) {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -133,7 +126,6 @@ namespace VehicleTelemetry {
                 dataPanels.Remove(panel as DataPanel);
             }
         }
-
 
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {

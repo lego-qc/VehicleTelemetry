@@ -36,9 +36,6 @@ namespace VehicleTelemetryApp {
             Panels.Add(videoPanel, DockState.Document);
             Panels.Add(quickTools, DockState.DockLeft);
 
-            // Set up panels
-            mapPanel.Paths = Paths;
-
             // create message processors
             messageProcessorData = new MessageProcessor_Data();
             messageProcessorPath = new MessageProcessor_Path();
@@ -46,11 +43,26 @@ namespace VehicleTelemetryApp {
             messageProcessorData.Target = dataPanel;
             messageProcessorPath.Target = this;
             messageProcessorMap.Target = mapPanel;
+
+
+            // path test stuff
+            Path testpath = new Path();
+            testpath.Name = "Path 1";
+            testpath.Add(new GeoPoint(47, 19));
+            testpath.Add(new GeoPoint(47, 20));
+            Path testpath2 = new Path();
+            testpath2.Name = "Path 2";
+            testpath2.Add(new GeoPoint(47, 19));
+            testpath2.Add(new GeoPoint(48, 19));
+            quickTools.AddPath(testpath);
+            quickTools.AddPath(testpath2);
+
+            mapPanel.Paths.Add(testpath2);
+
+            quickTools.AddMap(mapPanel);
+            //quickTools.AddMap(mapPanel);
         }
 
-        private void InitializeExtendedMenuStrip() {
-
-        }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
             Close();

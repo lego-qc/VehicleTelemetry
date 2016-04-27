@@ -27,6 +27,9 @@ namespace VehicleTelemetry {
             get; set;
         }
 
-
+        /// <summary>
+        /// Shows a configuration panel to set map options.
+        /// </summary>
+        public abstract void ShowConfig();
     }
 }

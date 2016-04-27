@@ -85,7 +85,7 @@ namespace VehicleTelemetry {
         /// <summary>
         /// Shows the configuration panel for the map panel.
         /// </summary>
-        public void ShowOptions() {
+        public override void ShowConfig() {
             mapParamsOptions_Click(null, null);
         }
 
