@@ -79,6 +79,7 @@ namespace NetworkTestTcp {
                     PathMessage pathMsg = new PathMessage();
                     pathMsg.action = PathMessage.eAction.ADD_PATH;
                     pathMsg.path = 10;
+                    pathMsg.name = "Trajectory";
 
                     client.Send(pathMsg);
                     Console.WriteLine("Configuring paths...");

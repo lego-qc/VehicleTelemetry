@@ -71,6 +71,18 @@
     <Compile Include="MapTools.Designer.cs">
       <DependentUpon>MapTools.cs</DependentUpon>
     </Compile>
+    <Compile Include="PathTools.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PathTools.Designer.cs">
+      <DependentUpon>PathTools.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PathToolsItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PathToolsItem.Designer.cs">
+      <DependentUpon>PathToolsItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="PreferencesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +114,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MapToolsItem.resx">
       <DependentUpon>MapToolsItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PathTools.resx">
+      <DependentUpon>PathTools.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PathToolsItem.resx">
+      <DependentUpon>PathToolsItem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PreferencesForm.resx">
       <DependentUpon>PreferencesForm.cs</DependentUpon>

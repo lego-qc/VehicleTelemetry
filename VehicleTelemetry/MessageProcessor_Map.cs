@@ -96,7 +96,7 @@ namespace VehicleTelemetry {
         /// </summary>
         void ProcessMessage(DataMessage msg) {
             lock (lockObject) {
-                if (target != null && activeIds.Contains(msg.Id) && msg.Dimension >= 2) {
+                if (target != null && activeIds.Contains(msg.Id) && msg.Dimension >= 2 && target.Follow) {
                     target.Invoke(new Action(() => {
                         if (msg.Dimension == 2) {
                             target.Position = new GeoPoint(msg[0], msg[1], 0);

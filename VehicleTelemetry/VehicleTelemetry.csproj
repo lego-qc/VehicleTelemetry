@@ -185,6 +185,9 @@
     <EmbeddedResource Include="DummyVideoPanel.resx">
       <DependentUpon>DummyVideoPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MapPanel.resx">
+      <DependentUpon>MapPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MessageProviderSerial_Config.resx">
       <DependentUpon>MessageProviderSerial_Config.cs</DependentUpon>
     </EmbeddedResource>
@@ -210,6 +213,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="VideoPanel.resx">
+      <DependentUpon>VideoPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

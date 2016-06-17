@@ -33,14 +33,17 @@ namespace VehicleTelemetryApp {
 
         public void AddPath(Path path) {
             mapTools.AddPath(path);
+            pathTools.AddPath(path);
         }
 
         public void RemovePath(Path path) {
             mapTools.RemovePath(path);
+            pathTools.RemovePath(path);
         }
 
         public void ClearPaths() {
             mapTools.ClearPaths();
+            pathTools.Clear();
         }
 
 

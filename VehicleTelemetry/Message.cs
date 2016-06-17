@@ -134,7 +134,7 @@ namespace VehicleTelemetry {
         /// </summary>
         public override eMessageType Type {
             get {
-                return eMessageType.LAYOUT;   
+                return eMessageType.LAYOUT;
             }
         }
 
@@ -411,7 +411,7 @@ namespace VehicleTelemetry {
         /// </summary>
         public override eMessageType Type {
             get {
-                return eMessageType.DATA;   
+                return eMessageType.DATA;
             }
         }
 
@@ -495,26 +495,36 @@ namespace VehicleTelemetry {
         /// Add/remove/modify paths/points.
         /// </summary>
         public eAction action;
+
         /// <summary>
         /// Which path to perform action on.
         /// </summary>
         public ushort path;
+
+        /// <summary>
+        /// What's the name of the path.
+        /// Only important when adding a path.
+        /// </summary>
+        public string name = null;
+
         /// <summary>
         /// Which point to modify.
         /// </summary>
         public uint index;
+
         /// <summary>
         /// The point to add or new value for modifications.
         /// </summary>
         public GeoPoint point;
-        private const int SIZE = 1 + 1 + 2 + 4 + 4 * 3;
+
+        private const int SIZE = 1 + 1 + 2 + 4 + 4 + 4 * 3;
 
         /// <summary>
         /// Type of message. Always PATH.
         /// </summary>
         public override eMessageType Type {
             get {
-                return eMessageType.PATH;   
+                return eMessageType.PATH;
             }
         }
 
@@ -522,7 +532,7 @@ namespace VehicleTelemetry {
         /// <see cref="Message.Serialize"/>
         /// </summary>
         public override byte[] Serialize() {
-            byte[] raw = new byte[SIZE];
+            byte[] raw = new byte[SIZE + name.Length];
             raw[0] = (byte)Type;
             raw[1] = (byte)action;
             raw[2] = (byte)(path >> 8);
@@ -531,6 +541,26 @@ namespace VehicleTelemetry {
             raw[5] = (byte)(index >> 16);
             raw[6] = (byte)(index >> 8);
             raw[7] = (byte)(index >> 0);
+
+
+            uint len;
+            byte[] bytes;
+            if (path != null) {
+                len = (uint)name.Length;
+                bytes = System.Text.Encoding.UTF8.GetBytes(name);
+            }
+            else {
+                len = 0;
+                bytes = null;
+            }
+            raw[8] = (byte)(len >> 24);
+            raw[9] = (byte)(len >> 16);
+            raw[10] = (byte)(len >> 8);
+            raw[11] = (byte)(len);
+            for (int i = 0; bytes != null && i < bytes.Length; ++i) {
+                raw[12 + i] = bytes[i];
+            }
+
 
             uint lat = 0;
             uint lng = 0;
@@ -542,20 +572,20 @@ namespace VehicleTelemetry {
                 alt = FloatToUint((float)point.Alt);
             }
 
-            raw[8] = (byte)(lat >> 24);
-            raw[9] = (byte)(lat >> 16);
-            raw[10] = (byte)(lat >> 8);
-            raw[11] = (byte)(lat >> 0);
+            raw[bytes.Length + 12 + 0] = (byte)(lat >> 24);
+            raw[bytes.Length + 12 + 1] = (byte)(lat >> 16);
+            raw[bytes.Length + 12 + 2] = (byte)(lat >> 8);
+            raw[bytes.Length + 12 + 3] = (byte)(lat >> 0);
 
-            raw[12] = (byte)(lng >> 24);
-            raw[13] = (byte)(lng >> 16);
-            raw[14] = (byte)(lng >> 8);
-            raw[15] = (byte)(lng >> 0);
+            raw[bytes.Length + 12 + 4] = (byte)(lng >> 24);
+            raw[bytes.Length + 12 + 5] = (byte)(lng >> 16);
+            raw[bytes.Length + 12 + 6] = (byte)(lng >> 8);
+            raw[bytes.Length + 12 + 7] = (byte)(lng >> 0);
 
-            raw[16] = (byte)(alt >> 24);
-            raw[17] = (byte)(alt >> 16);
-            raw[18] = (byte)(alt >> 8);
-            raw[19] = (byte)(alt >> 0);
+            raw[bytes.Length + 12 + 8] = (byte)(alt >> 24);
+            raw[bytes.Length + 12 + 9] = (byte)(alt >> 16);
+            raw[bytes.Length + 12 + 10] = (byte)(alt >> 8);
+            raw[bytes.Length + 12 + 11] = (byte)(alt >> 0);
 
             return raw;
         }
@@ -574,21 +604,32 @@ namespace VehicleTelemetry {
                 + ((uint)data[6] << 8)
                 + (data[7]);
 
+            uint strlen = ((uint)data[8] << 24)
+                + ((uint)data[9] << 16)
+                + ((uint)data[10] << 8)
+                + (data[11]);
+            byte[] namebytes = new byte[strlen];
+            for (int j = 0; j < strlen; j++) {
+                namebytes[j] = data[12 + j];
+            }
+            name = System.Text.Encoding.UTF8.GetString(namebytes);
+
+
             uint lat = 0, lng = 0, alt = 0;
-            lat |= (uint)data[8 + 0] << 24;
-            lat |= (uint)data[8 + 1] << 16;
-            lat |= (uint)data[8 + 2] << 8;
-            lat |= (uint)data[8 + 3];
+            lat |= (uint)data[strlen + 12 + 0] << 24;
+            lat |= (uint)data[strlen + 12 + 1] << 16;
+            lat |= (uint)data[strlen + 12 + 2] << 8;
+            lat |= (uint)data[strlen + 12 + 3];
 
-            lng |= (uint)data[12 + 0] << 24;
-            lng |= (uint)data[12 + 1] << 16;
-            lng |= (uint)data[12 + 2] << 8;
-            lng |= (uint)data[12 + 3];
+            lng |= (uint)data[strlen + 16 + 0] << 24;
+            lng |= (uint)data[strlen + 16 + 1] << 16;
+            lng |= (uint)data[strlen + 16 + 2] << 8;
+            lng |= (uint)data[strlen + 16 + 3];
 
-            alt |= (uint)data[16 + 0] << 24;
-            alt |= (uint)data[16 + 1] << 16;
-            alt |= (uint)data[16 + 2] << 8;
-            alt |= (uint)data[16 + 3];
+            alt |= (uint)data[strlen + 20 + 0] << 24;
+            alt |= (uint)data[strlen + 20 + 1] << 16;
+            alt |= (uint)data[strlen + 20 + 2] << 8;
+            alt |= (uint)data[strlen + 20 + 3];
 
             point = new GeoPoint(UintToFloat(lat), UintToFloat(lng), UintToFloat(alt));
 

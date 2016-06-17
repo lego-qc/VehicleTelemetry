@@ -114,6 +114,7 @@ namespace VehicleTelemetry {
         /// <param name="e">Unused.</param>
         private void mapParamsOptions_Click(object sender, EventArgs e) {
             var optionsForm = new MapOptions();
+            optionsForm.StartPosition = FormStartPosition.CenterParent;
             optionsForm.Provider = map.MapProvider;
             optionsForm.CacheMode = map.Manager.Mode;
             optionsForm.GMap = map;

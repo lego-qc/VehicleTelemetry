@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapOptions));
             this.mainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.confirmPanel = new System.Windows.Forms.Panel();
             this.confirmCancel = new System.Windows.Forms.Button();
@@ -198,13 +199,14 @@
             this.mapProviderSelector.Sorted = true;
             this.mapProviderSelector.TabIndex = 0;
             // 
-            // Form_MapOptions
+            // MapOptions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(348, 231);
             this.Controls.Add(this.mainLayout);
-            this.Name = "Form_MapOptions";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "MapOptions";
             this.Text = "Map View Options";
             this.mainLayout.ResumeLayout(false);
             this.mainLayout.PerformLayout();

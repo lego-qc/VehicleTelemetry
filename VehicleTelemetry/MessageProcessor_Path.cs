@@ -179,6 +179,7 @@ namespace VehicleTelemetry {
                             else if (!containsPath) {
                                 target.Invoke(new Action(() => {
                                     path = new Path();
+                                    path.Name = msg.name != null ? msg.name : "unnamed";
                                     target.Paths.Add(path);
                                     pathIdMapping.Add(msg.path, path);
                                 }));

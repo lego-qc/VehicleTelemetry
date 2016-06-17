@@ -86,6 +86,9 @@ namespace VehicleTelemetry {
                 default:
                     break;
             }
+            foreach (var map in mapPanels) {
+                map.Refresh();
+            }
         }
 
         private void AddPanel(Panel panel, DockState dockState) {

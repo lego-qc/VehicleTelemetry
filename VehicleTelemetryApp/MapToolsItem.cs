@@ -128,5 +128,9 @@ namespace VehicleTelemetryApp {
                 return path != null ? path.Name : "unnamed";
             }
         }
+
+        private void follow_CheckedChanged(object sender, EventArgs e) {
+            map.Follow = follow.Checked;
+        }
     }
 }
