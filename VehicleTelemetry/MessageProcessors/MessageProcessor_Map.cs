@@ -9,7 +9,6 @@ namespace VehicleTelemetry {
     /// Manages a map according to messages.
     /// </summary>
     public class MessageProcessor_Map : IMessageProcessor {
-        private IMessageProvider messageProvider;
         private MapPanel target;
         private HashSet<int> activeIds; /// <summary> These data message IDs should be set on map. </summary>
         private object lockObject;
@@ -19,29 +18,9 @@ namespace VehicleTelemetry {
             lockObject = new object();
             activeIds = new HashSet<int>();
             target = null;
-            messageProvider = null;
         }
 
-
-        /// <summary>
-        /// Set message provider from which it receives the messages.
-        /// </summary>
-        public IMessageProvider MessageProvider {
-            get {
-                return messageProvider;
-            }
-            set {
-                if (messageProvider != null) {
-                    messageProvider.OnMessage -= OnMessage;
-                }
-                messageProvider = value;
-                if (messageProvider != null) {
-                    messageProvider.OnMessage += OnMessage;
-                }
-            }
-        }
-
-
+        
         /// <summary>
         /// Set map object which is to be controlled.
         /// </summary>
@@ -60,7 +39,7 @@ namespace VehicleTelemetry {
         /// <summary>
         /// Handler for incoming messages. Demuxes them and passes them to specific handlers.
         /// </summary>
-        private void OnMessage(Message msg) {
+        public void OnMessage(Message msg) {
             if (target == null) {
                 return;
             }

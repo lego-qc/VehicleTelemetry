@@ -53,35 +53,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppMainForm.cs">
+    <Compile Include="QuadcopterApp.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AppMainForm.Designer.cs">
-      <DependentUpon>AppMainForm.cs</DependentUpon>
+    <Compile Include="QuadcopterApp.Designer.cs">
+      <DependentUpon>QuadcopterApp.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConnectionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConnectionForm.Designer.cs">
-      <DependentUpon>ConnectionForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MapTools.cs">
+    <Compile Include="PanelLibrary\QuickTools\MapTools.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MapTools.Designer.cs">
+    <Compile Include="PanelLibrary\QuickTools\MapTools.Designer.cs">
       <DependentUpon>MapTools.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathTools.cs">
+    <Compile Include="PanelLibrary\QuickTools\MapToolsPath.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PathTools.Designer.cs">
-      <DependentUpon>PathTools.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PathToolsItem.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PathToolsItem.Designer.cs">
-      <DependentUpon>PathToolsItem.cs</DependentUpon>
+    <Compile Include="PanelLibrary\QuickTools\MapToolsPath.Designer.cs">
+      <DependentUpon>MapToolsPath.cs</DependentUpon>
     </Compile>
     <Compile Include="PreferencesForm.cs">
       <SubType>Form</SubType>
@@ -91,35 +79,29 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuickTools.cs">
+    <Compile Include="PanelLibrary\QuickTools\QuickTools.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="QuickTools.Designer.cs">
+    <Compile Include="PanelLibrary\QuickTools\QuickTools.Designer.cs">
       <DependentUpon>QuickTools.cs</DependentUpon>
     </Compile>
-    <Compile Include="MapToolsItem.cs">
+    <Compile Include="PanelLibrary\QuickTools\MapToolsItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MapToolsItem.Designer.cs">
+    <Compile Include="PanelLibrary\QuickTools\MapToolsItem.Designer.cs">
       <DependentUpon>MapToolsItem.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AppMainForm.resx">
-      <DependentUpon>AppMainForm.cs</DependentUpon>
+    <EmbeddedResource Include="QuadcopterApp.resx">
+      <DependentUpon>QuadcopterApp.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConnectionForm.resx">
-      <DependentUpon>ConnectionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MapTools.resx">
+    <EmbeddedResource Include="PanelLibrary\QuickTools\MapTools.resx">
       <DependentUpon>MapTools.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MapToolsItem.resx">
+    <EmbeddedResource Include="PanelLibrary\QuickTools\MapToolsItem.resx">
       <DependentUpon>MapToolsItem.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathTools.resx">
-      <DependentUpon>PathTools.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PathToolsItem.resx">
-      <DependentUpon>PathToolsItem.cs</DependentUpon>
+    <EmbeddedResource Include="PanelLibrary\QuickTools\MapToolsPath.resx">
+      <DependentUpon>MapToolsPath.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PreferencesForm.resx">
       <DependentUpon>PreferencesForm.cs</DependentUpon>
@@ -134,7 +116,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="QuickTools.resx">
+    <EmbeddedResource Include="PanelLibrary\QuickTools\QuickTools.resx">
       <DependentUpon>QuickTools.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
@@ -149,13 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ConnectionForm_Disconnected.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\ConnectionForm_Connected.bmp" />
-    <Content Include="Resources\ConnectionForm_Waiting.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

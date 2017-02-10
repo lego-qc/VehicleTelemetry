@@ -23,7 +23,6 @@ namespace VehicleTelemetry {
     /// <see cref="TelemetryControl"/> for more about how panels are used.
     /// </remarks>
     public partial class GMapPanel : MapPanel {
-        private List<Path> paths = new List<Path>();
         private GeoPoint position;
         protected GMapExtended map = new GMapExtended();
 
@@ -40,7 +39,7 @@ namespace VehicleTelemetry {
             map.OnPositionChanged += this.mapControl_PositionChanged;
             map.OnMapZoomChanged += this.mapControl_ZoomChanged;
 
-            map.Paths = paths;
+            map.Paths = Paths;
 
             mapParamsLat.Text = map.Position.Lat.ToString();
             mapParamsLong.Text = map.Position.Lng.ToString();
@@ -68,19 +67,6 @@ namespace VehicleTelemetry {
                 map.Position = new PointLatLng(position.Lat, position.Lng);
             }
         }
-
-        /// <summary>
-        /// List of paths to draw on the map as lines.
-        /// </summary>
-        public override List<Path> Paths {
-            get {
-                return map.Paths;
-            }
-            set {
-                map.Paths = value;
-            }
-        }
-
 
         /// <summary>
         /// Shows the configuration panel for the map panel.

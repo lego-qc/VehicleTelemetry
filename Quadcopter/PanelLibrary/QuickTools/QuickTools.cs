@@ -30,26 +30,8 @@ namespace VehicleTelemetryApp {
             mapTools.ClearMaps();
         }
 
-
-        public void AddPath(Path path) {
-            mapTools.AddPath(path);
-            pathTools.AddPath(path);
-        }
-
-        public void RemovePath(Path path) {
-            mapTools.RemovePath(path);
-            pathTools.RemovePath(path);
-        }
-
-        public void ClearPaths() {
-            mapTools.ClearPaths();
-            pathTools.Clear();
-        }
-
-
         private void ResizeContents(object sender, EventArgs e) {
-            pathsBox.Size = new Size(this.Size.Width - pathsBox.Margin.Left - pathsBox.Margin.Right, pathsBox.Height);
-            mapsBox.Size = new Size(this.Size.Width - pathsBox.Margin.Left - pathsBox.Margin.Right, pathsBox.Height);
+            mapsBox.Size = new Size(this.Size.Width - mapsBox.Margin.Left - mapsBox.Margin.Right, mapsBox.Height);
         }
     }
 }

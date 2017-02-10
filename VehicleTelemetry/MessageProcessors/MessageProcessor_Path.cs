@@ -9,8 +9,7 @@ namespace VehicleTelemetry {
     /// Modifies paths according to messages it receives.
     /// </summary>
     public class MessageProcessor_Path : IMessageProcessor {
-        private IMessageProvider messageProvider;
-        private TelemetryControl target;
+        private MapPanel target;
         /// <summary>
         /// Maps path IDs to Path objects.
         /// </summary>
@@ -26,36 +25,18 @@ namespace VehicleTelemetry {
         private object lockObject = new object();
 
 
-        public MessageProcessor_Path(IMessageProvider provider = null, TelemetryControl target = null) {
-            MessageProvider = provider;
+        public MessageProcessor_Path(MapPanel target = null) {
             Target = target;
 
             pathIdMapping = new Dictionary<int, Path>();
             appendIdToPathMapping = new Dictionary<int, int>();
         }
 
-        /// <summary>
-        /// Assign the source of messages.
-        /// </summary>
-        public IMessageProvider MessageProvider {
-            get {
-                return messageProvider;
-            }
-            set {
-                if (messageProvider != null) {
-                    messageProvider.OnMessage -= OnMessage;
-                }
-                messageProvider = value;
-                if (messageProvider != null) {
-                    messageProvider.OnMessage += OnMessage;
-                }
-            }
-        }
 
         /// <summary>
         /// Which form to add paths to.
         /// </summary>
-        public TelemetryControl Target {
+        public MapPanel Target {
             get {
                 return target;
             }
@@ -69,7 +50,7 @@ namespace VehicleTelemetry {
         /// <summary>
         /// Handler for incoming messages. Demuxes them and passes them to specific handlers.
         /// </summary>
-        private void OnMessage(Message msg) {
+        public void OnMessage(Message msg) {
             if (target == null) {
                 return;
             }

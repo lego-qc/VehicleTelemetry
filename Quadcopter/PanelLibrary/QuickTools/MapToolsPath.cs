@@ -10,10 +10,10 @@ using System.Windows.Forms;
 using VehicleTelemetry;
 
 namespace VehicleTelemetryApp {
-    public partial class PathToolsItem : UserControl {
+    public partial class MapToolsPath : UserControl {
         private Path path;
 
-        public PathToolsItem(Path path = null) {
+        public MapToolsPath(Path path = null) {
             InitializeComponent();
 
             this.Path = path;
@@ -33,6 +33,7 @@ namespace VehicleTelemetryApp {
                 }
 
                 pathName.Text = path.Name;
+				visibilityToggle.Checked = path.Visible;
 
                 colorSelector.BackColor = path.Color;
                 if (colorSelector.BackColor.GetBrightness() < 0.5) {
@@ -58,5 +59,9 @@ namespace VehicleTelemetryApp {
         private void clearPoints_Click(object sender, EventArgs e) {
             path.Clear();
         }
-    }
+
+		private void visibilityToggle_CheckedChanged(object sender, EventArgs e) {
+			path.Visible = visibilityToggle.Checked;
+		}
+	}
 }

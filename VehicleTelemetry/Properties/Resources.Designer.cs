@@ -63,6 +63,36 @@ namespace VehicleTelemetry.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ConnectionForm_Connected {
+            get {
+                object obj = ResourceManager.GetObject("ConnectionForm_Connected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConnectionForm_Disconnected {
+            get {
+                object obj = ResourceManager.GetObject("ConnectionForm_Disconnected", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConnectionForm_Waiting {
+            get {
+                object obj = ResourceManager.GetObject("ConnectionForm_Waiting", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap VideoTestImageStatic {
             get {
                 object obj = ResourceManager.GetObject("VideoTestImageStatic", resourceCulture);

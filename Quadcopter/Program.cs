@@ -24,7 +24,7 @@ namespace VehicleTelemetryApp {
             //netServer.Listen();
 
 
-            Application.Run(new AppMainForm());
+            Application.Run(new QuadcopterApp());
         }
     }
 }

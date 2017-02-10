@@ -10,8 +10,7 @@ namespace VehicleTelemetry {
     /// show them on the GUI.
     /// </summary>
     public interface IMessageProcessor {
-        IMessageProvider MessageProvider {
-            get; set;
-        }
+
+        void OnMessage(Message msg);
     }
 }

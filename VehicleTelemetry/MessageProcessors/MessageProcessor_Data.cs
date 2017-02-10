@@ -28,30 +28,11 @@ namespace VehicleTelemetry {
 
 
         public MessageProcessor_Data(IMessageProvider provider = null, DataPanel target = null) {
-            MessageProvider = provider;
             Target = target;
 
             idToIndexMapping = new Dictionary<int, int>();
         }
-
-        /// <summary>
-        /// Assign a message source.
-        /// </summary>
-        public IMessageProvider MessageProvider {
-            get {
-                return messageProvider;
-            }
-            set {
-                if (messageProvider != null) {
-                    messageProvider.OnMessage -= OnMessage;
-                }
-                messageProvider = value;
-                if (messageProvider != null) {
-                    messageProvider.OnMessage += OnMessage;
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Which panel to display stuff on.
         /// </summary>
@@ -69,7 +50,7 @@ namespace VehicleTelemetry {
         /// <summary>
         /// Handle message events. Demuxes by message type, and forwards messages.
         /// </summary>
-        private void OnMessage(Message msg) {
+        public void OnMessage(Message msg) {
             if (target == null) {
                 return;
             }

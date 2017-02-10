@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-
+using System.Collections.ObjectModel;
 
 namespace VehicleTelemetry {
     /// <summary>
@@ -15,12 +15,12 @@ namespace VehicleTelemetry {
     /// Allow drawing of custom overlays.
     /// </remarks>
     public class GMapExtended : GMap.NET.WindowsForms.GMapControl {
-        private List<Path> paths = new List<Path>();
+		private ObservableCollection<Path> paths = null;
 
         /// <summary>
         /// List of paths that are to be drawn as lines on the map.
         /// </summary>
-        public List<Path> Paths {
+        public ObservableCollection<Path> Paths {
             get {
                 return paths;
             }
@@ -37,6 +37,9 @@ namespace VehicleTelemetry {
 
             if (paths != null) {
                 foreach (Path path in paths) {
+					if (!path.Visible) {
+						continue;
+					}
                     for (int i = 0; i < path.Count - 1; i++) {
                         PointLatLng p = new PointLatLng();
                         p.Lat = path[i].Lat;

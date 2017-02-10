@@ -98,25 +98,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Panels\DataSnippet.cs">
+    <Compile Include="MessageProviders\ConnectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MessageProviders\ConnectionForm.designer.cs">
+      <DependentUpon>ConnectionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PanelLibrary\DataSnippet.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Panels\DataSnippet.Designer.cs">
+    <Compile Include="PanelLibrary\DataSnippet.Designer.cs">
       <DependentUpon>DataSnippet.cs</DependentUpon>
     </Compile>
-    <Compile Include="Panels\DataPanel.cs">
+    <Compile Include="PanelLibrary\DataPanel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\DataPanel.Designer.cs">
+    <Compile Include="PanelLibrary\DataPanel.Designer.cs">
       <DependentUpon>DataPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Panels\DummyVideoPanel.cs">
+    <Compile Include="PanelLibrary\DummyVideoPanel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\DummyVideoPanel.Designer.cs">
+    <Compile Include="PanelLibrary\DummyVideoPanel.Designer.cs">
       <DependentUpon>DummyVideoPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Foundation\MapPanel.cs">
+    <Compile Include="Panel\MapPanel.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MessageProcessors\MessageProcessor_Data.cs" />
@@ -136,13 +142,13 @@
     <Compile Include="MessageProviders\MessageProviderTcp_Config.Designer.cs">
       <DependentUpon>MessageProviderTcp_Config.cs</DependentUpon>
     </Compile>
-    <Compile Include="Foundation\Panel.cs">
+    <Compile Include="Panel\Panel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Foundation\PanelCollection.cs">
+    <Compile Include="Panel\PanelCollection.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Foundation\PanelToolStripItem.cs">
+    <Compile Include="Panel\PanelToolStripItem.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TelemetryControl.cs">
@@ -151,41 +157,44 @@
     <Compile Include="TelemetryControl.Designer.cs">
       <DependentUpon>TelemetryControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Panels\MapOptions.cs">
+    <Compile Include="PanelLibrary\MapOptions.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\MapOptions.Designer.cs">
+    <Compile Include="PanelLibrary\MapOptions.Designer.cs">
       <DependentUpon>MapOptions.cs</DependentUpon>
     </Compile>
     <Compile Include="MessageProviders\IMessageProvider.cs" />
-    <Compile Include="Panels\GMapExtended.cs">
+    <Compile Include="PanelLibrary\GMapExtended.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Panels\GMapPanel.cs">
+    <Compile Include="PanelLibrary\GMapPanel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Panels\GMapPanel.Designer.cs">
+    <Compile Include="PanelLibrary\GMapPanel.Designer.cs">
       <DependentUpon>GMapPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Foundation\Message.cs" />
+    <Compile Include="Basics\Message.cs" />
     <Compile Include="MessageProcessors\IMessageProcessor.cs" />
     <Compile Include="MessageProviders\MessageProviderTcp.cs" />
-    <Compile Include="Foundation\Path.cs" />
+    <Compile Include="Basics\Path.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Foundation\GeoPoint.cs" />
-    <Compile Include="Foundation\VideoPanel.cs">
+    <Compile Include="Basics\GeoPoint.cs" />
+    <Compile Include="Panel\VideoPanel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <EmbeddedResource Include="Panels\DataSnippet.resx">
+    <EmbeddedResource Include="MessageProviders\ConnectionForm.resx">
+      <DependentUpon>ConnectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PanelLibrary\DataSnippet.resx">
       <DependentUpon>DataSnippet.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\DataPanel.resx">
+    <EmbeddedResource Include="PanelLibrary\DataPanel.resx">
       <DependentUpon>DataPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\DummyVideoPanel.resx">
+    <EmbeddedResource Include="PanelLibrary\DummyVideoPanel.resx">
       <DependentUpon>DummyVideoPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Foundation\MapPanel.resx">
+    <EmbeddedResource Include="Panel\MapPanel.resx">
       <DependentUpon>MapPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MessageProviders\MessageProviderSerial_Config.resx">
@@ -197,10 +206,10 @@
     <EmbeddedResource Include="TelemetryControl.resx">
       <DependentUpon>TelemetryControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\MapOptions.resx">
+    <EmbeddedResource Include="PanelLibrary\MapOptions.resx">
       <DependentUpon>MapOptions.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Panels\GMapPanel.resx">
+    <EmbeddedResource Include="PanelLibrary\GMapPanel.resx">
       <DependentUpon>GMapPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -213,7 +222,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Foundation\VideoPanel.resx">
+    <EmbeddedResource Include="Panel\VideoPanel.resx">
       <DependentUpon>VideoPanel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
@@ -246,6 +255,9 @@
     <None Include="Resources\VideoTestImageStatic.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\ConnectionForm_Connected.bmp" />
+    <Content Include="Resources\ConnectionForm_Disconnected.bmp" />
+    <Content Include="Resources\ConnectionForm_Waiting.bmp" />
     <Content Include="Resources\VideoTestImageStaticFHD.jpg" />
   </ItemGroup>
   <ItemGroup />

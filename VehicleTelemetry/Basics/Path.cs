@@ -12,6 +12,7 @@ namespace VehicleTelemetry {
     public class Path : List<GeoPoint> {
         private Color color = Color.FromArgb(255, 0, 0, 0);
         private string name = "";
+		private bool visible = true;
 
         /// <summary>
         /// Color of the path on the map.
@@ -36,5 +37,17 @@ namespace VehicleTelemetry {
                 name = value;
             }
         }
+
+		/// <summary>
+		/// Set is path should be drawn on the map.
+		/// </summary>
+		public bool Visible {
+			get {
+				return visible;
+			}
+			set {
+				visible = value;
+			}
+		}
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,13 @@ namespace VehicleTelemetry {
     /// </summary>
     public abstract class MapPanel : Panel {
         private bool follow;
+		private ObservableCollection<Path> paths;
+
+
+		public MapPanel() {
+			paths = new ObservableCollection<Path>();
+			follow = false;
+		}
 
         /// <summary>
         /// Current position on the map.
@@ -37,8 +45,10 @@ namespace VehicleTelemetry {
         /// Paths are show as thin lines. One may use them to represent the path of a vehicle
         /// or zones of certain type.
         /// </remarks>
-        public abstract List<Path> Paths {
-            get; set;
+        public ObservableCollection<Path> Paths {
+            get {
+				return paths;
+			}
         }
 
         /// <summary>

@@ -23,24 +23,24 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.mapFlowContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(282, 145);
-            this.flowLayoutPanel1.TabIndex = 0;
+            this.mapFlowContainer.AutoSize = true;
+            this.mapFlowContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.mapFlowContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mapFlowContainer.Location = new System.Drawing.Point(0, 0);
+            this.mapFlowContainer.Name = "flowLayoutPanel1";
+            this.mapFlowContainer.Size = new System.Drawing.Size(282, 145);
+            this.mapFlowContainer.TabIndex = 0;
             // 
             // MapTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.Controls.Add(this.mapFlowContainer);
             this.Name = "MapTools";
             this.Size = new System.Drawing.Size(282, 145);
             this.ResumeLayout(false);
@@ -50,6 +50,6 @@
 
         #endregion
 
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.FlowLayoutPanel mapFlowContainer;
     }
 }

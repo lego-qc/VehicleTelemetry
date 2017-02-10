@@ -1,4 +1,4 @@
-﻿namespace VehicleTelemetryApp {
+﻿namespace VehicleTelemetry {
     partial class ConnectionForm {
         /// <summary>
         /// Required designer variable.
@@ -95,7 +95,7 @@
             // 
             // stateIndicator
             // 
-            this.stateIndicator.Image = global::VehicleTelemetryApp.Properties.Resources.ConnectionForm_Disconnected;
+            this.stateIndicator.Image = global::VehicleTelemetry.Properties.Resources.ConnectionForm_Disconnected;
             this.stateIndicator.Location = new System.Drawing.Point(372, 3);
             this.stateIndicator.Name = "stateIndicator";
             this.stateIndicator.Size = new System.Drawing.Size(34, 27);
