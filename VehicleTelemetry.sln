@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkTestTcp", "NetworkTe
 		{A0F1DFB4-F8F5-4FDF-B1CD-A869AC60C5AD} = {A0F1DFB4-F8F5-4FDF-B1CD-A869AC60C5AD}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UPRA", "UPRA\UPRA.csproj", "{BCDCFD29-AFA3-4650-A33A-24AFBAF9549A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,14 @@ Global
 		{8B24BB53-5634-4F1D-B3CF-72C5A38A07A7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B24BB53-5634-4F1D-B3CF-72C5A38A07A7}.Release|x86.ActiveCfg = Release|Any CPU
 		{8B24BB53-5634-4F1D-B3CF-72C5A38A07A7}.Release|x86.Build.0 = Release|Any CPU
+		{BCDCFD29-AFA3-4650-A33A-24AFBAF9549A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCDCFD29-AFA3-4650-A33A-24AFBAF9549A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCDCFD29-AFA3-4650-A33A-24AFBAF9549A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BCDCFD29-AFA3-4650-A33A-24AFBAF9549A}.Debug|x86.Build.0 = Debug|Any CPU
+		{BCDCFD29-AFA3-4650-A33A-24AFBAF9549A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCDCFD29-AFA3-4650-A33A-24AFBAF9549A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCDCFD29-AFA3-4650-A33A-24AFBAF9549A}.Release|x86.ActiveCfg = Release|Any CPU
+		{BCDCFD29-AFA3-4650-A33A-24AFBAF9549A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

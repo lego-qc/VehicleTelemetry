@@ -1,0 +1,33 @@
+﻿Data that needs to be shown on UI:
+- last message in raw format
+- geo: lat/long/alt
+- temperature: internal/external + vs time
+- map
+- elevation plot vs time
+- camera view + fetch command / show in folder
+- radio rotation
+- radio rotation command
+- radio signal strength
+- message log
+
+Panels:
+	Data Panel (right)
+		Electrical: Voltage, Consumption, Charge
+		Geo: lat, long, alt
+		Temperature: external, internal
+	Map (center)
+		Geo: lat, long
+		Goto position
+		Zoom in/out
+		Follow
+		Current path + predicted path
+		Altitude somehow?
+	Camera (center)
+		Latest image
+		Take image command
+		Open in folder command
+	Radio (left)
+		Rotation (error)
+		[x] Hold
+		Signal strength
+		Message log
